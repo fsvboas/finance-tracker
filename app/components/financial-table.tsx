@@ -2,7 +2,7 @@
 
 import { Trash2 } from "lucide-react";
 import CurrencyFormat from "../helpers/currency-format";
-import { InvoiceType } from "../types/invoice-type";
+import { TransactionType } from "../types/transaction-type";
 import { Button } from "./ui/button";
 import {
   Table,
@@ -14,12 +14,12 @@ import {
 } from "./ui/table";
 
 interface FinancialTableProps {
-  data?: InvoiceType[];
+  data?: TransactionType[];
 }
 
 const FinancialTable = ({ data }: FinancialTableProps) => {
-  const handleDeleteInvoice = (index: number) => {
-    alert(`Delete Invoice ${index}`);
+  const handleDeleteTransaction = (index: number) => {
+    alert(`Delete Transaction ${index}`);
   };
 
   return (
@@ -39,7 +39,7 @@ const FinancialTable = ({ data }: FinancialTableProps) => {
             <TableCell>
               <p
                 className={`font-medium ${
-                  item?.invoiceType === "incoming"
+                  item?.transactionType === "incoming"
                     ? "text-green-600"
                     : "text-red-600"
                 }`}
@@ -51,7 +51,7 @@ const FinancialTable = ({ data }: FinancialTableProps) => {
             <TableCell className="w-10">
               <Button
                 className="cursor-pointer bg-transparent shadow-none hover:bg-red-100 text-neutral-300 hover:text-red-600 duration-200"
-                onClick={() => handleDeleteInvoice(index)}
+                onClick={() => handleDeleteTransaction(index)}
               >
                 <Trash2 />
               </Button>
