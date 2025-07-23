@@ -18,7 +18,7 @@ export default function Home() {
   const handleClearInvoiceList = () => alert("Clear Invoice List");
 
   return (
-    <Column className="min-h-screen w-full flex bg-black/95 items-center justify-center">
+    <Column className="min-h-screen w-full flex bg-[#f4f2ee] items-center justify-center">
       <Column className="items-center space-y-2 w-full max-w-2xl">
         <Flex className="sm:space-x-2 max-sm:space-y-2 flex-col sm:flex-row w-full justify-center items-center">
           <Card title="Entradas" value={incomings} />
@@ -28,7 +28,7 @@ export default function Home() {
         <Row className="justify-between w-full h-10 items-center">
           <Button
             variant="link"
-            className="text-white cursor-pointer px-0 h-full"
+            className="cursor-pointer px-0 h-full"
             onClick={handleAddNewInvoice}
           >
             <Row className="items-center space-x-1.5 h-full">
@@ -38,7 +38,7 @@ export default function Home() {
           </Button>
           <Button
             variant="link"
-            className="text-white cursor-pointer px-0"
+            className="cursor-pointer px-0"
             onClick={handleClearInvoiceList}
           >
             <Row className="items-center space-x-1.5">

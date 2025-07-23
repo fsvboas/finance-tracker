@@ -25,7 +25,7 @@ const FinancialTable = ({ data }: FinancialTableProps) => {
   return (
     <Table className="bg-white rounded">
       <TableHeader>
-        <TableRow>
+        <TableRow className="hover:bg-transparent">
           <TableHead>Descrição</TableHead>
           <TableHead>Valor</TableHead>
           <TableHead>Data</TableHead>
