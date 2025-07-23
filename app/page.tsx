@@ -1,13 +1,21 @@
+"use client";
+
+import { ListPlus, ListRestart } from "lucide-react";
 import Card from "./components/financial-summary-card";
 import FinancialTable from "./components/financial-table";
+import { Button } from "./components/ui/button";
 import Column from "./components/utils/column";
 import Flex from "./components/utils/flex";
+import Row from "./components/utils/row";
 import { InvoiceType } from "./types/invoice-type";
 
 export default function Home() {
   const incomings = 100000;
   const outcomings = 50000;
   const total = incomings - outcomings;
+
+  const handleAddNewInvoice = () => alert("Add New Invoice");
+  const handleClearInvoiceList = () => alert("Clear Invoice List");
 
   return (
     <Column className="min-h-screen w-full flex bg-black/95 items-center justify-center">
@@ -17,6 +25,28 @@ export default function Home() {
           <Card title="Saídas" value={outcomings} />
           <Card title="Total" value={total} />
         </Flex>
+        <Row className="justify-between w-full h-10 items-center">
+          <Button
+            variant="link"
+            className="text-white cursor-pointer px-0 h-full"
+            onClick={handleAddNewInvoice}
+          >
+            <Row className="items-center space-x-1.5 h-full">
+              <ListPlus className="!w-5 !h-5" />
+              <span>Nova Transação</span>
+            </Row>
+          </Button>
+          <Button
+            variant="link"
+            className="text-white cursor-pointer px-0"
+            onClick={handleClearInvoiceList}
+          >
+            <Row className="items-center space-x-1.5">
+              <ListRestart className="!w-5 !h-5" />
+              <span>Limpar Tabela</span>
+            </Row>
+          </Button>
+        </Row>
         <FinancialTable data={mockDataTable} />
       </Column>
     </Column>
