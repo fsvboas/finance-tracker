@@ -9,7 +9,7 @@ interface CardProps {
 }
 const Card = ({ title, value }: CardProps) => {
   return (
-    <Column className="p-4 bg-white w-full max-w-60 min-h-32 justify-between rounded">
+    <Column className="p-4 bg-white w-full md:max-w-60 min-h-32 justify-between rounded">
       <Row className="justify-between">
         <p>{title}</p>
         <span>{cardIconMap[title]}</span>
