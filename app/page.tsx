@@ -5,15 +5,25 @@ import AddNewTransactionDialog from "./components/add-new-transaction-dialog";
 import Card from "./components/financial-summary-card";
 import FinancialTable from "./components/financial-table";
 import { Button } from "./components/ui/button";
+import { ScrollArea } from "./components/ui/scroll-area";
 import Column from "./components/utils/column";
 import Flex from "./components/utils/flex";
 import Row from "./components/utils/row";
 import { TransactionType } from "./types/transaction-type";
 
 export default function Home() {
-  const incomings = 100000;
-  const outcomings = 50000;
-  const total = incomings - outcomings;
+  const totalIncoming = mockDataTable.reduce((sum, transaction) => {
+    return transaction.transactionType === "incoming"
+      ? sum + transaction.value
+      : sum;
+  }, 0);
+  const totalOutcoming = mockDataTable.reduce((sum, transaction) => {
+    return transaction.transactionType === "outcoming"
+      ? sum + transaction.value
+      : sum;
+  }, 0);
+
+  const total = totalIncoming - totalOutcoming;
 
   const handleClearTransactionList = () => alert("Clear Transaction List");
 
@@ -21,11 +31,11 @@ export default function Home() {
     <Column className="min-h-screen w-full flex bg-[#f4f2ee] items-center justify-center">
       <Column className="items-center space-y-2 w-full max-w-2xl">
         <Flex className="sm:space-x-2 max-sm:space-y-2 flex-col sm:flex-row w-full justify-center items-center">
-          <Card title="Entradas" value={incomings} />
-          <Card title="Saídas" value={outcomings} />
+          <Card title="Entradas" value={totalIncoming} />
+          <Card title="Saídas" value={totalOutcoming} />
           <Card title="Total" value={total} />
         </Flex>
-        <Row className="justify-between w-full h-10 items-center">
+        <Row className="justify-between w-full h-10 items-center max-[700px]:px-2">
           <AddNewTransactionDialog
             trigger={
               <Button variant="link" className="cursor-pointer px-0 h-full">
@@ -47,7 +57,9 @@ export default function Home() {
             </Row>
           </Button>
         </Row>
-        <FinancialTable data={mockDataTable} />
+        <ScrollArea className="w-full h-90">
+          <FinancialTable data={mockDataTable} />
+        </ScrollArea>
       </Column>
     </Column>
   );
@@ -58,6 +70,30 @@ const mockDataTable: TransactionType[] = [
     description: "Salário",
     value: 500000,
     transactionType: "incoming",
+    date: "05/07/2025",
+  },
+  {
+    description: "Gasolina",
+    value: 30000,
+    transactionType: "outcoming",
+    date: "05/07/2025",
+  },
+  {
+    description: "Plano de Saúde",
+    value: 60000,
+    transactionType: "outcoming",
+    date: "05/07/2025",
+  },
+  {
+    description: "Freelance",
+    value: 200000,
+    transactionType: "incoming",
+    date: "05/07/2025",
+  },
+  {
+    description: "Mochila de Viagem",
+    value: 25000,
+    transactionType: "outcoming",
     date: "05/07/2025",
   },
   {
