@@ -47,7 +47,7 @@ const AddNewTransactionDialog = ({ trigger }: AddNewTransactionDialogProps) => {
           <Label htmlFor="transaction">Transação</Label>
           <Input id="transaction" />
         </Column>
-        <Flex className="sm:space-x-2 max-sm:flex-col max-sm:space-y-4">
+        <Flex className="min-[500px]:space-x-2 max-[500px]:flex-col max-[500px]:space-y-4">
           <Column className="space-y-2">
             <Label htmlFor="value">Valor</Label>
             <Input id="value" />

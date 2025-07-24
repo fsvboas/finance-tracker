@@ -15,7 +15,7 @@ function DatePicker() {
   const [date, setDate] = useState<Date | undefined>(undefined);
 
   return (
-    <Flex className="space-x-2 max-sm:flex-col max-sm:space-y-4">
+    <Flex className="space-x-2 max-[425px]:flex-col max-[425px]:space-y-4">
       <Column className="flex flex-col space-y-2 w-full">
         <Label htmlFor="date-picker">Data</Label>
         <Popover open={open} onOpenChange={setOpen}>
