@@ -1,7 +1,7 @@
 "use client";
 
 import { ListPlus, ListRestart } from "lucide-react";
-import AddNewTransactionDialog from "./components/add-new-transaction-dialog";
+import AddTransactionDialog from "./components/add-transaction-dialog";
 import Card from "./components/financial-summary-card";
 import FinancialTable from "./components/financial-table";
 import { Button } from "./components/ui/button";
@@ -36,7 +36,7 @@ export default function Home() {
           <Card title="Total" value={total} />
         </Flex>
         <Row className="justify-between w-full h-10 items-center max-[700px]:px-2">
-          <AddNewTransactionDialog
+          <AddTransactionDialog
             trigger={
               <Button variant="link" className="cursor-pointer px-0 h-full">
                 <Row className="items-center space-x-1.5 h-full">

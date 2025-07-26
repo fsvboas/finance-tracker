@@ -15,11 +15,11 @@ import { Tabs, TabsList, TabsTrigger } from "./ui/tabs";
 import Column from "./utils/column";
 import Flex from "./utils/flex";
 
-interface AddNewTransactionDialogProps {
+interface AddTransactionDialogProps {
   trigger: React.ReactNode;
 }
 
-const AddNewTransactionDialog = ({ trigger }: AddNewTransactionDialogProps) => {
+const AddTransactionDialog = ({ trigger }: AddTransactionDialogProps) => {
   return (
     <Dialog>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
@@ -67,4 +67,4 @@ const AddNewTransactionDialog = ({ trigger }: AddNewTransactionDialogProps) => {
   );
 };
 
-export default AddNewTransactionDialog;
+export default AddTransactionDialog;
