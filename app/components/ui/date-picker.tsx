@@ -1,5 +1,6 @@
 "use client";
 
+import { TransactionType } from "@/app/types/transaction-type";
 import { ChevronDownIcon } from "lucide-react";
 import { useState } from "react";
 import Column from "../utils/column";
@@ -10,7 +11,11 @@ import { Input } from "./input";
 import { Label } from "./label";
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
 
-function DatePicker() {
+interface DatePickerProps {
+  transactionDate?: TransactionType["date"];
+}
+
+function DatePicker({ transactionDate }: DatePickerProps) {
   const [open, setOpen] = useState<boolean>(false);
   const [date, setDate] = useState<Date | undefined>(undefined);
 
@@ -25,7 +30,8 @@ function DatePicker() {
               id="date-picker"
               className="w-full min-w-[150px] justify-between font-normal"
             >
-              {date ? date.toLocaleDateString() : "Selecione a data"}
+              {(date ?? transactionDate)?.toLocaleDateString() ||
+                "Selecione a data"}
               <ChevronDownIcon />
             </Button>
           </PopoverTrigger>
