@@ -3,6 +3,7 @@
 import { Trash2 } from "lucide-react";
 import CurrencyFormat from "../helpers/currency-format";
 import { TransactionType } from "../types/transaction-type";
+import TransactionDetailsDialog from "./transaction-details-dialog";
 import { Button } from "./ui/button";
 import {
   Table,
@@ -32,32 +33,42 @@ const FinancialTable = ({ data }: FinancialTableProps) => {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {data?.map((item, index) => (
-          <TableRow className="h-14" key={index}>
-            {/* TO-DO: WRAP OR ELLIPSIS DESCRIPTION */}
-            <TableCell className="w-1/2">{item?.description}</TableCell>
-            <TableCell>
-              <p
-                className={`font-medium ${
-                  item?.transactionType === "incoming"
-                    ? "text-green-600"
-                    : "text-red-600"
-                }`}
-              >
-                <CurrencyFormat>{item?.value}</CurrencyFormat>
-              </p>
-            </TableCell>
-            <TableCell className="">{item?.date}</TableCell>
-            <TableCell className="w-10">
-              <Button
-                className="cursor-pointer bg-transparent shadow-none hover:bg-red-100 text-neutral-300 hover:text-red-600 duration-200"
-                onClick={() => handleDeleteTransaction(index)}
-              >
-                <Trash2 />
-              </Button>
-            </TableCell>
-          </TableRow>
-        ))}
+        {data?.map((item, index) => {
+          // TO-DO: Change date format
+          const transactionDate = item?.date?.toDateString();
+          return (
+            <TransactionDetailsDialog
+              transaction={item}
+              key={index}
+              trigger={
+                <TableRow className="h-14">
+                  {/* TO-DO: WRAP OR ELLIPSIS DESCRIPTION */}
+                  <TableCell className="w-1/2">{item?.description}</TableCell>
+                  <TableCell>
+                    <p
+                      className={`font-medium ${
+                        item?.transactionType === "incoming"
+                          ? "text-green-600"
+                          : "text-red-600"
+                      }`}
+                    >
+                      <CurrencyFormat>{item?.value}</CurrencyFormat>
+                    </p>
+                  </TableCell>
+                  <TableCell>{transactionDate}</TableCell>
+                  <TableCell className="w-10">
+                    <Button
+                      className="cursor-pointer bg-transparent shadow-none hover:bg-red-100 text-neutral-300 hover:text-red-600 duration-200"
+                      onClick={() => handleDeleteTransaction(index)}
+                    >
+                      <Trash2 />
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              }
+            />
+          );
+        })}
       </TableBody>
     </Table>
   );
