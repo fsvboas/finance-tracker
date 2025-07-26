@@ -15,7 +15,7 @@ interface DatePickerProps {
   transactionDate?: TransactionType["date"];
 }
 
-function DatePicker({ transactionDate }: DatePickerProps) {
+function DateTimePicker({ transactionDate }: DatePickerProps) {
   const [open, setOpen] = useState<boolean>(false);
   const [date, setDate] = useState<Date | undefined>(undefined);
 
@@ -62,4 +62,4 @@ function DatePicker({ transactionDate }: DatePickerProps) {
   );
 }
 
-export { DatePicker };
+export { DateTimePicker };

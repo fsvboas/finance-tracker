@@ -1,6 +1,6 @@
 import { TransactionType } from "../types/transaction-type";
 import { Button } from "./ui/button";
-import { DatePicker } from "./ui/date-picker";
+import { DateTimePicker } from "./ui/date-time-picker";
 import {
   Dialog,
   DialogClose,
@@ -41,7 +41,7 @@ const TransactionDetailsDialog = ({
             {/* TO-DO: CURRENCY (R$) INPUT MASK */}
             <Input id="value" value={transaction?.value} disabled />
           </Column>
-          <DatePicker transactionDate={transaction?.date} />
+          <DateTimePicker transactionDate={transaction?.date} />
         </Flex>
         <DialogFooter>
           <DialogClose asChild>

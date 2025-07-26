@@ -1,5 +1,5 @@
 import { Button } from "./ui/button";
-import { DatePicker } from "./ui/date-picker";
+import { DateTimePicker } from "./ui/date-time-picker";
 import {
   Dialog,
   DialogClose,
@@ -52,7 +52,7 @@ const AddTransactionDialog = ({ trigger }: AddTransactionDialogProps) => {
             <Label htmlFor="value">Valor</Label>
             <Input id="value" />
           </Column>
-          <DatePicker />
+          <DateTimePicker />
         </Flex>
         <DialogFooter>
           <DialogClose asChild>
