@@ -1,6 +1,5 @@
 import { TransactionType } from "../types/transaction-type";
 import { Button } from "./ui/button";
-import { DateTimePicker } from "./ui/date-time-picker";
 import {
   Dialog,
   DialogClose,
@@ -10,10 +9,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "./ui/dialog";
-import { Input } from "./ui/input";
-import { Label } from "./ui/label";
 import Column from "./utils/column";
-import Flex from "./utils/flex";
+import Row from "./utils/row";
+import Show from "./utils/show";
 
 interface TransactionDetailsDialog {
   trigger: React.ReactNode;
@@ -24,32 +22,53 @@ const TransactionDetailsDialog = ({
   trigger,
   transaction,
 }: TransactionDetailsDialog) => {
+  const hasTransactionTimeMock = true;
+
   return (
     <Dialog>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Transaction</DialogTitle>
+          <DialogTitle>{transaction?.description}</DialogTitle>
         </DialogHeader>
         <Column className="space-y-2">
-          <Label htmlFor="transaction">Transação</Label>
-          <Input id="transaction" value={transaction?.description} disabled />
+          {/* TO-DO: CREATE A BADGE TO SHOW TRANSACTION TYPE */}
+          <dl className="space-y-2">
+            <Row className="space-x-2">
+              <dt className="font-medium">Tipo de Transação:</dt>
+              <dd>{transaction?.transactionType}</dd>
+            </Row>
+            {/* TO-DO: CURRENCY (R$) FORMAT */}
+            <Row className="space-x-2">
+              <dt className="font-medium">Valor:</dt>
+              <dd>{transaction?.value}</dd>
+            </Row>
+            <Row className="space-x-2">
+              <dt className="font-medium">Dia:</dt>
+              <dd>{transaction?.date?.toDateString()}</dd>
+            </Row>
+            <Show when={hasTransactionTimeMock}>
+              <Row className="space-x-2">
+                <dt className="font-medium">Horário:</dt>
+                <dd>10:30 AM</dd>
+              </Row>
+              <Row className="space-x-2">
+                <dt className="font-medium">Forma de Pagamento:</dt>
+                <dd>Cartão Nubank</dd>
+              </Row>
+              <Row className="space-x-2">
+                <dt className="font-medium">
+                  Percentual correspondente às suas entradas:
+                </dt>
+                <dd>23%</dd>
+              </Row>
+            </Show>
+          </dl>
         </Column>
-        <Flex className="min-[500px]:space-x-2 max-[500px]:flex-col max-[500px]:space-y-4">
-          <Column className="space-y-2">
-            <Label htmlFor="value">Valor</Label>
-            {/* TO-DO: CURRENCY (R$) INPUT MASK */}
-            <Input id="value" value={transaction?.value} disabled />
-          </Column>
-          <DateTimePicker transactionDate={transaction?.date} />
-        </Flex>
         <DialogFooter>
           <DialogClose asChild>
-            <Button className="hover:cursor-pointer" variant="secondary">
-              Cancelar
-            </Button>
+            <Button className="hover:cursor-pointer">Fechar</Button>
           </DialogClose>
-          <Button className="hover:cursor-pointer">Adicionar</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
