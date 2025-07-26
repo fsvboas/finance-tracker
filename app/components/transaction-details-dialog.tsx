@@ -1,0 +1,59 @@
+import { TransactionType } from "../types/transaction-type";
+import { Button } from "./ui/button";
+import { DatePicker } from "./ui/date-picker";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "./ui/dialog";
+import { Input } from "./ui/input";
+import { Label } from "./ui/label";
+import Column from "./utils/column";
+import Flex from "./utils/flex";
+
+interface TransactionDetailsDialog {
+  trigger: React.ReactNode;
+  transaction?: TransactionType;
+}
+
+const TransactionDetailsDialog = ({
+  trigger,
+  transaction,
+}: TransactionDetailsDialog) => {
+  return (
+    <Dialog>
+      <DialogTrigger asChild>{trigger}</DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Transaction</DialogTitle>
+        </DialogHeader>
+        <Column className="space-y-2">
+          <Label htmlFor="transaction">Transação</Label>
+          <Input id="transaction" value={transaction?.description} disabled />
+        </Column>
+        <Flex className="min-[500px]:space-x-2 max-[500px]:flex-col max-[500px]:space-y-4">
+          <Column className="space-y-2">
+            <Label htmlFor="value">Valor</Label>
+            {/* TO-DO: CURRENCY (R$) INPUT MASK */}
+            <Input id="value" value={transaction?.value} disabled />
+          </Column>
+          <DatePicker transactionDate={transaction?.date} />
+        </Flex>
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button className="hover:cursor-pointer" variant="secondary">
+              Cancelar
+            </Button>
+          </DialogClose>
+          <Button className="hover:cursor-pointer">Adicionar</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+export default TransactionDetailsDialog;
