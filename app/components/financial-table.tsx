@@ -2,6 +2,7 @@
 
 import { Trash2 } from "lucide-react";
 import CurrencyFormatter from "../helpers/currency-formatter";
+import DateFormatter from "../helpers/date-formatter";
 import { TransactionType } from "../types/transaction-type";
 import TransactionDetailsDialog from "./transaction-details-dialog";
 import { Button } from "./ui/button";
@@ -34,8 +35,7 @@ const FinancialTable = ({ data }: FinancialTableProps) => {
       </TableHeader>
       <TableBody>
         {data?.map((item, index) => {
-          // TO-DO: Change date format
-          const transactionDate = item?.date?.toDateString();
+          const transactionDate = item?.date?.toISOString();
           return (
             <TransactionDetailsDialog
               transaction={item}
@@ -55,7 +55,9 @@ const FinancialTable = ({ data }: FinancialTableProps) => {
                       <CurrencyFormatter>{item?.value}</CurrencyFormatter>
                     </p>
                   </TableCell>
-                  <TableCell>{transactionDate}</TableCell>
+                  <TableCell>
+                    <DateFormatter>{transactionDate}</DateFormatter>
+                  </TableCell>
                   <TableCell className="w-10">
                     <Button
                       className="cursor-pointer bg-transparent shadow-none hover:bg-red-100 text-neutral-300 hover:text-red-600 duration-200"

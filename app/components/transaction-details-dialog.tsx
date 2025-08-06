@@ -1,3 +1,5 @@
+import CurrencyFormatter from "../helpers/currency-formatter";
+import DateFormatter from "../helpers/date-formatter";
 import { TransactionType } from "../types/transaction-type";
 import { Button } from "./ui/button";
 import {
@@ -15,7 +17,7 @@ import Show from "./utils/show";
 
 interface TransactionDetailsDialog {
   trigger: React.ReactNode;
-  transaction?: TransactionType;
+  transaction: TransactionType;
 }
 
 const TransactionDetailsDialog = ({
@@ -24,38 +26,51 @@ const TransactionDetailsDialog = ({
 }: TransactionDetailsDialog) => {
   const hasTransactionTimeMock = true;
 
+  const transactionTypeTranslation = {
+    incoming: "Entrada",
+    outcoming: "Saída",
+  } as const;
+
   return (
     <Dialog>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{transaction?.description}</DialogTitle>
+          <DialogTitle>{transaction.description}</DialogTitle>
         </DialogHeader>
         <Column className="space-y-2">
-          {/* TO-DO: CREATE A BADGE TO SHOW TRANSACTION TYPE */}
           <dl className="space-y-2">
             <Row className="space-x-2">
               <dt className="font-medium">Tipo de Transação:</dt>
-              <dd>{transaction?.transactionType}</dd>
+              <dd
+                className={`font-semibold  ${
+                  transaction.transactionType === "incoming"
+                    ? "text-green-600"
+                    : "text-red-600"
+                }`}
+              >
+                {transactionTypeTranslation[transaction.transactionType]}
+              </dd>
             </Row>
-            {/* TO-DO: CURRENCY (R$) FORMAT */}
             <Row className="space-x-2">
               <dt className="font-medium">Valor:</dt>
-              <dd>{transaction?.value}</dd>
+              <dd>
+                <CurrencyFormatter>{transaction.value}</CurrencyFormatter>
+              </dd>
             </Row>
             <Row className="space-x-2">
               <dt className="font-medium">Dia:</dt>
-              <dd>{transaction?.date?.toDateString()}</dd>
+              <dd>
+                <DateFormatter>{transaction.date?.toISOString()}</DateFormatter>
+              </dd>
             </Row>
             <Show when={hasTransactionTimeMock}>
               <Row className="space-x-2">
                 <dt className="font-medium">Horário:</dt>
                 <dd>10:30 AM</dd>
               </Row>
-              <Row className="space-x-2">
-                <dt className="font-medium">Forma de Pagamento:</dt>
-                <dd>Cartão Nubank</dd>
-              </Row>
+            </Show>
+            <Show when={transaction.transactionType === "outcoming"}>
               <Row className="space-x-2">
                 <dt className="font-medium">
                   Percentual correspondente às suas entradas:
