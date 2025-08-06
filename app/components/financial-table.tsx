@@ -59,7 +59,10 @@ const FinancialTable = ({ data }: FinancialTableProps) => {
                   <TableCell className="w-10">
                     <Button
                       className="cursor-pointer bg-transparent shadow-none hover:bg-red-100 text-neutral-300 hover:text-red-600 duration-200"
-                      onClick={() => handleDeleteTransaction(index)}
+                      onClick={(event) => {
+                        event.preventDefault();
+                        handleDeleteTransaction(index);
+                      }}
                     >
                       <Trash2 />
                     </Button>
