@@ -42,8 +42,9 @@ const FinancialTable = ({ data }: FinancialTableProps) => {
               key={index}
               trigger={
                 <TableRow className="h-14">
-                  {/* TO-DO: WRAP OR ELLIPSIS DESCRIPTION */}
-                  <TableCell className="w-1/2">{item?.description}</TableCell>
+                  <TableCell className="max-w-[150px] md:max-w-[300px] overflow-x-hidden text-ellipsis">
+                    {item?.description}
+                  </TableCell>
                   <TableCell>
                     <p
                       className={`font-medium ${

@@ -35,8 +35,10 @@ const TransactionDetailsDialog = ({
     <Dialog>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent>
-        <DialogHeader>
-          <DialogTitle>{transaction.description}</DialogTitle>
+        <DialogHeader className="overflow-hidden">
+          <DialogTitle className="overflow-hidden text-ellipsis">
+            {transaction.description}
+          </DialogTitle>
         </DialogHeader>
         <Column className="space-y-2">
           <dl className="space-y-2">
@@ -72,9 +74,7 @@ const TransactionDetailsDialog = ({
             </Show>
             <Show when={transaction.transactionType === "outcoming"}>
               <Row className="space-x-2">
-                <dt className="font-medium">
-                  Percentual correspondente às suas entradas:
-                </dt>
+                <dt className="font-medium">Percentual das entradas:</dt>
                 <dd>23%</dd>
               </Row>
             </Show>
