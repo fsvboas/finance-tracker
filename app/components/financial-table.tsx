@@ -1,11 +1,9 @@
 "use client";
 
-import { Trash2 } from "lucide-react";
 import CurrencyFormatter from "../helpers/currency-formatter";
 import DateFormatter from "../helpers/date-formatter";
 import { TransactionType } from "../types/transaction-type";
 import TransactionDetailsDialog from "./transaction-details-dialog";
-import { Button } from "./ui/button";
 import {
   Table,
   TableBody,
@@ -20,10 +18,6 @@ interface FinancialTableProps {
 }
 
 const FinancialTable = ({ data }: FinancialTableProps) => {
-  const handleDeleteTransaction = (index: number) => {
-    alert(`Delete Transaction ${index}`);
-  };
-
   return (
     <Table className="bg-white rounded">
       <TableHeader>
@@ -58,17 +52,6 @@ const FinancialTable = ({ data }: FinancialTableProps) => {
                   </TableCell>
                   <TableCell>
                     <DateFormatter>{transactionDate}</DateFormatter>
-                  </TableCell>
-                  <TableCell className="w-10">
-                    <Button
-                      className="cursor-pointer bg-transparent shadow-none hover:bg-red-100 text-neutral-300 hover:text-red-600 duration-200"
-                      onClick={(event) => {
-                        event.preventDefault();
-                        handleDeleteTransaction(index);
-                      }}
-                    >
-                      <Trash2 />
-                    </Button>
                   </TableCell>
                 </TableRow>
               }

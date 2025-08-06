@@ -4,7 +4,6 @@ import { TransactionType } from "../types/transaction-type";
 import { Button } from "./ui/button";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogFooter,
   DialogHeader,
@@ -24,6 +23,10 @@ const TransactionDetailsDialog = ({
   trigger,
   transaction,
 }: TransactionDetailsDialog) => {
+  const handleDeleteTransaction = (transactionId: string) => {
+    alert(`Delete Transaction ${transactionId}`);
+  };
+
   const hasTransactionTimeMock = true;
 
   const transactionTypeTranslation = {
@@ -81,9 +84,12 @@ const TransactionDetailsDialog = ({
           </dl>
         </Column>
         <DialogFooter>
-          <DialogClose asChild>
-            <Button className="hover:cursor-pointer">Fechar</Button>
-          </DialogClose>
+          <Button
+            className="cursor-pointer"
+            onClick={() => handleDeleteTransaction(transaction.id)}
+          >
+            Remover Transação
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

@@ -67,48 +67,56 @@ export default function Home() {
 
 const mockDataTable: TransactionType[] = [
   {
+    id: "1",
     description: "Salário",
     value: 500000,
     transactionType: "incoming",
     date: new Date("2025-07-05"),
   },
   {
+    id: "2",
     description: "Gasolina",
     value: 30000,
     transactionType: "outcoming",
     date: new Date("2025-07-05"),
   },
   {
+    id: "3",
     description: "Plano de Saúde",
     value: 60000,
     transactionType: "outcoming",
     date: new Date("2025-07-10"),
   },
   {
+    id: "4",
     description: "Freelance",
     value: 200000,
     transactionType: "incoming",
     date: new Date("2025-07-15"),
   },
   {
+    id: "5",
     description: "Mochila de Viagem",
     value: 25000,
     transactionType: "outcoming",
     date: new Date("2025-07-19"),
   },
   {
+    id: "6",
     description: "Aluguel",
     value: 100000,
     transactionType: "outcoming",
     date: new Date("2025-07-23"),
   },
   {
+    id: "7",
     description: "Condomínio",
     value: 50000,
     transactionType: "outcoming",
     date: new Date("2025-07-23"),
   },
   {
+    id: "8",
     description: "Mercado",
     value: 30000,
     transactionType: "outcoming",
