@@ -1,23 +1,23 @@
 "use client";
 
-import { TransactionType } from "@/app/types/transaction-type";
+import DateFormatter from "@/app/helpers/date-formatter";
 import { ChevronDownIcon } from "lucide-react";
 import { useState } from "react";
+import { pt } from "react-day-picker/locale";
 import Column from "../utils/column";
 import Flex from "../utils/flex";
+import Show from "../utils/show";
 import { Button } from "./button";
 import { Calendar } from "./calendar";
 import { Input } from "./input";
 import { Label } from "./label";
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
 
-interface DatePickerProps {
-  transactionDate?: TransactionType["date"];
-}
-
-function DateTimePicker({ transactionDate }: DatePickerProps) {
+function DateTimePicker() {
   const [open, setOpen] = useState<boolean>(false);
   const [date, setDate] = useState<Date | undefined>(undefined);
+
+  const transactionDateFormatted = date?.toISOString();
 
   return (
     <Flex className="space-x-2 max-[425px]:flex-col max-[425px]:space-y-4">
@@ -30,16 +30,17 @@ function DateTimePicker({ transactionDate }: DatePickerProps) {
               id="date-picker"
               className="w-full min-w-[150px] justify-between font-normal"
             >
-              {(date ?? transactionDate)?.toLocaleDateString() ||
-                "Selecione a data"}
+              <Show when={date} fallback={"Selecione a data"}>
+                <DateFormatter>{transactionDateFormatted}</DateFormatter>
+              </Show>
               <ChevronDownIcon />
             </Button>
           </PopoverTrigger>
           <PopoverContent className="overflow-hidden p-0" align="start">
             <Calendar
+              locale={pt}
               mode="single"
               selected={date}
-              captionLayout="dropdown"
               onSelect={(date) => {
                 setDate(date);
                 setOpen(false);
