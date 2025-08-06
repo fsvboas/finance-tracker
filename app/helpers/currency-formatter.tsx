@@ -1,20 +1,21 @@
-interface CurrencyFormatProps {
+interface CurrencyFormatterProps {
   children: number | string | undefined;
 }
 
-const currencyFormatter = (value: number) => {
-  if (!value) return "R$0,00";
-  return (
-    `R$` +
-    new Intl.NumberFormat("pt-BR", {
-      style: "decimal",
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    }).format(value / 100)
-  );
+export const currencyFormatter = (value: number) => {
+  if (!value) return "R$ 0,00";
+
+  const number = String(value).replace(/[^0-9\-]/g, "") ?? 0;
+
+  return new Intl.NumberFormat("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(Number(number) / 100);
 };
 
-const CurrencyFormatter = ({ children }: CurrencyFormatProps) => {
+const CurrencyFormatter = ({ children }: CurrencyFormatterProps) => {
   return <>{currencyFormatter(Number(children))}</>;
 };
 
