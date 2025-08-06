@@ -38,8 +38,8 @@ const TransactionDetailsDialog = ({
     <Dialog>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent>
-        <DialogHeader className="overflow-hidden">
-          <DialogTitle className="overflow-hidden text-ellipsis">
+        <DialogHeader className="overflow-hidden border-b-1 border-black/10">
+          <DialogTitle className="overflow-hidden text-ellipsis pb-2">
             {transaction.description}
           </DialogTitle>
         </DialogHeader>
