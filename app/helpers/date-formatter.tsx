@@ -1,7 +1,7 @@
 import { format, isValid, parseISO } from "date-fns";
 
 interface DateFormatterProps {
-  children: string;
+  children: string | undefined;
 }
 
 const dateFormatter = (dateAsString: string) => {
@@ -10,6 +10,7 @@ const dateFormatter = (dateAsString: string) => {
 };
 
 const DateFormatter = ({ children }: DateFormatterProps) => {
+  if (!children) return;
   const date = parseISO(children);
   if (!isValid(date)) return null;
   return <>{dateFormatter(children)}</>;
