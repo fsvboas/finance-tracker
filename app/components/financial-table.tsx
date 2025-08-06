@@ -1,7 +1,7 @@
 "use client";
 
 import { Trash2 } from "lucide-react";
-import CurrencyFormat from "../helpers/currency-format";
+import CurrencyFormatter from "../helpers/currency-formatter";
 import { TransactionType } from "../types/transaction-type";
 import TransactionDetailsDialog from "./transaction-details-dialog";
 import { Button } from "./ui/button";
@@ -52,7 +52,7 @@ const FinancialTable = ({ data }: FinancialTableProps) => {
                           : "text-red-600"
                       }`}
                     >
-                      <CurrencyFormat>{item?.value}</CurrencyFormat>
+                      <CurrencyFormatter>{item?.value}</CurrencyFormatter>
                     </p>
                   </TableCell>
                   <TableCell>{transactionDate}</TableCell>

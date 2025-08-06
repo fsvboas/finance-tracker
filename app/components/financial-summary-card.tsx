@@ -1,5 +1,5 @@
 import { Banknote, BanknoteArrowDown, BanknoteArrowUp } from "lucide-react";
-import CurrencyFormat from "../helpers/currency-format";
+import CurrencyFormatter from "../helpers/currency-formatter";
 import Column from "./utils/column";
 import Row from "./utils/row";
 
@@ -15,7 +15,7 @@ const Card = ({ title, value }: CardProps) => {
         <span>{cardIconMap[title]}</span>
       </Row>
       <p className="text-3xl font-medium">
-        <CurrencyFormat>{value}</CurrencyFormat>
+        <CurrencyFormatter>{value}</CurrencyFormatter>
       </p>
     </Column>
   );
