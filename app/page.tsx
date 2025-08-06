@@ -28,7 +28,7 @@ export default function Home() {
   const handleClearTransactionList = () => alert("Clear Transaction List");
 
   return (
-    <Column className="min-h-screen w-full flex bg-[#f4f2ee] items-center justify-center">
+    <Column className="min-h-screen w-full flex bg-[#f4f2ee] items-center sm:justify-center">
       <Column className="items-center space-y-2 w-full max-w-2xl">
         <Flex className="sm:space-x-2 max-sm:space-y-2 flex-col sm:flex-row w-full justify-center items-center">
           <Card title="Entradas" value={totalIncoming} />
