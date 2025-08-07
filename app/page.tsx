@@ -1,7 +1,7 @@
 "use client";
 
 import { ListPlus, ListRestart } from "lucide-react";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import AddTransactionDialog from "./components/add-transaction-dialog";
 import Card from "./components/financial-summary-card";
 import FinancialTable from "./components/financial-table";
@@ -14,19 +14,31 @@ import Row from "./components/utils/row";
 import { TransactionType } from "./types/transaction-type";
 
 export default function Home() {
-  const getCurrentMonth = new Date().getMonth();
+  const getCurrentMonth = new Date().getMonth() + 1;
   const [month, setMonth] = useState<number>(getCurrentMonth);
 
-  const totalIncoming = mockDataTable.reduce((sum, transaction) => {
-    return transaction.transactionType === "incoming"
-      ? sum + transaction.value
-      : sum;
-  }, 0);
-  const totalOutcoming = mockDataTable.reduce((sum, transaction) => {
-    return transaction.transactionType === "outcoming"
-      ? sum + transaction.value
-      : sum;
-  }, 0);
+  const filteredTransactions = useMemo(() => {
+    return mockDataTable.filter((transaction) => {
+      const transactionMonth = transaction.date.getMonth() + 1;
+      return transactionMonth === month;
+    });
+  }, [month]);
+
+  const totalIncoming = useMemo(() => {
+    return filteredTransactions.reduce((sum, transaction) => {
+      return transaction.transactionType === "incoming"
+        ? sum + transaction.value
+        : sum;
+    }, 0);
+  }, [filteredTransactions]);
+
+  const totalOutcoming = useMemo(() => {
+    return filteredTransactions.reduce((sum, transaction) => {
+      return transaction.transactionType === "outcoming"
+        ? sum + transaction.value
+        : sum;
+    }, 0);
+  }, [filteredTransactions]);
 
   const total = totalIncoming - totalOutcoming;
 
@@ -64,7 +76,7 @@ export default function Home() {
           </Button>
         </Row>
         <ScrollArea className="w-full h-90">
-          <FinancialTable data={mockDataTable} />
+          <FinancialTable data={filteredTransactions} />
         </ScrollArea>
       </Column>
     </Column>
@@ -91,41 +103,41 @@ const mockDataTable: TransactionType[] = [
     description: "Plano de Saúde",
     value: 60000,
     transactionType: "outcoming",
-    date: new Date("2025-07-10"),
+    date: new Date("2025-08-10"),
   },
   {
     id: "4",
     description: "Freelance",
     value: 200000,
     transactionType: "incoming",
-    date: new Date("2025-07-15"),
+    date: new Date("2025-08-15"),
   },
   {
     id: "5",
     description: "Mochila de Viagem",
     value: 25000,
     transactionType: "outcoming",
-    date: new Date("2025-07-19"),
+    date: new Date("2025-09-19"),
   },
   {
     id: "6",
     description: "Aluguel",
     value: 100000,
     transactionType: "outcoming",
-    date: new Date("2025-07-23"),
+    date: new Date("2025-10-23"),
   },
   {
     id: "7",
     description: "Condomínio",
     value: 50000,
     transactionType: "outcoming",
-    date: new Date("2025-07-23"),
+    date: new Date("2025-11-23"),
   },
   {
     id: "8",
     description: "Mercado",
     value: 30000,
     transactionType: "outcoming",
-    date: new Date("2025-07-28"),
+    date: new Date("2025-11-28"),
   },
 ];
