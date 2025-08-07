@@ -9,7 +9,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "Finance Tracker",
   description:
-    "O Finance Tracker é útil para controlar receitas, despesas e acompanhar seu orçamento pessoal de forma prática e visual.",
+    "O Finance Tracker foi criado para que você possa, facilmente, controlar receitas, despesas e acompanhar seu orçamento pessoal de forma rápida e prática. Sem complicações.",
 };
 
 export default function RootLayout({
@@ -18,7 +18,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="pt">
       <body className={`${inter} antialiased`}>{children}</body>
     </html>
   );
