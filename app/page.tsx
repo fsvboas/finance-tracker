@@ -33,7 +33,7 @@ export default function Home() {
         <Flex className="sm:space-x-2 max-sm:space-y-2 flex-col sm:flex-row w-full justify-center items-center">
           <Card title="Entradas" value={totalIncoming} />
           <Card title="Saídas" value={totalOutcoming} />
-          <Card title="Total" value={total} />
+          <Card title="Disponível" value={total} />
         </Flex>
         <Row className="justify-between w-full h-10 items-center max-[700px]:px-2">
           <AddTransactionDialog
@@ -61,6 +61,7 @@ export default function Home() {
           <FinancialTable data={mockDataTable} />
         </ScrollArea>
       </Column>
+      {/* </AppBackground> */}
     </Column>
   );
 }

@@ -4,7 +4,7 @@ import Column from "./utils/column";
 import Row from "./utils/row";
 
 interface CardProps {
-  title: "Entradas" | "Saídas" | "Total";
+  title: "Entradas" | "Saídas" | "Disponível";
   value?: number | string;
 }
 const Card = ({ title, value }: CardProps) => {
@@ -26,5 +26,5 @@ export default Card;
 const cardIconMap = {
   Entradas: <BanknoteArrowUp className="text-green-600" />,
   Saídas: <BanknoteArrowDown className="text-red-600" />,
-  Total: <Banknote />,
+  Disponível: <Banknote />,
 };
