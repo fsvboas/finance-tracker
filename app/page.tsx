@@ -3,6 +3,7 @@
 import { ListPlus, ListRestart } from "lucide-react";
 import { useMemo, useState } from "react";
 import AddTransactionDialog from "./components/add-transaction-dialog";
+import EmptyTransactionHistory from "./components/empty-transaction-history";
 import Card from "./components/financial-summary-card";
 import FinancialTable from "./components/financial-table";
 import MonthlyButtonGroup from "./components/monthly-button-group";
@@ -11,6 +12,7 @@ import { ScrollArea } from "./components/ui/scroll-area";
 import Column from "./components/utils/column";
 import Flex from "./components/utils/flex";
 import Row from "./components/utils/row";
+import Show from "./components/utils/show";
 import { TransactionType } from "./types/transaction-type";
 
 export default function Home() {
@@ -76,7 +78,12 @@ export default function Home() {
           </Button>
         </Row>
         <ScrollArea className="w-full h-90">
-          <FinancialTable data={filteredTransactions} />
+          <Show
+            when={filteredTransactions?.length > 0}
+            fallback={<EmptyTransactionHistory />}
+          >
+            <FinancialTable data={filteredTransactions} />
+          </Show>
         </ScrollArea>
       </Column>
     </Column>
