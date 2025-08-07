@@ -70,7 +70,7 @@ const TimePeriodSelector = ({
         <Button
           size="icon"
           variant="outline"
-          className="rounded-full cursor-pointer"
+          className="cursor-pointer"
           onClick={handlePreviousYear}
           disabled={selectedYear <= minYear}
         >
@@ -80,7 +80,7 @@ const TimePeriodSelector = ({
         <Button
           size="icon"
           variant="outline"
-          className="rounded-full cursor-pointer"
+          className="cursor-pointer"
           onClick={handleNextYear}
           disabled={selectedYear >= maxYear}
         >
@@ -99,7 +99,7 @@ const TimePeriodSelector = ({
                 }}
                 onClick={() => setSelectedMonth(month.number)}
                 className={`cursor-pointer
-                flex-1 text-sm font-medium transition-all duration-200 rounded-none
+                flex-1 text-sm font-medium transition-all duration-200 rounded-none border-r last:border-0
                 ${
                   selectedMonth === month.number
                     ? "bg-black text-white"
