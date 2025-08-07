@@ -64,6 +64,10 @@ const TimePeriodSelector = ({
     }
   };
 
+  const isMonthSelected = (monthNumber: number) => {
+    return selectedMonth === monthNumber && selectedYear === currentYear;
+  };
+
   return (
     <Column className="w-full space-y-2 py-2">
       <Row className="items-center justify-end space-x-2 max-[780px]:px-2">
@@ -91,6 +95,7 @@ const TimePeriodSelector = ({
         <Row className="rounded overflow-hidden">
           {monthNamesMap.map((month, index) => {
             const shortMonthName = month.name.slice(0, 3);
+            const isSelected = isMonthSelected(month.number);
             return (
               <Button
                 key={month.number}
@@ -101,12 +106,12 @@ const TimePeriodSelector = ({
                 className={`cursor-pointer
                 flex-1 text-sm font-medium transition-all duration-200 rounded-none
                 ${
-                  selectedMonth === month.number
+                  isSelected
                     ? "bg-black text-white"
                     : "bg-white text-black hover:bg-black/10"
                 }
               `}
-                aria-pressed={selectedMonth === month.number}
+                aria-pressed={isSelected}
                 title={month.name}
               >
                 {shortMonthName}
