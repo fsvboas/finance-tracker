@@ -1,9 +1,11 @@
 "use client";
 
 import { ListPlus, ListRestart } from "lucide-react";
+import { useState } from "react";
 import AddTransactionDialog from "./components/add-transaction-dialog";
 import Card from "./components/financial-summary-card";
 import FinancialTable from "./components/financial-table";
+import MonthlyButtonGroup from "./components/monthly-button-group";
 import { Button } from "./components/ui/button";
 import { ScrollArea } from "./components/ui/scroll-area";
 import Column from "./components/utils/column";
@@ -12,6 +14,9 @@ import Row from "./components/utils/row";
 import { TransactionType } from "./types/transaction-type";
 
 export default function Home() {
+  const getCurrentMonth = new Date().getMonth();
+  const [month, setMonth] = useState<number>(getCurrentMonth);
+
   const totalIncoming = mockDataTable.reduce((sum, transaction) => {
     return transaction.transactionType === "incoming"
       ? sum + transaction.value
@@ -29,13 +34,14 @@ export default function Home() {
 
   return (
     <Column className="min-h-screen w-full flex bg-[#f4f2ee] items-center sm:justify-center">
-      <Column className="items-center space-y-2 w-full max-w-2xl">
+      <Column className="items-center space-y-2 w-full max-w-3xl">
+        <MonthlyButtonGroup selectedMonth={month} setSelectedMonth={setMonth} />
         <Flex className="sm:space-x-2 max-sm:space-y-2 flex-col sm:flex-row w-full justify-center items-center">
           <Card title="Entradas" value={totalIncoming} />
           <Card title="Saídas" value={totalOutcoming} />
           <Card title="Disponível" value={total} />
         </Flex>
-        <Row className="justify-between w-full h-10 items-center max-[700px]:px-2">
+        <Row className="justify-between w-full h-10 items-center max-[780px]:px-2">
           <AddTransactionDialog
             trigger={
               <Button variant="link" className="cursor-pointer px-0 h-full">
@@ -61,7 +67,6 @@ export default function Home() {
           <FinancialTable data={mockDataTable} />
         </ScrollArea>
       </Column>
-      {/* </AppBackground> */}
     </Column>
   );
 }
