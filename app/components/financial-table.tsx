@@ -29,7 +29,7 @@ const FinancialTable = ({ data }: FinancialTableProps) => {
       </TableHeader>
       <TableBody>
         {data?.map((item, index) => {
-          const transactionDate = item?.date?.toISOString();
+          const transactionDate = new Date(item?.date).toISOString();
           return (
             <TransactionDetailsDialog
               transaction={item}

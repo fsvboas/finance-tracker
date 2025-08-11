@@ -1,5 +1,6 @@
 "use client";
 
+import { useQuery } from "@tanstack/react-query";
 import { ListPlus, ListRestart } from "lucide-react";
 import { useMemo, useState } from "react";
 import AddTransactionDialog from "./components/add-transaction-dialog";
@@ -13,7 +14,7 @@ import Column from "./components/utils/column";
 import Flex from "./components/utils/flex";
 import Row from "./components/utils/row";
 import Show from "./components/utils/show";
-import { TransactionType } from "./types/transaction-type";
+import { getTransactions } from "./services";
 
 export default function Home() {
   const getCurrentMonth = new Date().getMonth() + 1;
@@ -21,10 +22,20 @@ export default function Home() {
   const [month, setMonth] = useState<number>(getCurrentMonth);
   const [year, setYear] = useState<number>(getCurrentYear);
 
+  // TO-DO: Pending state layout
+  const { data, isPending: pendingGetTransactions } = useQuery({
+    queryFn: () => getTransactions(),
+    queryKey: ["transactions"],
+  });
+
+  const transactions = data || [];
+
   const filteredTransactions = useMemo(() => {
-    return mockDataTable.filter((transaction) => {
-      const transactionMonth = transaction.date.getMonth() + 1;
-      const transactionYear = transaction.date.getFullYear();
+    return transactions.filter((transaction) => {
+      const transactionDate = new Date(transaction.date);
+
+      const transactionMonth = transactionDate.getMonth() + 1;
+      const transactionYear = transactionDate.getFullYear();
       return transactionMonth === month && transactionYear === year;
     });
   }, [month, year]);
@@ -97,62 +108,3 @@ export default function Home() {
     </Column>
   );
 }
-
-const mockDataTable: TransactionType[] = [
-  {
-    id: "1",
-    description: "Salário",
-    value: 500000,
-    transactionType: "incoming",
-    date: new Date("2025-07-05"),
-  },
-  {
-    id: "2",
-    description: "Gasolina",
-    value: 30000,
-    transactionType: "outcoming",
-    date: new Date("2025-07-05"),
-  },
-  {
-    id: "3",
-    description: "Plano de Saúde",
-    value: 60000,
-    transactionType: "outcoming",
-    date: new Date("2025-08-10"),
-  },
-  {
-    id: "4",
-    description: "Freelance",
-    value: 200000,
-    transactionType: "incoming",
-    date: new Date("2025-08-15"),
-  },
-  {
-    id: "5",
-    description: "Mochila de Viagem",
-    value: 25000,
-    transactionType: "outcoming",
-    date: new Date("2025-09-19"),
-  },
-  {
-    id: "6",
-    description: "Aluguel",
-    value: 100000,
-    transactionType: "outcoming",
-    date: new Date("2025-10-23"),
-  },
-  {
-    id: "7",
-    description: "Condomínio",
-    value: 50000,
-    transactionType: "outcoming",
-    date: new Date("2025-11-23"),
-  },
-  {
-    id: "8",
-    description: "Mercado",
-    value: 30000,
-    transactionType: "outcoming",
-    date: new Date("2025-11-28"),
-  },
-];

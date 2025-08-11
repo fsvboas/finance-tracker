@@ -34,6 +34,8 @@ const TransactionDetailsDialog = ({
     outcoming: "Saída",
   } as const;
 
+  const transactionDate = new Date(transaction.date).toISOString();
+
   return (
     <Dialog>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
@@ -66,7 +68,7 @@ const TransactionDetailsDialog = ({
             <Row className="space-x-2">
               <dt className="font-medium">Dia:</dt>
               <dd>
-                <DateFormatter>{transaction.date?.toISOString()}</DateFormatter>
+                <DateFormatter>{transactionDate}</DateFormatter>
               </dd>
             </Row>
             <Show when={hasTransactionTimeMock}>
