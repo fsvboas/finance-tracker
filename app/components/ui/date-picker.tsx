@@ -1,5 +1,4 @@
 "use client";
-
 import DateFormatter from "@/app/helpers/date-formatter";
 import { ChevronDownIcon } from "lucide-react";
 import { useState } from "react";
@@ -9,15 +8,18 @@ import Flex from "../utils/flex";
 import Show from "../utils/show";
 import { Button } from "./button";
 import { Calendar } from "./calendar";
-import { Input } from "./input";
 import { Label } from "./label";
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
 
-function DateTimePicker() {
-  const [open, setOpen] = useState<boolean>(false);
-  const [date, setDate] = useState<Date | undefined>(undefined);
+interface DatePickerProps {
+  value?: Date;
+  onValueChange: (date: Date | undefined) => void;
+}
 
-  const transactionDateFormatted = date?.toISOString();
+function DatePicker({ value, onValueChange }: DatePickerProps) {
+  const [open, setOpen] = useState<boolean>(false);
+
+  const transactionDateFormatted = value && value?.toISOString();
 
   return (
     <Flex className="space-x-2 max-[425px]:flex-col max-[425px]:space-y-4">
@@ -30,7 +32,7 @@ function DateTimePicker() {
               id="date-picker"
               className="w-full min-w-[150px] justify-between font-normal"
             >
-              <Show when={date} fallback={"Selecione a data"}>
+              <Show when={value} fallback={"Selecione a data"}>
                 <DateFormatter>{transactionDateFormatted}</DateFormatter>
               </Show>
               <ChevronDownIcon />
@@ -40,27 +42,28 @@ function DateTimePicker() {
             <Calendar
               locale={pt}
               mode="single"
-              selected={date}
+              selected={value}
               onSelect={(date) => {
-                setDate(date);
+                onValueChange(date);
                 setOpen(false);
               }}
             />
           </PopoverContent>
         </Popover>
       </Column>
-      <Column className="space-y-2">
+      {/* <Column className="space-y-2">
         <Label htmlFor="time-picker">Horário</Label>
         <Input
           type="time"
           id="time-picker"
           step="1"
-          defaultValue="10:30:00"
+          value={timeValue || ""}
+          onChange={(e) => onTimeChange(e.target.value)}
           className="bg-background w-full appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
         />
-      </Column>
+      </Column> */}
     </Flex>
   );
 }
 
-export { DateTimePicker };
+export default DatePicker;

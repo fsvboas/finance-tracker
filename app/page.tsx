@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { ListPlus, ListRestart } from "lucide-react";
+import { ListPlus } from "lucide-react";
 import { useMemo, useState } from "react";
 import AddTransactionFormDialog from "./components/add-transaction-form-dialog";
 import EmptyTransactionHistory from "./components/empty-transaction-history";
@@ -43,7 +43,7 @@ export default function Home() {
   const totalIncoming = useMemo(() => {
     return filteredTransactions.reduce((sum, transaction) => {
       return transaction.transactionType === "incoming"
-        ? sum + transaction.value
+        ? sum + Number(transaction.value)
         : sum;
     }, 0);
   }, [filteredTransactions]);
@@ -51,7 +51,7 @@ export default function Home() {
   const totalOutcoming = useMemo(() => {
     return filteredTransactions.reduce((sum, transaction) => {
       return transaction.transactionType === "outcoming"
-        ? sum + transaction.value
+        ? sum + Number(transaction.value)
         : sum;
     }, 0);
   }, [filteredTransactions]);
@@ -85,7 +85,7 @@ export default function Home() {
               </Button>
             }
           />
-          <Button
+          {/* <Button
             variant="link"
             className="cursor-pointer px-0"
             onClick={handleClearTransactionList}
@@ -94,7 +94,7 @@ export default function Home() {
               <ListRestart className="!w-5 !h-5" />
               <span>Limpar Tabela</span>
             </Row>
-          </Button>
+          </Button> */}
         </Row>
         <ScrollArea className="w-full h-90">
           <Show
