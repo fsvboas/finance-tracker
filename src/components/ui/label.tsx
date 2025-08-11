@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import * as LabelPrimitive from "@radix-ui/react-label"
+import * as LabelPrimitive from "@radix-ui/react-label";
+import * as React from "react";
 
-import { cn } from "@/app/libs/shadcn-ui/utils"
+import { cn } from "@/src/libs/shadcn-ui/utils";
 
 function Label({
   className,
@@ -18,7 +18,7 @@ function Label({
       )}
       {...props}
     />
-  )
+  );
 }
 
-export { Label }
+export { Label };

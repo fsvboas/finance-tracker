@@ -3,18 +3,18 @@
 import { useQuery } from "@tanstack/react-query";
 import { ListPlus } from "lucide-react";
 import { useMemo, useState } from "react";
-import AddTransactionFormDialog from "./components/add-transaction-form-dialog";
-import EmptyTransactionHistory from "./components/empty-transaction-history";
-import Card from "./components/financial-summary-card";
-import FinancialTable from "./components/financial-table";
-import TimePeriodSelector from "./components/time-period-selector";
-import { Button } from "./components/ui/button";
-import { ScrollArea } from "./components/ui/scroll-area";
-import Column from "./components/utils/column";
-import Flex from "./components/utils/flex";
-import Row from "./components/utils/row";
-import Show from "./components/utils/show";
-import { getTransactions } from "./services";
+import AddTransactionFormDialog from "../components/add-transaction-form-dialog";
+import EmptyTransactionHistory from "../components/empty-transaction-history";
+import Card from "../components/financial-summary-card";
+import FinancialTable from "../components/financial-table";
+import TimePeriodSelector from "../components/time-period-selector";
+import { Button } from "../components/ui/button";
+import { ScrollArea } from "../components/ui/scroll-area";
+import Column from "../components/utils/column";
+import Flex from "../components/utils/flex";
+import Row from "../components/utils/row";
+import Show from "../components/utils/show";
+import { getTransactions } from "../services";
 
 export default function Home() {
   const getCurrentMonth = new Date().getMonth() + 1;

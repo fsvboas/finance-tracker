@@ -1,6 +1,6 @@
-import * as React from "react"
+import * as React from "react";
 
-import { cn } from "@/app/libs/shadcn-ui/utils"
+import { cn } from "@/src/libs/shadcn-ui/utils";
 
 function Input({ className, type, ...props }: React.ComponentProps<"input">) {
   return (
@@ -15,7 +15,7 @@ function Input({ className, type, ...props }: React.ComponentProps<"input">) {
       )}
       {...props}
     />
-  )
+  );
 }
 
-export { Input }
+export { Input };

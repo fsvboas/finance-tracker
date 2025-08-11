@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { TanstackQueryProvider } from "../libs/tanstack-query";
 import "./globals.css";
-import { TanstackQueryProvider } from "./libs/tanstack-query";
 
 const inter = Inter({
   subsets: ["latin"],
