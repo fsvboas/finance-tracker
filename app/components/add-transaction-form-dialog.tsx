@@ -6,6 +6,7 @@ import { Loader2Icon } from "lucide-react";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import * as z from "zod";
+import { currencyFormatter } from "../helpers/currency-formatter";
 import { queryClient } from "../libs/tanstack-query";
 import { postTransaction } from "../services/post-transaction";
 import { TransactionType } from "../types/transaction-type";
@@ -76,6 +77,7 @@ const AddTransactionFormDialog = ({
     };
     post({ transaction: payload });
   };
+
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
@@ -156,10 +158,14 @@ const AddTransactionFormDialog = ({
                     <Input
                       id="value"
                       placeholder="R$ 2.000,00"
-                      value={value}
-                      onChange={onChange}
-                      className={`${error && "border-red-600"}`}
+                      value={currencyFormatter(Number(value))}
+                      onChange={(event) => {
+                        const rawValue = event.target.value.replace(/\D/g, "");
+                        onChange(rawValue);
+                      }}
+                      className={`${error ? "border-red-600" : ""}`}
                     />
+
                     <div className="h-2 -mt-1">
                       <Show when={error}>
                         <span className="text-xs text-red-600">
