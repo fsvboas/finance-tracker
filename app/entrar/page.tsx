@@ -8,7 +8,6 @@ import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 import Column from "../components/utils/column";
-import Row from "../components/utils/row";
 import Show from "../components/utils/show";
 
 const LoginFormSchema = z.object({
@@ -68,17 +67,18 @@ export default function LoginScreen() {
             />
           </Column>
           <Column className="space-y-2">
-            <Row className="justify-between">
-              <Label htmlFor="password">Senha</Label>
-              <Button
+            {/* <Row className="justify-between"> */}
+            <Label htmlFor="password">Senha</Label>
+            {/* <Button
                 type="button"
                 variant="link"
                 className="p-0 h-fit opacity-40"
+                disabled
                 onClick={() => null}
               >
                 Esqueceu a senha?
-              </Button>
-            </Row>
+              </Button> */}
+            {/* </Row> */}
             <Controller
               name="password"
               control={control}
