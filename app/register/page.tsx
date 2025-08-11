@@ -1,6 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "../components/ui/button";
@@ -176,9 +177,11 @@ export default function RegisterScreen() {
               {/* </Show> */}
               Criar conta
             </Button>
-            <Button type="button" variant="link" onClick={() => null}>
-              Já tenho uma conta
-            </Button>
+            <Link href="/login" className="flex self-center w-fit" passHref>
+              <Button type="button" variant="link">
+                Já tenho uma conta
+              </Button>
+            </Link>
           </Column>
         </form>
       </Column>
