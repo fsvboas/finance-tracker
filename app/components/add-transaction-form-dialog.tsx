@@ -78,7 +78,7 @@ const AddTransactionFormDialog = ({
         <form
           id="transaction-form"
           onSubmit={handleSubmit(handleAddTransaction)}
-          className="space-y-3"
+          className="space-y-4"
         >
           <DialogHeader>
             <DialogTitle />
@@ -124,8 +124,9 @@ const AddTransactionFormDialog = ({
                     placeholder="Salário"
                     value={value}
                     onChange={onChange}
+                    className={`${error && "border-red-600"}`}
                   />
-                  <div className="h-2">
+                  <div className="h-2 -mt-1">
                     <Show when={error}>
                       <span className="text-xs text-red-600">
                         {error?.message}
@@ -152,8 +153,9 @@ const AddTransactionFormDialog = ({
                       placeholder="R$ 2.000,00"
                       value={value}
                       onChange={onChange}
+                      className={`${error && "border-red-600"}`}
                     />
-                    <div className="h-2">
+                    <div className="h-2 -mt-1">
                       <Show when={error}>
                         <span className="text-xs text-red-600">
                           {error?.message}
