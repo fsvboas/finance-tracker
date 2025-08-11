@@ -19,6 +19,7 @@ import { getTransactions } from "./services";
 export default function Home() {
   const getCurrentMonth = new Date().getMonth() + 1;
   const getCurrentYear = new Date().getFullYear();
+
   const [month, setMonth] = useState<number>(getCurrentMonth);
   const [year, setYear] = useState<number>(getCurrentYear);
 
@@ -28,7 +29,7 @@ export default function Home() {
     queryKey: ["transactions"],
   });
 
-  const transactions = data || [];
+  const transactions = useMemo(() => data || [], [data]);
 
   const filteredTransactions = useMemo(() => {
     return transactions.filter((transaction) => {
@@ -38,7 +39,7 @@ export default function Home() {
       const transactionYear = transactionDate.getFullYear();
       return transactionMonth === month && transactionYear === year;
     });
-  }, [month, year]);
+  }, [month, year, transactions]);
 
   const totalIncoming = useMemo(() => {
     return filteredTransactions.reduce((sum, transaction) => {
@@ -57,8 +58,6 @@ export default function Home() {
   }, [filteredTransactions]);
 
   const total = totalIncoming - totalOutcoming;
-
-  const handleClearTransactionList = () => alert("Clear Transaction List");
 
   return (
     <Column className="min-h-screen w-full flex bg-[#f4f2ee] items-center sm:justify-center">
