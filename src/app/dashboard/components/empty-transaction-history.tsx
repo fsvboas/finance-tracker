@@ -1,7 +1,7 @@
+import { Button } from "@/src/components/button";
+import Column from "@/src/components/utils/column";
 import { CircleSlash2 } from "lucide-react";
 import AddTransactionFormDialog from "./add-transaction-form-dialog";
-import { Button } from "./ui/button";
-import Column from "./utils/column";
 
 const EmptyTransactionHistory = () => {
   return (

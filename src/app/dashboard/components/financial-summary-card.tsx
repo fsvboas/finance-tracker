@@ -1,7 +1,7 @@
+import Column from "@/src/components/utils/column";
+import Row from "@/src/components/utils/row";
+import CurrencyFormatter from "@/src/helpers/currency-formatter";
 import { Banknote, BanknoteArrowDown, BanknoteArrowUp } from "lucide-react";
-import CurrencyFormatter from "../helpers/currency-formatter";
-import Column from "./utils/column";
-import Row from "./utils/row";
 
 interface CardProps {
   title: "Entradas" | "Saídas" | "Disponível";

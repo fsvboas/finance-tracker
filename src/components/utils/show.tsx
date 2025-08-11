@@ -5,6 +5,7 @@ interface ShowProps {
   fallback?: React.ReactNode;
   children?: React.ReactNode | React.ReactNode[];
 }
+
 const Show = (props: ShowProps) => {
   return <>{props.when ? props.children : props.fallback}</>;
 };

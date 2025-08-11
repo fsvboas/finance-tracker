@@ -1,9 +1,5 @@
 "use client";
 
-import CurrencyFormatter from "../helpers/currency-formatter";
-import DateFormatter from "../helpers/date-formatter";
-import { TransactionType } from "../types/transaction-type";
-import TransactionDetailsDialog from "./transaction-details-dialog";
 import {
   Table,
   TableBody,
@@ -11,7 +7,11 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "./ui/table";
+} from "@/src/components/table";
+import CurrencyFormatter from "@/src/helpers/currency-formatter";
+import DateFormatter from "@/src/helpers/date-formatter";
+import { TransactionType } from "@/src/types/transaction-type";
+import TransactionDetailsDialog from "./transaction-details-dialog";
 
 interface FinancialTableProps {
   data?: TransactionType[];

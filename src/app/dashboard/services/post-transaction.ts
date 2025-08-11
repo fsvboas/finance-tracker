@@ -1,5 +1,5 @@
-import { api } from "../libs/axios/api";
-import { TransactionType } from "../types/transaction-type";
+import { api } from "../../../libs/axios/api";
+import { TransactionType } from "../../../types/transaction-type";
 
 interface PostTransactionProps {
   transaction: TransactionType;

@@ -1,9 +1,9 @@
+import { Button } from "@/src/components/button";
+import { ScrollArea, ScrollBar } from "@/src/components/scroll-area";
+import Column from "@/src/components/utils/column";
+import Row from "@/src/components/utils/row";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Dispatch, SetStateAction, useEffect, useRef } from "react";
-import { Button } from "./ui/button";
-import { ScrollArea, ScrollBar } from "./ui/scroll-area";
-import Column from "./utils/column";
-import Row from "./utils/row";
 
 interface TimePeriodSelectorProps {
   selectedYear: number;

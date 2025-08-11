@@ -1,17 +1,8 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
-import { Loader2Icon } from "lucide-react";
-import { useEffect, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
-import * as z from "zod";
-import { currencyFormatter } from "../helpers/currency-formatter";
-import { queryClient } from "../libs/tanstack-query";
-import { postTransaction } from "../services/post-transaction";
-import { TransactionType } from "../types/transaction-type";
-import { Button } from "./ui/button";
-import DatePicker from "./ui/date-picker";
+import { postTransaction } from "@/src/app/dashboard/services";
+import { Button } from "@/src/components/button";
+import DatePicker from "@/src/components/date-picker";
 import {
   Dialog,
   DialogClose,
@@ -20,13 +11,22 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "./ui/dialog";
-import { Input } from "./ui/input";
-import { Label } from "./ui/label";
-import { Tabs, TabsList, TabsTrigger } from "./ui/tabs";
-import Column from "./utils/column";
-import Flex from "./utils/flex";
-import Show from "./utils/show";
+} from "@/src/components/dialog";
+import { Input } from "@/src/components/input";
+import { Label } from "@/src/components/label";
+import { Tabs, TabsList, TabsTrigger } from "@/src/components/tabs";
+import Column from "@/src/components/utils/column";
+import Flex from "@/src/components/utils/flex";
+import Show from "@/src/components/utils/show";
+import { currencyFormatter } from "@/src/helpers/currency-formatter";
+import { queryClient } from "@/src/libs/tanstack-query";
+import { TransactionType } from "@/src/types/transaction-type";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
+import { Loader2Icon } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import * as z from "zod";
 
 interface AddTransactionFormDialogProps {
   trigger: React.ReactNode;

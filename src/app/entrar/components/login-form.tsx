@@ -1,8 +1,8 @@
 "use client";
 
-import { Button } from "@/src/components/ui/button";
-import { Input } from "@/src/components/ui/input";
-import { Label } from "@/src/components/ui/label";
+import { Button } from "@/src/components/button";
+import { Input } from "@/src/components/input";
+import { Label } from "@/src/components/label";
 import Column from "@/src/components/utils/column";
 import Show from "@/src/components/utils/show";
 import { zodResolver } from "@hookform/resolvers/zod";

@@ -1,13 +1,12 @@
 "use client";
 
+import { getTransactions } from "@/src/app/dashboard/services";
+import Column from "@/src/components/utils/column";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
-import { getTransactions } from "../services";
-
 import FinancialSummary from "./financial-summary";
 import TimePeriodSelector from "./time-period-selector";
 import TransactionList from "./transaction-section";
-import Column from "./utils/column";
 
 export default function FinancialDashboard() {
   const getCurrentMonth = new Date().getMonth() + 1;

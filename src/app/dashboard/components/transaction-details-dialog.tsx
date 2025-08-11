@@ -1,14 +1,7 @@
 "use client";
 
-import { useMutation } from "@tanstack/react-query";
-import { Loader2Icon } from "lucide-react";
-import { useState } from "react";
-import CurrencyFormatter from "../helpers/currency-formatter";
-import DateFormatter from "../helpers/date-formatter";
-import { queryClient } from "../libs/tanstack-query";
-import { deleteTransaction } from "../services/delete-transaction";
-import { TransactionType } from "../types/transaction-type";
-import { Button } from "./ui/button";
+import { deleteTransaction } from "@/src/app/dashboard/services";
+import { Button } from "@/src/components/button";
 import {
   Dialog,
   DialogContent,
@@ -16,10 +9,17 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "./ui/dialog";
-import Column from "./utils/column";
-import Row from "./utils/row";
-import Show from "./utils/show";
+} from "@/src/components/dialog";
+import Column from "@/src/components/utils/column";
+import Row from "@/src/components/utils/row";
+import Show from "@/src/components/utils/show";
+import CurrencyFormatter from "@/src/helpers/currency-formatter";
+import DateFormatter from "@/src/helpers/date-formatter";
+import { queryClient } from "@/src/libs/tanstack-query";
+import { TransactionType } from "@/src/types/transaction-type";
+import { useMutation } from "@tanstack/react-query";
+import { Loader2Icon } from "lucide-react";
+import { useState } from "react";
 
 interface TransactionDetailsDialog {
   trigger: React.ReactNode;

@@ -1,14 +1,14 @@
 "use client";
 
+import { Button } from "@/src/components/button";
+import { ScrollArea } from "@/src/components/scroll-area";
+import Row from "@/src/components/utils/row";
+import Show from "@/src/components/utils/show";
+import { TransactionType } from "@/src/types/transaction-type";
 import { ListPlus } from "lucide-react";
-import { TransactionType } from "../types/transaction-type";
 import AddTransactionFormDialog from "./add-transaction-form-dialog";
 import EmptyTransactionHistory from "./empty-transaction-history";
 import FinancialTable from "./financial-table";
-import { Button } from "./ui/button";
-import { ScrollArea } from "./ui/scroll-area";
-import Row from "./utils/row";
-import Show from "./utils/show";
 
 interface TransactionSectionProps {
   transactions: TransactionType[];

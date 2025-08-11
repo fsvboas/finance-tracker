@@ -1,5 +1,5 @@
+import Flex from "@/src/components/utils/flex";
 import Card from "./financial-summary-card";
-import Flex from "./utils/flex";
 
 interface FinancialSummaryProps {
   totalIncoming: number;
