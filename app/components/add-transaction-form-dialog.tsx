@@ -1,6 +1,9 @@
+"use client";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { Loader2Icon } from "lucide-react";
+import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import * as z from "zod";
 import { queryClient } from "../libs/tanstack-query";
@@ -42,6 +45,8 @@ type TransactionFormSchemaType = z.infer<typeof schema>;
 const AddTransactionFormDialog = ({
   trigger,
 }: AddTransactionFormDialogProps) => {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+
   const { control, handleSubmit } = useForm<TransactionFormSchemaType>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -56,7 +61,7 @@ const AddTransactionFormDialog = ({
     mutationFn: postTransaction,
     onSuccess: () => {
       queryClient?.invalidateQueries({ queryKey: ["transactions"] });
-      // TO-DO: CLOSE MODAL
+      setIsOpen(false);
     },
     onError: (error) => {
       // TO-DO: TOAST
@@ -72,7 +77,7 @@ const AddTransactionFormDialog = ({
     post({ transaction: payload });
   };
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent>
         <form
