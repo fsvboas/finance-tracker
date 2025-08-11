@@ -117,9 +117,13 @@ export default function LoginScreen() {
               {/* </Show> */}
               Entrar
             </Button>
-            <Link href="/register" className="flex self-center w-fit" passHref>
+            <Link
+              href="/criar-conta"
+              className="flex self-center w-fit"
+              passHref
+            >
               <Button type="button" variant="link">
-                Criar uma conta
+                Criar conta
               </Button>
             </Link>
           </Column>

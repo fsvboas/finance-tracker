@@ -177,7 +177,7 @@ export default function RegisterScreen() {
               {/* </Show> */}
               Criar conta
             </Button>
-            <Link href="/login" className="flex self-center w-fit" passHref>
+            <Link href="/entrar" className="flex self-center w-fit" passHref>
               <Button type="button" variant="link">
                 Já tenho uma conta
               </Button>
