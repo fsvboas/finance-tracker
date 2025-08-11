@@ -3,7 +3,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { ListPlus, ListRestart } from "lucide-react";
 import { useMemo, useState } from "react";
-import AddTransactionDialog from "./components/add-transaction-dialog";
+import AddTransactionFormDialog from "./components/add-transaction-form-dialog";
 import EmptyTransactionHistory from "./components/empty-transaction-history";
 import Card from "./components/financial-summary-card";
 import FinancialTable from "./components/financial-table";
@@ -75,7 +75,7 @@ export default function Home() {
           <Card title="Disponível" value={total} />
         </Flex>
         <Row className="justify-between w-full h-10 items-center max-[780px]:px-2">
-          <AddTransactionDialog
+          <AddTransactionFormDialog
             trigger={
               <Button variant="link" className="cursor-pointer px-0 h-full">
                 <Row className="items-center space-x-1.5 h-full">
