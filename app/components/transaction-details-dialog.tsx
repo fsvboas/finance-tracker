@@ -12,7 +12,6 @@ import {
 } from "./ui/dialog";
 import Column from "./utils/column";
 import Row from "./utils/row";
-import Show from "./utils/show";
 
 interface TransactionDetailsDialog {
   trigger: React.ReactNode;
@@ -71,18 +70,18 @@ const TransactionDetailsDialog = ({
                 <DateFormatter>{transactionDate}</DateFormatter>
               </dd>
             </Row>
-            <Show when={hasTransactionTimeMock}>
+            {/* <Show when={hasTransactionTimeMock}>
               <Row className="space-x-2">
                 <dt className="font-medium">Horário:</dt>
                 <dd>10:30 AM</dd>
               </Row>
-            </Show>
-            <Show when={transaction.transactionType === "outcoming"}>
+            </Show> */}
+            {/* <Show when={transaction.transactionType === "outcoming"}>
               <Row className="space-x-2">
                 <dt className="font-medium">Percentual das entradas:</dt>
                 <dd>23%</dd>
               </Row>
-            </Show>
+            </Show> */}
           </dl>
         </Column>
         <DialogFooter>
