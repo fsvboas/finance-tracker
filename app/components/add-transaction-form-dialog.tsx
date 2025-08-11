@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { Loader2Icon } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import * as z from "zod";
 import { currencyFormatter } from "../helpers/currency-formatter";
@@ -48,7 +48,7 @@ const AddTransactionFormDialog = ({
 }: AddTransactionFormDialogProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
-  const { control, handleSubmit } = useForm<TransactionFormSchemaType>({
+  const { control, handleSubmit, reset } = useForm<TransactionFormSchemaType>({
     resolver: zodResolver(schema),
     defaultValues: {
       transactionType: "incoming",
@@ -77,6 +77,12 @@ const AddTransactionFormDialog = ({
     };
     post({ transaction: payload });
   };
+
+  useEffect(() => {
+    if (isOpen) {
+      reset();
+    }
+  }, [isOpen, reset]);
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
