@@ -1,6 +1,8 @@
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { Loader2Icon } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
+import * as z from "zod";
 import { queryClient } from "../libs/tanstack-query";
 import { postTransaction } from "../services/post-transaction";
 import { TransactionType } from "../types/transaction-type";
@@ -26,10 +28,22 @@ interface AddTransactionFormDialogProps {
   trigger: React.ReactNode;
 }
 
+const schema = z.object({
+  transactionType: z.enum(["incoming", "outcoming"]),
+  description: z
+    .string()
+    .min(1, { message: "Adicione uma descrição para a transação." }),
+  value: z.string().min(1, { message: "Adicione o valor da transação." }),
+  date: z.date(),
+});
+
+type TransactionFormSchemaType = z.infer<typeof schema>;
+
 const AddTransactionFormDialog = ({
   trigger,
 }: AddTransactionFormDialogProps) => {
-  const { control, handleSubmit } = useForm<TransactionType>({
+  const { control, handleSubmit } = useForm<TransactionFormSchemaType>({
+    resolver: zodResolver(schema),
     defaultValues: {
       transactionType: "incoming",
       description: "",
@@ -42,6 +56,7 @@ const AddTransactionFormDialog = ({
     mutationFn: postTransaction,
     onSuccess: () => {
       queryClient?.invalidateQueries({ queryKey: ["transactions"] });
+      // TO-DO: CLOSE MODAL
     },
     onError: (error) => {
       // TO-DO: TOAST
@@ -49,10 +64,13 @@ const AddTransactionFormDialog = ({
     },
   });
 
-  const handleAddTransaction = (transaction: TransactionType) => {
-    post({ transaction });
+  const handleAddTransaction = (transaction: TransactionFormSchemaType) => {
+    const payload: TransactionType = {
+      id: crypto.randomUUID(),
+      ...transaction,
+    };
+    post({ transaction: payload });
   };
-
   return (
     <Dialog>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
@@ -96,13 +114,25 @@ const AddTransactionFormDialog = ({
             <Controller
               name="description"
               control={control}
-              render={({ field: { onChange, value } }) => (
-                <Input
-                  id="transaction"
-                  placeholder="Salário"
-                  value={value}
-                  onChange={onChange}
-                />
+              render={({
+                field: { onChange, value },
+                fieldState: { error },
+              }) => (
+                <Column>
+                  <Input
+                    id="transaction"
+                    placeholder="Salário"
+                    value={value}
+                    onChange={onChange}
+                  />
+                  <div className="h-2">
+                    <Show when={error}>
+                      <span className="text-xs text-red-600">
+                        {error?.message}
+                      </span>
+                    </Show>
+                  </div>
+                </Column>
               )}
             />
           </Column>
@@ -112,13 +142,25 @@ const AddTransactionFormDialog = ({
               <Controller
                 name="value"
                 control={control}
-                render={({ field: { onChange, value } }) => (
-                  <Input
-                    id="value"
-                    placeholder="R$ 2.000,00"
-                    value={value}
-                    onChange={onChange}
-                  />
+                render={({
+                  field: { onChange, value },
+                  fieldState: { error },
+                }) => (
+                  <Column>
+                    <Input
+                      id="value"
+                      placeholder="R$ 2.000,00"
+                      value={value}
+                      onChange={onChange}
+                    />
+                    <div className="h-2">
+                      <Show when={error}>
+                        <span className="text-xs text-red-600">
+                          {error?.message}
+                        </span>
+                      </Show>
+                    </div>
+                  </Column>
                 )}
               />
             </Column>
