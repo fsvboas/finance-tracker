@@ -1,5 +1,12 @@
+"use client";
+
+import { useMutation } from "@tanstack/react-query";
+import { Loader2Icon } from "lucide-react";
+import { useState } from "react";
 import CurrencyFormatter from "../helpers/currency-formatter";
 import DateFormatter from "../helpers/date-formatter";
+import { queryClient } from "../libs/tanstack-query";
+import { deleteTransaction } from "../services/delete-transaction";
 import { TransactionType } from "../types/transaction-type";
 import { Button } from "./ui/button";
 import {
@@ -12,6 +19,7 @@ import {
 } from "./ui/dialog";
 import Column from "./utils/column";
 import Row from "./utils/row";
+import Show from "./utils/show";
 
 interface TransactionDetailsDialog {
   trigger: React.ReactNode;
@@ -22,11 +30,7 @@ const TransactionDetailsDialog = ({
   trigger,
   transaction,
 }: TransactionDetailsDialog) => {
-  const handleDeleteTransaction = (transactionId: string) => {
-    alert(`Delete Transaction ${transactionId}`);
-  };
-
-  const hasTransactionTimeMock = true;
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const transactionTypeTranslation = {
     incoming: "Entrada",
@@ -35,8 +39,20 @@ const TransactionDetailsDialog = ({
 
   const transactionDate = new Date(transaction.date).toISOString();
 
+  const { mutate: del, isPending: pendingDeleteTransaction } = useMutation({
+    mutationFn: deleteTransaction,
+    onSuccess: () => {
+      queryClient?.invalidateQueries({ queryKey: ["transactions"] });
+      setIsOpen(false);
+    },
+  });
+
+  const handleDeleteTransaction = (transactionId: TransactionType["id"]) => {
+    del({ transactionId });
+  };
+
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent>
         <DialogHeader className="overflow-hidden border-b-1 border-black/10">
@@ -88,7 +104,11 @@ const TransactionDetailsDialog = ({
           <Button
             className="cursor-pointer"
             onClick={() => handleDeleteTransaction(transaction.id)}
+            disabled={pendingDeleteTransaction}
           >
+            <Show when={pendingDeleteTransaction}>
+              <Loader2Icon className="animate-spin" />
+            </Show>
             Remover Transação
           </Button>
         </DialogFooter>
