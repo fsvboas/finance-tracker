@@ -51,13 +51,10 @@ const RegisterForm = () => {
   const { mutate: signUp, isPending: pendingSignUp } = useMutation({
     mutationFn: doSignUp,
     onSuccess: () => {
-      toast.success(
-        "Cadastro realizado com sucesso! Confira seu email para ativar sua conta.",
-        {
-          position: "top-center",
-          className: "!bg-green-600/80 !text-white",
-        }
-      );
+      toast.success("Cadastro realizado com sucesso!", {
+        position: "top-center",
+        className: "!bg-green-600/80 !text-white",
+      });
       router.push("/entrar");
     },
     onError: (error) => {
