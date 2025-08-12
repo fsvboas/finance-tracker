@@ -1,7 +1,7 @@
 "use client";
 
 import { useMutation } from "@tanstack/react-query";
-import { LogOut, UserIcon } from "lucide-react";
+import { Loader2Icon, LogOut, UserIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { doLogout } from "../app/entrar/services";
 import { useUser } from "../hooks/use-user";
@@ -15,12 +15,12 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "./dropdown-menu";
+import Show from "./utils/show";
 
 const UserMenu = () => {
   const user = useUser();
   const route = useRouter();
 
-  // TO-DO: PENDING AND ERROR STATE
   const { mutate: logout, isPending: pendingLogout } = useMutation({
     mutationFn: doLogout,
     onSuccess: () => route.push("/entrar"),
@@ -38,7 +38,9 @@ const UserMenu = () => {
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="start">
         {/* TO-DO: CHANGE TO USER NAME */}
-        <DropdownMenuLabel>Olá, {user?.email}! </DropdownMenuLabel>
+        <DropdownMenuLabel>
+          Olá, {user?.user_metadata?.display_name || "Usuário"}!
+        </DropdownMenuLabel>
         <DropdownMenuGroup>
           {/* <DropdownMenuItem>
             Minha Conta
@@ -54,7 +56,12 @@ const UserMenu = () => {
         >
           Sair
           <DropdownMenuShortcut>
-            <LogOut className="text-red-600" />
+            <Show
+              when={!pendingLogout}
+              fallback={<Loader2Icon className="animate-spin text-red-600" />}
+            >
+              <LogOut className="text-red-600" />
+            </Show>
           </DropdownMenuShortcut>
         </DropdownMenuItem>
       </DropdownMenuContent>
