@@ -31,7 +31,7 @@ const UserMenu = () => {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
+      <DropdownMenuTrigger asChild className="cursor-pointer">
         <div className="bg-transparent border rounded-full w-8 h-8 flex items-center justify-center">
           <UserIcon size={20} />
         </div>
@@ -49,7 +49,7 @@ const UserMenu = () => {
           <DropdownMenuSeparator />
         </DropdownMenuGroup>
         <DropdownMenuItem
-          className="!text-red-600 hover:!bg-red-50"
+          className="!text-red-600 hover:!bg-red-50 cursor-pointer"
           onClick={() => logout()}
         >
           Sair
