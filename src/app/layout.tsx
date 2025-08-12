@@ -23,7 +23,7 @@ export default function RootLayout({
     <html lang="pt-BR">
       <body className={`${inter} antialiased`}>
         <TanstackQueryProvider>{children}</TanstackQueryProvider>
-        <Toaster expand={true} />
+        <Toaster visibleToasts={1} />
       </body>
     </html>
   );
