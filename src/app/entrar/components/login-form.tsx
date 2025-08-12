@@ -137,11 +137,7 @@ const LoginForm = () => {
               </Show>
               Entrar
             </Button>
-            <Link
-              href="/criar-conta"
-              className="flex self-center w-fit"
-              passHref
-            >
+            <Link href="/cadastro" className="flex self-center w-fit" passHref>
               <Button type="button" variant="link">
                 Criar conta
               </Button>
