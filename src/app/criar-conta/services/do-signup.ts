@@ -7,17 +7,19 @@ interface DoSignUpProps {
 }
 
 export async function doSignUp({ name, email, password }: DoSignUpProps) {
-  try {
-    await supabaseClient.auth.signUp({
-      email,
-      password,
-      options: {
-        data: {
-          display_name: name,
-        },
+  const { error } = await supabaseClient.auth.signUp({
+    email,
+    password,
+    options: {
+      data: {
+        display_name: name,
       },
-    });
-  } catch (error) {
+    },
+  });
+
+  if (error) {
     throw error;
   }
+
+  return;
 }

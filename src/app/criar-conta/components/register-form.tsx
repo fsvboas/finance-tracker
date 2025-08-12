@@ -5,12 +5,14 @@ import { Input } from "@/src/components/input";
 import { Label } from "@/src/components/label";
 import Column from "@/src/components/utils/column";
 import Show from "@/src/components/utils/show";
+import { translateSupabaseErrorMessages } from "@/src/utils/translate-supabase-errors";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { Loader2Icon } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 import { doSignUp } from "../services/do-signup";
 
@@ -18,7 +20,7 @@ const RegisterFormSchema = z
   .object({
     name: z
       .string()
-      .min(3, "Digite um nome válido (mínimo 3 caracteres).")
+      .min(3, "Digite um nome válido.")
       .refine((val) => !/^\d+$/.test(val), "O nome não pode ser um número."),
     email: z
       .email("Digite um e-mail válido.")
@@ -48,9 +50,22 @@ const RegisterForm = () => {
 
   const { mutate: signUp, isPending: pendingSignUp } = useMutation({
     mutationFn: doSignUp,
-    onSuccess: () => router.push("/entrar"),
+    onSuccess: () => {
+      toast.success(
+        "Cadastro realizado com sucesso! Confira seu email para ativar sua conta.",
+        {
+          position: "top-center",
+          className: "!bg-green-600/80 !text-white",
+        }
+      );
+      router.push("/entrar");
+    },
     onError: (error) => {
-      console.log(error);
+      const message = translateSupabaseErrorMessages(error.message);
+      toast.error(message, {
+        position: "top-center",
+        className: "!bg-red-600/80 !text-white",
+      });
     },
   });
 
