@@ -7,6 +7,7 @@ import Column from "@/src/components/utils/column";
 import Show from "@/src/components/utils/show";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
+import { Loader2Icon } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
@@ -31,7 +32,6 @@ const LoginForm = () => {
     },
   });
 
-  // TO-DO: PENDING STATE
   const { mutate: login, isPending: pendingLogin } = useMutation({
     mutationFn: doLogin,
     onSuccess: () => router.push("/dashboard"),
@@ -124,11 +124,11 @@ const LoginForm = () => {
             <Button
               className="hover:cursor-pointer w-full"
               type="submit"
-              // disabled={pendingLogin}
+              disabled={pendingLogin}
             >
-              {/* <Show when={pendingLogin}> */}
-              {/* <Loader2Icon className="animate-spin" /> */}
-              {/* </Show> */}
+              <Show when={pendingLogin}>
+                <Loader2Icon className="animate-spin" />
+              </Show>
               Entrar
             </Button>
             <Link
