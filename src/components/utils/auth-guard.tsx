@@ -4,6 +4,7 @@ import { supabaseClient } from "@/src/libs/supabase/supabase-client";
 import type { Session } from "@supabase/supabase-js";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { TopLoadingBar } from "../top-loading-bar";
 
 interface AuthGuardProps {
   children: React.ReactNode;
@@ -57,9 +58,12 @@ export function AuthGuard({
     }
   }, [loading, session, requireAuth, redirectTo, router]);
 
-  if (loading) return <div>Carregando...</div>;
-
   const hasAccess = (requireAuth && session) || (!requireAuth && !session);
 
-  return hasAccess ? <>{children}</> : null;
+  return (
+    <>
+      <TopLoadingBar isLoading={loading} />
+      {!loading && hasAccess && <>{children}</>}
+    </>
+  );
 }
