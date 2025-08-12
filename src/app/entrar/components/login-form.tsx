@@ -6,28 +6,42 @@ import { Label } from "@/src/components/label";
 import Column from "@/src/components/utils/column";
 import Show from "@/src/components/utils/show";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
+import { doLogin } from "../services/do-login";
 
 const LoginFormSchema = z.object({
-  login: z.string().min(1, "O campo login é obrigatório."),
+  email: z.string().min(1, "O campo email é obrigatório."),
   password: z.string().min(1, "O campo senha é obrigatório."),
 });
 
 type LoginFormSchemaType = z.infer<typeof LoginFormSchema>;
 
 const LoginForm = () => {
+  const router = useRouter();
+
   const { handleSubmit, control } = useForm<LoginFormSchemaType>({
     resolver: zodResolver(LoginFormSchema),
     defaultValues: {
-      login: "",
+      email: "",
       password: "",
     },
   });
 
-  const handleLogin = (login: LoginFormSchemaType) => {
-    console.log(login);
+  // TO-DO: PENDING STATE
+  const { mutate: login, isPending: pendingLogin } = useMutation({
+    mutationFn: doLogin,
+    onSuccess: () => router.push("/dashboard"),
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+
+  const handleLogin = ({ email, password }: LoginFormSchemaType) => {
+    login({ email, password });
   };
 
   return (
@@ -39,9 +53,9 @@ const LoginForm = () => {
           className="space-y-4"
         >
           <Column className="space-y-2">
-            <Label htmlFor="login">Login</Label>
+            <Label htmlFor="email">E-mail</Label>
             <Controller
-              name="login"
+              name="email"
               control={control}
               render={({
                 field: { onChange, value },
@@ -49,7 +63,7 @@ const LoginForm = () => {
               }) => (
                 <Column>
                   <Input
-                    id="login"
+                    id="email"
                     placeholder="seuemail@exemplo.com"
                     value={value}
                     onChange={onChange}
