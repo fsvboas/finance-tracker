@@ -3,7 +3,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { LogOut, UserIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { doLogout } from "../app/entrar/services/do-logout";
+import { doLogout } from "../app/entrar/services";
 import { useUser } from "../hooks/use-user";
 import {
   DropdownMenu,

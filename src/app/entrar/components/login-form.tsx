@@ -11,7 +11,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
-import { doLogin } from "../services/do-login";
+import { doLogin } from "../services";
 
 const LoginFormSchema = z.object({
   email: z.string().min(1, "O campo email é obrigatório."),
