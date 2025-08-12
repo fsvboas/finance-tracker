@@ -6,9 +6,13 @@ import { Label } from "@/src/components/label";
 import Column from "@/src/components/utils/column";
 import Show from "@/src/components/utils/show";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
+import { Loader2Icon } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
+import { doSignUp } from "../services/do-signup";
 
 const RegisterFormSchema = z
   .object({
@@ -30,6 +34,8 @@ const RegisterFormSchema = z
 type RegisterFormSchemaType = z.infer<typeof RegisterFormSchema>;
 
 const RegisterForm = () => {
+  const router = useRouter();
+
   const { handleSubmit, control } = useForm<RegisterFormSchemaType>({
     resolver: zodResolver(RegisterFormSchema),
     defaultValues: {
@@ -40,8 +46,16 @@ const RegisterForm = () => {
     },
   });
 
-  const handleRegister = (login: RegisterFormSchemaType) => {
-    console.log(login);
+  const { mutate: signUp, isPending: pendingSignUp } = useMutation({
+    mutationFn: doSignUp,
+    onSuccess: () => router.push("/entrar"),
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+
+  const handleSignUp = ({ name, email, password }: RegisterFormSchemaType) => {
+    signUp({ name, email, password });
   };
 
   return (
@@ -49,7 +63,7 @@ const RegisterForm = () => {
       <Column className="rounded-xl bg-white p-8 border border-zinc-200 shadow-sm w-[500px]">
         <form
           id="login-form"
-          onSubmit={handleSubmit(handleRegister)}
+          onSubmit={handleSubmit(handleSignUp)}
           className="space-y-4"
         >
           <Column className="space-y-2">
@@ -170,11 +184,11 @@ const RegisterForm = () => {
             <Button
               className="hover:cursor-pointer w-full"
               type="submit"
-              // disabled={pendingRegister}
+              disabled={pendingSignUp}
             >
-              {/* <Show when={pendingRegister}> */}
-              {/* <Loader2Icon className="animate-spin" /> */}
-              {/* </Show> */}
+              <Show when={pendingSignUp}>
+                <Loader2Icon className="animate-spin" />
+              </Show>
               Criar conta
             </Button>
             <Link href="/entrar" className="flex self-center w-fit" passHref>
