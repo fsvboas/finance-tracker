@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { Toaster } from "../components/sonner";
 import { TanstackQueryProvider } from "../libs/tanstack-query";
 import "./globals.css";
 
@@ -22,6 +23,7 @@ export default function RootLayout({
     <html lang="pt-BR">
       <body className={`${inter} antialiased`}>
         <TanstackQueryProvider>{children}</TanstackQueryProvider>
+        <Toaster expand={true} />
       </body>
     </html>
   );
