@@ -5,12 +5,14 @@ import { Input } from "@/src/components/input";
 import { Label } from "@/src/components/label";
 import Column from "@/src/components/utils/column";
 import Show from "@/src/components/utils/show";
+import { translateSupabaseErrorMessages } from "@/src/utils/translate-supabase-errors";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { Loader2Icon } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 import { doLogin } from "../services";
 
@@ -36,7 +38,11 @@ const LoginForm = () => {
     mutationFn: doLogin,
     onSuccess: () => router.push("/dashboard"),
     onError: (error) => {
-      console.log(error);
+      const message = translateSupabaseErrorMessages(error.message);
+      toast.error(message, {
+        position: "top-center",
+        className: "!bg-red-600/80 !text-white",
+      });
     },
   });
 

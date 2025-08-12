@@ -6,13 +6,14 @@ interface DoLoginProps {
 }
 
 export async function doLogin({ email, password }: DoLoginProps) {
-  try {
-    const { data } = await supabaseClient.auth.signInWithPassword({
-      email,
-      password,
-    });
-    return data;
-  } catch (error) {
+  const { data, error } = await supabaseClient.auth.signInWithPassword({
+    email,
+    password,
+  });
+
+  if (error) {
     throw error;
   }
+
+  return data;
 }
