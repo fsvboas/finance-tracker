@@ -20,7 +20,7 @@ export default function TransactionSection({
 }: TransactionSectionProps) {
   return (
     <>
-      <Row className="justify-between w-full h-10 items-center max-[780px]:px-2">
+      <Row className="justify-between w-full h-10 items-center max-[1020px]:px-2">
         <AddTransactionFormDialog
           trigger={
             <Button variant="link" className="cursor-pointer px-0 h-full">
