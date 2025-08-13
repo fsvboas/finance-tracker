@@ -2,13 +2,14 @@
 
 import { Button } from "@/src/components/button";
 import { ScrollArea } from "@/src/components/scroll-area";
+import Column from "@/src/components/utils/column";
 import Row from "@/src/components/utils/row";
 import Show from "@/src/components/utils/show";
 import { TransactionType } from "@/src/types/transaction-type";
 import { ListPlus } from "lucide-react";
 import AddTransactionFormDialog from "./add-transaction-form-dialog";
 import EmptyTransactionHistory from "./empty-transaction-history";
-import FinancialTable from "./financial-table";
+import TransactionCard from "./transaction-card";
 
 interface TransactionSectionProps {
   transactions: TransactionType[];
@@ -36,7 +37,11 @@ export default function TransactionSection({
           when={transactions?.length > 0}
           fallback={<EmptyTransactionHistory />}
         >
-          <FinancialTable data={transactions} />
+          <Column className="space-y-1">
+            {transactions?.map((transaction, index) => (
+              <TransactionCard key={index} transaction={transaction} />
+            ))}
+          </Column>
         </Show>
       </ScrollArea>
     </>
