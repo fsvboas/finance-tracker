@@ -66,7 +66,7 @@ const TimePeriodSelector = ({
 
   return (
     <Column className="w-full space-y-2 py-2">
-      <Row className="items-center justify-end space-x-2 max-[780px]:px-2">
+      <Row className="items-center justify-between md:justify-end space-x-2 max-[780px]:px-2">
         <Button
           size="icon"
           variant="outline"
