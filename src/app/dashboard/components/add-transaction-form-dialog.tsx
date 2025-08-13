@@ -66,8 +66,8 @@ const AddTransactionFormDialog = ({
 
   const { mutate: post, isPending: pendingPostTransaction } = useMutation({
     mutationFn: postTransaction,
-    onSuccess: async () => {
-      await queryClient?.invalidateQueries({ queryKey: ["transactions"] });
+    onSuccess: () => {
+      queryClient?.invalidateQueries({ queryKey: ["transactions"] });
       setIsOpen(false);
       toast.success("Transação adicionada com sucesso!", {
         className: "!bg-green-600/80 !text-white",

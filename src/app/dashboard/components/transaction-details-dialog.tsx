@@ -45,11 +45,11 @@ const TransactionDetailsDialog = ({
 
   const { mutate: del, isPending: pendingDeleteTransaction } = useMutation({
     mutationFn: deleteTransaction,
-    onSuccess: async (_, variables) => {
-      await queryClient?.invalidateQueries({ queryKey: ["transactions"] });
+    onSuccess: (_, variables) => {
+      queryClient?.invalidateQueries({ queryKey: ["transactions"] });
       setIsOpen(false);
       toast.success(
-        `Transação "${variables.transaction.description}" removida com sucesso!`,
+        `Transação ${variables.transaction.description}" removida com sucesso!`,
         {
           className: "!bg-green-600/80 !text-white",
         }
