@@ -1,38 +1,33 @@
 import { supabaseClient } from "@/src/libs/supabase/supabase-client";
-import { TransactionType } from "@/src/types/transaction-type";
-import { decryptData } from "@/src/utils/encrypt-data";
+import { decryptData, deriveKey } from "@/src/utils/encrypt-data";
 
-export async function getTransactions(): Promise<TransactionType[]> {
+export async function getTransactions(pin: string) {
   const {
     data: { user },
-    error: authError,
   } = await supabaseClient.auth.getUser();
+  if (!user) throw new Error("Usuário não autenticado");
 
-  if (authError || !user) {
-    throw new Error("Usuário não autenticado");
-  }
+  const { data: userSecret } = await supabaseClient
+    .from("user_secrets")
+    .select("salt")
+    .eq("user_id", user.id)
+    .single();
+
+  if (!userSecret?.salt) throw new Error("PIN não configurado");
+
+  const keyHex = deriveKey(pin, userSecret.salt);
 
   const { data, error } = await supabaseClient
     .from("transactions")
     .select("*")
     .order("created_at", { ascending: false });
 
-  if (error) {
-    throw error;
-  }
+  if (error) throw error;
 
-  const decryptedTransactions: TransactionType[] = (data || []).map(
-    (transaction: TransactionType) => ({
-      id: transaction.id,
-      user_id: transaction.user_id,
-      description: decryptData(transaction.description, user.id),
-      value: decryptData(transaction.value, user.id),
-      transactionType: decryptData(transaction.transactionType, user.id) as
-        | "incoming"
-        | "outcoming",
-      created_at: transaction.created_at,
-    })
-  );
-
-  return decryptedTransactions;
+  return (data || []).map((tx) => ({
+    ...tx,
+    description: decryptData(tx.description, keyHex),
+    value: decryptData(tx.value, keyHex),
+    transactionType: decryptData(tx.transactionType, keyHex),
+  }));
 }

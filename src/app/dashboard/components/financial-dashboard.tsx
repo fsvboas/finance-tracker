@@ -1,14 +1,21 @@
 "use client";
 
 import { getTransactions } from "@/src/app/dashboard/services";
+import { UserPinFormDialog } from "@/src/components/user-pin-form-dialog";
 import Column from "@/src/components/utils/column";
+import Show from "@/src/components/utils/show";
+import { usePin } from "@/src/contexts/user-pin-context";
+import { useUser } from "@/src/hooks/use-user";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import FinancialSummary from "./financial-summary";
 import TimePeriodSelector from "./time-period-selector";
-import TransactionList from "./transaction-section";
+import TransactionSection from "./transaction-section";
 
 export default function FinancialDashboard() {
+  const { pin } = usePin();
+  const user = useUser();
+
   const getCurrentMonth = new Date().getMonth() + 1;
   const getCurrentYear = new Date().getFullYear();
 
@@ -16,7 +23,7 @@ export default function FinancialDashboard() {
   const [year, setYear] = useState<number>(getCurrentYear);
 
   const { data, isPending: pendingGetTransactions } = useQuery({
-    queryFn: () => getTransactions(),
+    queryFn: () => getTransactions(pin!),
     queryKey: ["transactions"],
   });
 
@@ -51,23 +58,33 @@ export default function FinancialDashboard() {
     };
   }, [filteredTransactions]);
 
+  if (!user) return;
+
   return (
     <Column className="items-center w-full space-y-2 max-w-5xl mx-auto mt-16">
-      <TimePeriodSelector
-        selectedYear={year}
-        setSelectedYear={setYear}
-        selectedMonth={month}
-        setSelectedMonth={setMonth}
-      />
-      <FinancialSummary
-        totalIncoming={financialSummary.totalIncoming}
-        totalOutcoming={financialSummary.totalOutcoming}
-        total={financialSummary.total}
-      />
-      <TransactionList
-        transactions={filteredTransactions}
-        pendingTransactions={pendingGetTransactions}
-      />
+      <Show
+        when={user && pin}
+        fallback={
+          // TO-Do: Create a service to validate if user.secrets exists
+          <UserPinFormDialog userId={user!.id} mode="validate" />
+        }
+      >
+        <TimePeriodSelector
+          selectedYear={year}
+          setSelectedYear={setYear}
+          selectedMonth={month}
+          setSelectedMonth={setMonth}
+        />
+        <FinancialSummary
+          totalIncoming={financialSummary.totalIncoming}
+          totalOutcoming={financialSummary.totalOutcoming}
+          total={financialSummary.total}
+        />
+        <TransactionSection
+          transactions={filteredTransactions}
+          pendingTransactions={pendingGetTransactions}
+        />
+      </Show>
     </Column>
   );
 }
