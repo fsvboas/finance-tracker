@@ -1,11 +1,15 @@
-import { api } from "../../../libs/axios/api";
-import { TransactionType } from "../../../types/transaction-type";
+import { supabaseClient } from "@/src/libs/supabase/supabase-client";
+import { TransactionType } from "@/src/types/transaction-type";
 
-export async function getTransactions() {
-  try {
-    const { data } = await api.get<TransactionType[]>("/transactions");
-    return data;
-  } catch (error) {
+export async function getTransactions(): Promise<TransactionType[]> {
+  const { data, error } = await supabaseClient
+    .from("transactions")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  if (error) {
     throw error;
   }
+
+  return data || [];
 }

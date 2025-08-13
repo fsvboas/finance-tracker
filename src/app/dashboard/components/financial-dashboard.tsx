@@ -24,7 +24,7 @@ export default function FinancialDashboard() {
 
   const filteredTransactions = useMemo(() => {
     return transactions.filter((transaction) => {
-      const transactionDate = new Date(transaction.date);
+      const transactionDate = new Date(transaction.created_at);
       const transactionMonth = transactionDate.getMonth() + 1;
       const transactionYear = transactionDate.getFullYear();
       return transactionMonth === month && transactionYear === year;
@@ -64,7 +64,10 @@ export default function FinancialDashboard() {
         totalOutcoming={financialSummary.totalOutcoming}
         total={financialSummary.total}
       />
-      <TransactionList transactions={filteredTransactions} />
+      <TransactionList
+        transactions={filteredTransactions}
+        pendingTransactions={pendingGetTransactions}
+      />
     </Column>
   );
 }

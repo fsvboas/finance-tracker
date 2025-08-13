@@ -12,7 +12,7 @@ interface TransactionCardProps {
 }
 
 export default function TransactionCard({ transaction }: TransactionCardProps) {
-  const transactionDate = new Date(transaction?.date).toISOString();
+  const transactionDate = new Date(transaction?.created_at).toISOString();
 
   const isIncomingValue = transaction?.transactionType === "incoming";
 

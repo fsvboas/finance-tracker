@@ -37,7 +37,7 @@ const TransactionDetailsDialog = ({
     outcoming: "Saída",
   } as const;
 
-  const transactionDate = new Date(transaction.date).toISOString();
+  const transactionDate = new Date(transaction.created_at).toISOString();
 
   const { mutate: del, isPending: pendingDeleteTransaction } = useMutation({
     mutationFn: deleteTransaction,

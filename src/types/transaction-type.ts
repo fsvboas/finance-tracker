@@ -1,7 +1,8 @@
 export type TransactionType = {
   id: string;
+  user_id: string;
   description: string;
   value: string;
   transactionType: "incoming" | "outcoming";
-  date: Date;
+  created_at: string;
 };
