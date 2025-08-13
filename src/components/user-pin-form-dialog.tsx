@@ -64,7 +64,7 @@ export function UserPinFormDialog({ userId, mode }: UserPinFormDialogProps) {
     if (value === "Apagar") {
       const newValue = currentValue.slice(0, -1);
       onChange(newValue);
-    } else if (value === "Apagar Tudo") {
+    } else if (value === "Limpar") {
       onChange("");
     } else if (currentValue.length < 4 && !isNaN(Number(value))) {
       const newValue = currentValue + value;
@@ -136,7 +136,7 @@ export function UserPinFormDialog({ userId, mode }: UserPinFormDialogProps) {
                           handleButtonClick(button, value, onChange)
                         }
                         disabled={
-                          (button === "Apagar" || button === "Apagar Tudo") &&
+                          (button === "Apagar" || button === "Limpar") &&
                           value.length === 0
                         }
                       >
