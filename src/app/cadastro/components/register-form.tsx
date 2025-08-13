@@ -54,7 +54,9 @@ const RegisterForm = () => {
       toast.success("Cadastro realizado com sucesso!", {
         className: "!bg-green-600/80 !text-white",
       });
-      router.push("/entrar");
+      // TO-DO: Replace when create the e-mail validation
+      router.push("/dashboard");
+      // router.push("/entrar");
     },
     onError: (error) => {
       const message = translateSupabaseErrorMessages(error.message);
