@@ -42,7 +42,7 @@ export async function checkPinExists({ userId }: Partial<UserPinProps>) {
     .eq("user_id", userId)
     .single();
 
-  if (error) throw new Error("PIN não configurado.");
+  if (error) return false;
 
   return !!(data && data.pin_hash);
 }

@@ -70,28 +70,26 @@ export default function FinancialDashboard() {
 
   return (
     <Column className="items-center w-full space-y-2 max-w-5xl mx-auto mt-16">
-      <Show
-        when={user && pin && !pendingCheckPinExists}
-        fallback={
+      <Show when={!pendingCheckPinExists}>
+        <Show when={user}>
           <UserPinFormDialog userId={user!.id} mode={userPinFormDialogMode} />
-        }
-      >
-        <TimePeriodSelector
-          selectedYear={year}
-          setSelectedYear={setYear}
-          selectedMonth={month}
-          setSelectedMonth={setMonth}
-        />
-        <FinancialSummary
-          totalIncoming={financialSummary.totalIncoming}
-          totalOutcoming={financialSummary.totalOutcoming}
-          total={financialSummary.total}
-        />
-        <TransactionSection
-          transactions={filteredTransactions}
-          pendingTransactions={pendingGetTransactions}
-        />
+        </Show>
       </Show>
+      <TimePeriodSelector
+        selectedYear={year}
+        setSelectedYear={setYear}
+        selectedMonth={month}
+        setSelectedMonth={setMonth}
+      />
+      <FinancialSummary
+        totalIncoming={financialSummary.totalIncoming}
+        totalOutcoming={financialSummary.totalOutcoming}
+        total={financialSummary.total}
+      />
+      <TransactionSection
+        transactions={filteredTransactions}
+        pendingTransactions={pendingGetTransactions}
+      />
     </Column>
   );
 }
