@@ -13,6 +13,7 @@ import {
 import Column from "@/src/components/utils/column";
 import Row from "@/src/components/utils/row";
 import Show from "@/src/components/utils/show";
+import { usePin } from "@/src/contexts/user-pin-context";
 import CurrencyFormatter from "@/src/helpers/currency-formatter";
 import DateFormatter from "@/src/helpers/date-formatter";
 import { queryClient } from "@/src/libs/tanstack-query";
@@ -20,6 +21,7 @@ import { TransactionType } from "@/src/types/transaction-type";
 import { useMutation } from "@tanstack/react-query";
 import { Loader2Icon } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 
 interface TransactionDetailsDialog {
   trigger: React.ReactNode;
@@ -30,6 +32,8 @@ const TransactionDetailsDialog = ({
   trigger,
   transaction,
 }: TransactionDetailsDialog) => {
+  const { pin } = usePin();
+
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const transactionTypeTranslation = {
@@ -41,14 +45,26 @@ const TransactionDetailsDialog = ({
 
   const { mutate: del, isPending: pendingDeleteTransaction } = useMutation({
     mutationFn: deleteTransaction,
-    onSuccess: () => {
-      queryClient?.invalidateQueries({ queryKey: ["transactions"] });
+    onSuccess: async (_, variables) => {
+      await queryClient?.invalidateQueries({ queryKey: ["transactions"] });
       setIsOpen(false);
+      toast.success(
+        `Transação "${variables.transaction.description}" removida com sucesso!`,
+        {
+          className: "!bg-green-600/80 !text-white",
+        }
+      );
+    },
+    onError: (error) => {
+      // TO-DO: Translate error messages
+      toast.error(error.message, {
+        className: "!bg-red-600/80 !text-white",
+      });
     },
   });
 
-  const handleDeleteTransaction = (transactionId: TransactionType["id"]) => {
-    del({ transactionId });
+  const handleDeleteTransaction = (transaction: TransactionType) => {
+    del({ transaction, pin: pin! });
   };
 
   return (
@@ -103,7 +119,7 @@ const TransactionDetailsDialog = ({
         <DialogFooter>
           <Button
             className="cursor-pointer"
-            onClick={() => handleDeleteTransaction(transaction.id)}
+            onClick={() => handleDeleteTransaction(transaction)}
             disabled={pendingDeleteTransaction}
           >
             <Show when={pendingDeleteTransaction}>
