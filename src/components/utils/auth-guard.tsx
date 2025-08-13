@@ -4,6 +4,7 @@ import { supabaseClient } from "@/src/libs/supabase/supabase-client";
 import type { Session } from "@supabase/supabase-js";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import Header from "../header";
 import { TopLoadingBar } from "../top-loading-bar";
 
 interface AuthGuardProps {
@@ -65,7 +66,14 @@ export function AuthGuard({
   return (
     <>
       <TopLoadingBar isLoading={loading} />
-      {!loading && hasAccess && <>{children}</>}
+      {!loading && hasAccess && (
+        <>
+          {requireAuth && <Header />}
+          <div className="min-h-screen w-full flex bg-[#f4f2ee] items-center sm:justify-center">
+            {children}
+          </div>
+        </>
+      )}
     </>
   );
 }

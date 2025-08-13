@@ -52,7 +52,7 @@ export default function FinancialDashboard() {
   }, [filteredTransactions]);
 
   return (
-    <Column className="items-center space-y-2 max-w-5xl mx-auto mt-16">
+    <Column className="items-center w-full space-y-2 max-w-5xl mx-auto mt-16">
       <TimePeriodSelector
         selectedYear={year}
         setSelectedYear={setYear}

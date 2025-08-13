@@ -69,147 +69,133 @@ const RegisterForm = () => {
   };
 
   return (
-    <div className="min-h-screen flex justify-center items-center bg-white mx-2">
-      <Column className="rounded-xl bg-white p-8 border border-zinc-200 shadow-sm w-[500px]">
-        <form
-          id="login-form"
-          onSubmit={handleSubmit(handleSignUp)}
-          className="space-y-4"
-        >
-          <Column className="space-y-2">
-            <Label htmlFor="name">Nome</Label>
-            <Controller
-              name="name"
-              control={control}
-              render={({
-                field: { onChange, value },
-                fieldState: { error },
-              }) => (
-                <Column>
-                  <Input
-                    id="name"
-                    placeholder="Seu nome"
-                    value={value}
-                    onChange={onChange}
-                    className={`${error && "border-red-600"}`}
-                  />
-                  <div className="h-2 -mt-1">
-                    <Show when={error}>
-                      <span className="text-xs text-red-600">
-                        {error?.message}
-                      </span>
-                    </Show>
-                  </div>
-                </Column>
-              )}
-            />
-          </Column>
-          <Column className="space-y-2">
-            <Label htmlFor="email">E-mail</Label>
-            <Controller
-              name="email"
-              control={control}
-              render={({
-                field: { onChange, value },
-                fieldState: { error },
-              }) => (
-                <Column>
-                  <Input
-                    id="email"
-                    placeholder="seuemail@exemplo.com"
-                    value={value}
-                    onChange={onChange}
-                    className={`${error && "border-red-600"}`}
-                  />
-                  <div className="h-2 -mt-1">
-                    <Show when={error}>
-                      <span className="text-xs text-red-600">
-                        {error?.message}
-                      </span>
-                    </Show>
-                  </div>
-                </Column>
-              )}
-            />
-          </Column>
-          <Column className="space-y-2">
-            <Label htmlFor="password">Senha</Label>
-            <Controller
-              name="password"
-              control={control}
-              render={({
-                field: { onChange, value },
-                fieldState: { error },
-              }) => (
-                <Column>
-                  <Input
-                    id="password"
-                    type="password"
-                    placeholder="••••••••"
-                    value={value}
-                    onChange={onChange}
-                    className={`${error && "border-red-600"}`}
-                  />
-                  <div className="h-2 -mt-1">
-                    <Show when={error}>
-                      <span className="text-xs text-red-600">
-                        {error?.message}
-                      </span>
-                    </Show>
-                  </div>
-                </Column>
-              )}
-            />
-          </Column>
-          <Column className="space-y-2">
-            <Label htmlFor="confirmPassword">Confirmar Senha</Label>
-            <Controller
-              name="confirmPassword"
-              control={control}
-              render={({
-                field: { onChange, value },
-                fieldState: { error },
-              }) => (
-                <Column>
-                  <Input
-                    id="confirmPassword"
-                    type="password"
-                    placeholder="••••••••"
-                    value={value}
-                    onChange={onChange}
-                    className={`${error && "border-red-600"}`}
-                  />
-                  <div className="h-2 -mt-1">
-                    <Show when={error}>
-                      <span className="text-xs text-red-600">
-                        {error?.message}
-                      </span>
-                    </Show>
-                  </div>
-                </Column>
-              )}
-            />
-          </Column>
-          <Column className="mt-5">
-            <Button
-              className="hover:cursor-pointer w-full"
-              type="submit"
-              disabled={pendingSignUp}
-            >
-              <Show when={pendingSignUp}>
-                <Loader2Icon className="animate-spin" />
-              </Show>
-              Criar conta
+    <Column className="rounded-xl bg-white p-8 border border-zinc-200 shadow-sm w-[500px]">
+      <form
+        id="login-form"
+        onSubmit={handleSubmit(handleSignUp)}
+        className="space-y-4"
+      >
+        <Column className="space-y-2">
+          <Label htmlFor="name">Nome</Label>
+          <Controller
+            name="name"
+            control={control}
+            render={({ field: { onChange, value }, fieldState: { error } }) => (
+              <Column>
+                <Input
+                  id="name"
+                  placeholder="Seu nome"
+                  value={value}
+                  onChange={onChange}
+                  className={`${error && "border-red-600"}`}
+                />
+                <div className="h-2 -mt-1">
+                  <Show when={error}>
+                    <span className="text-xs text-red-600">
+                      {error?.message}
+                    </span>
+                  </Show>
+                </div>
+              </Column>
+            )}
+          />
+        </Column>
+        <Column className="space-y-2">
+          <Label htmlFor="email">E-mail</Label>
+          <Controller
+            name="email"
+            control={control}
+            render={({ field: { onChange, value }, fieldState: { error } }) => (
+              <Column>
+                <Input
+                  id="email"
+                  placeholder="seuemail@exemplo.com"
+                  value={value}
+                  onChange={onChange}
+                  className={`${error && "border-red-600"}`}
+                />
+                <div className="h-2 -mt-1">
+                  <Show when={error}>
+                    <span className="text-xs text-red-600">
+                      {error?.message}
+                    </span>
+                  </Show>
+                </div>
+              </Column>
+            )}
+          />
+        </Column>
+        <Column className="space-y-2">
+          <Label htmlFor="password">Senha</Label>
+          <Controller
+            name="password"
+            control={control}
+            render={({ field: { onChange, value }, fieldState: { error } }) => (
+              <Column>
+                <Input
+                  id="password"
+                  type="password"
+                  placeholder="••••••••"
+                  value={value}
+                  onChange={onChange}
+                  className={`${error && "border-red-600"}`}
+                />
+                <div className="h-2 -mt-1">
+                  <Show when={error}>
+                    <span className="text-xs text-red-600">
+                      {error?.message}
+                    </span>
+                  </Show>
+                </div>
+              </Column>
+            )}
+          />
+        </Column>
+        <Column className="space-y-2">
+          <Label htmlFor="confirmPassword">Confirmar Senha</Label>
+          <Controller
+            name="confirmPassword"
+            control={control}
+            render={({ field: { onChange, value }, fieldState: { error } }) => (
+              <Column>
+                <Input
+                  id="confirmPassword"
+                  type="password"
+                  placeholder="••••••••"
+                  value={value}
+                  onChange={onChange}
+                  className={`${error && "border-red-600"}`}
+                />
+                <div className="h-2 -mt-1">
+                  <Show when={error}>
+                    <span className="text-xs text-red-600">
+                      {error?.message}
+                    </span>
+                  </Show>
+                </div>
+              </Column>
+            )}
+          />
+        </Column>
+        <Column className="mt-5">
+          <Button
+            className="hover:cursor-pointer w-full"
+            type="submit"
+            disabled={pendingSignUp}
+          >
+            <Show when={pendingSignUp}>
+              <Loader2Icon className="animate-spin" />
+            </Show>
+            Criar conta
+          </Button>
+          <Link href="/entrar" className="flex self-center w-fit" passHref>
+            <Button type="button" variant="link">
+              Já tenho uma conta
             </Button>
-            <Link href="/entrar" className="flex self-center w-fit" passHref>
-              <Button type="button" variant="link">
-                Já tenho uma conta
-              </Button>
-            </Link>
-          </Column>
-        </form>
-      </Column>
-    </div>
+          </Link>
+        </Column>
+      </form>
+    </Column>
   );
 };
 
