@@ -1,6 +1,6 @@
 "use client";
 
-import { getTransactions } from "@/src/app/dashboard/services";
+import { checkPinExists, getTransactions } from "@/src/app/dashboard/services";
 import { UserPinFormDialog } from "@/src/components/user-pin-form-dialog";
 import Column from "@/src/components/utils/column";
 import Show from "@/src/components/utils/show";
@@ -22,10 +22,18 @@ export default function FinancialDashboard() {
   const [month, setMonth] = useState<number>(getCurrentMonth);
   const [year, setYear] = useState<number>(getCurrentYear);
 
+  const { data: pinExists, isPending: pendingCheckPinExists } = useQuery({
+    queryFn: () => checkPinExists({ userId: user?.id }),
+    queryKey: ["pin-exists", user?.id],
+    enabled: !!user?.id,
+  });
+
   const { data, isPending: pendingGetTransactions } = useQuery({
     queryFn: () => getTransactions(pin!),
     queryKey: ["transactions"],
   });
+
+  const userPinFormDialogMode = pinExists ? "validate" : "create";
 
   const transactions = useMemo(() => data || [], [data]);
 
@@ -63,10 +71,9 @@ export default function FinancialDashboard() {
   return (
     <Column className="items-center w-full space-y-2 max-w-5xl mx-auto mt-16">
       <Show
-        when={user && pin}
+        when={user && pin && !pendingCheckPinExists}
         fallback={
-          // TO-Do: Create a service to validate if user.secrets exists
-          <UserPinFormDialog userId={user!.id} mode="validate" />
+          <UserPinFormDialog userId={user!.id} mode={userPinFormDialogMode} />
         }
       >
         <TimePeriodSelector

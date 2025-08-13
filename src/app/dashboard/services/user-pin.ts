@@ -27,10 +27,22 @@ export async function validateUserPin({ userId, pin }: UserPinProps) {
     .eq("user_id", userId)
     .single();
 
-  if (error || !userSecret) throw new Error("PIN não configurado");
+  if (error || !userSecret) throw new Error("PIN não configurado.");
 
   const inputHash = hashPin(pin, userSecret.salt);
-  if (inputHash !== userSecret.pin_hash) throw new Error("PIN incorreto");
+  if (inputHash !== userSecret.pin_hash) throw new Error("PIN incorreto.");
 
   return userSecret.salt;
+}
+
+export async function checkPinExists({ userId }: Partial<UserPinProps>) {
+  const { data, error } = await supabaseClient
+    .from("user_secrets")
+    .select("pin_hash")
+    .eq("user_id", userId)
+    .single();
+
+  if (error) throw new Error("PIN não configurado.");
+
+  return !!(data && data.pin_hash);
 }
