@@ -52,7 +52,6 @@ const RegisterForm = () => {
     mutationFn: doSignUp,
     onSuccess: () => {
       toast.success("Cadastro realizado com sucesso!", {
-        position: "top-center",
         className: "!bg-green-600/80 !text-white",
       });
       router.push("/entrar");
@@ -60,7 +59,6 @@ const RegisterForm = () => {
     onError: (error) => {
       const message = translateSupabaseErrorMessages(error.message);
       toast.error(message, {
-        position: "top-center",
         className: "!bg-red-600/80 !text-white",
       });
     },

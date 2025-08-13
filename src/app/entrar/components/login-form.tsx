@@ -40,7 +40,6 @@ const LoginForm = () => {
     onError: (error) => {
       const message = translateSupabaseErrorMessages(error.message);
       toast.error(message, {
-        position: "top-center",
         className: "!bg-red-600/80 !text-white",
       });
     },
