@@ -39,7 +39,7 @@ function DatePicker({ value, onValueChange }: DatePickerProps) {
               <ChevronDownIcon />
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="overflow-hidden p-0" align="start">
+          <PopoverContent className="overflow-hidden p-0 w-fit">
             <Calendar
               locale={pt}
               mode="single"
