@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <AuthGuard requireAuth redirectTo="/entrar">
       <div className="min-h-screen w-full flex bg-[#f4f2ee] items-center sm:justify-center">
-        <div className="items-center space-y-2 w-full">
+        <div className="space-y-2 w-full">
           <Header />
           <FinancialDashboard />
         </div>
