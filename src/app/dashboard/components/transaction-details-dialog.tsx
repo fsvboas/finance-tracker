@@ -63,7 +63,7 @@ const TransactionDetailsDialog = ({
         <Column className="space-y-2">
           <dl className="space-y-2">
             <Row className="space-x-2">
-              <dt className="font-medium">Tipo de Transação:</dt>
+              <dt className="font-semibold">Tipo de Transação:</dt>
               <dd
                 className={`font-semibold  ${
                   transaction.transactionType === "incoming"
@@ -75,13 +75,13 @@ const TransactionDetailsDialog = ({
               </dd>
             </Row>
             <Row className="space-x-2">
-              <dt className="font-medium">Valor:</dt>
+              <dt className="font-semibold">Valor:</dt>
               <dd>
                 <CurrencyFormatter>{transaction.value}</CurrencyFormatter>
               </dd>
             </Row>
             <Row className="space-x-2">
-              <dt className="font-medium">Dia:</dt>
+              <dt className="font-semibold">Dia:</dt>
               <dd>
                 <DateFormatter>{transactionDate}</DateFormatter>
               </dd>
