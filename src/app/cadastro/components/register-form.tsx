@@ -69,7 +69,7 @@ const RegisterForm = () => {
   };
 
   return (
-    <Column className="rounded-xl bg-white p-8 border border-zinc-200 shadow-sm w-[500px]">
+    <Column className="rounded-lg bg-white p-6 border border-zinc-200 shadow-sm w-full max-w-[500px]">
       <form
         id="login-form"
         onSubmit={handleSubmit(handleSignUp)}

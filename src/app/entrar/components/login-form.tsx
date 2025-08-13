@@ -50,7 +50,7 @@ const LoginForm = () => {
   };
 
   return (
-    <Column className="rounded-xl bg-white p-8 border border-zinc-200 shadow-sm w-[500px]">
+    <Column className="rounded-lg bg-white p-6 border border-zinc-200 shadow-sm max-w-[500px] w-full">
       <form
         id="login-form"
         onSubmit={handleSubmit(handleLogin)}
