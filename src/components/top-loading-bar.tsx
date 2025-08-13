@@ -1,16 +1,22 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Progress } from "./progress";
 
-interface TopLoadingBarProps {
-  isLoading: boolean;
-  className?: string;
-}
+const TopLoadingBar = () => {
+  const pathname = usePathname();
 
-export function TopLoadingBar({ isLoading, className }: TopLoadingBarProps) {
+  const [isLoading, setIsLoading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    setIsLoading(true);
+    requestAnimationFrame(() => {
+      setIsLoading(false);
+    });
+  }, [pathname]);
 
   useEffect(() => {
     if (isLoading) {
@@ -44,8 +50,10 @@ export function TopLoadingBar({ isLoading, className }: TopLoadingBarProps) {
     <div className="fixed top-0 left-0 right-0 z-50">
       <Progress
         value={progress}
-        className={`h-1 rounded-none border-none bg-transparent [&>div]:bg-green-600 ${className}`}
+        className="h-1 rounded-none border-none bg-transparent [&>div]:bg-green-600"
       />
     </div>
   );
-}
+};
+
+export default TopLoadingBar;

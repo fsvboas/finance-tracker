@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Header from "../components/header";
 import { Toaster } from "../components/sonner";
+import TopLoadingBar from "../components/top-loading-bar";
 import { TanstackQueryProvider } from "../libs/tanstack-query";
 import "./globals.css";
 
@@ -24,6 +25,7 @@ export default function RootLayout({
     <html lang="pt-BR">
       <body className={`${inter.className} antialiased`}>
         <TanstackQueryProvider>
+          <TopLoadingBar />
           <Header />
           <main className="min-h-screen w-full flex bg-[#f4f2ee] items-center sm:justify-center">
             {children}

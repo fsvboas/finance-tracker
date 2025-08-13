@@ -3,7 +3,6 @@
 import { useAuth } from "@/src/hooks/use-auth";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { TopLoadingBar } from "../top-loading-bar";
 
 interface AuthGuardProps {
   children: React.ReactNode;
@@ -28,8 +27,6 @@ const AuthGuard = ({
       router.push(redirectTo);
     }
   }, [loading, isAuthenticated, requireAuth, redirectTo, router]);
-
-  if (loading) return <TopLoadingBar isLoading={true} />;
 
   const hasAccess = requireAuth ? isAuthenticated : !isAuthenticated;
 
