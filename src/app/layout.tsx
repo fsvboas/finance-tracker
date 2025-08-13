@@ -22,7 +22,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR">
-      <body className={`${inter} antialiased`}>
+      <body className={`${inter.className} antialiased`}>
         <TanstackQueryProvider>
           <Header />
           <main className="min-h-screen w-full flex bg-[#f4f2ee] items-center sm:justify-center">
