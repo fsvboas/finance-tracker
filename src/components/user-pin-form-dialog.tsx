@@ -3,17 +3,22 @@
 import { usePin } from "@/src/contexts/user-pin-context";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DialogTitle } from "@radix-ui/react-dialog";
+import { useMutation } from "@tanstack/react-query";
+import { Loader2Icon } from "lucide-react";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
+import { toast } from "sonner";
 import * as z from "zod";
 import {
   createUserPin,
   validateUserPin,
 } from "../app/dashboard/services/user-pin";
+import { queryClient } from "../libs/tanstack-query";
 import { Button } from "./button";
 import { Dialog, DialogContent } from "./dialog";
 import { Input } from "./input";
 import Column from "./utils/column";
+import Show from "./utils/show";
 
 const PinFormSchema = z.object({
   pin: z.string().length(4, "PIN deve ter exatamente 4 caracteres"),
@@ -46,9 +51,9 @@ export function UserPinFormDialog({ userId, mode }: UserPinFormDialogProps) {
     "1",
     "2",
     "3",
-    "Apagar",
+    "Limpar",
     "0",
-    "Apagar Tudo",
+    "Apagar",
   ];
 
   const handleButtonClick = (
@@ -69,14 +74,36 @@ export function UserPinFormDialog({ userId, mode }: UserPinFormDialogProps) {
 
   const submitButtonLabel = mode === "create" ? "Criar PIN" : "Validar PIN";
 
+  const { mutate: create, isPending: pendingCreateUserPin } = useMutation({
+    mutationFn: createUserPin,
+    onSuccess: (_, variables) => {
+      setPin(variables.pin);
+      setIsOpen(false);
+    },
+    onError: (error) => {
+      toast.error(error.message, {
+        className: "!bg-red-600/80 !text-white",
+      });
+    },
+  });
+
+  const { mutate: validate, isPending: pendingValidateUserPin } = useMutation({
+    mutationFn: validateUserPin,
+    onSuccess: (_, variables) => {
+      setPin(variables.pin);
+      queryClient?.invalidateQueries({ queryKey: ["transactions"] });
+      setIsOpen(false);
+    },
+    onError: (error) => {
+      toast.error(error.message, {
+        className: "!bg-red-600/80 !text-white",
+      });
+    },
+  });
+
   const onSubmit = async (data: PinFormSchemaType) => {
-    if (mode === "create") {
-      await createUserPin({ userId, pin: data.pin });
-    } else {
-      await validateUserPin({ userId, pin: data.pin });
-    }
-    setPin(data.pin);
-    setIsOpen(false);
+    if (mode === "create") return create({ userId, pin: data.pin });
+    validate({ userId, pin: data.pin });
   };
 
   return (
@@ -119,9 +146,16 @@ export function UserPinFormDialog({ userId, mode }: UserPinFormDialogProps) {
                   </div>
                   <Button
                     type="submit"
-                    className="cursor-pointer"
-                    disabled={value.length !== 4}
+                    className="cursor-pointer bg-green-600 hover:bg-green-500"
+                    disabled={
+                      value.length !== 4 ||
+                      pendingCreateUserPin ||
+                      pendingValidateUserPin
+                    }
                   >
+                    <Show when={pendingCreateUserPin || pendingValidateUserPin}>
+                      <Loader2Icon className="animate-spin" />
+                    </Show>
                     {submitButtonLabel}
                   </Button>
                 </>
