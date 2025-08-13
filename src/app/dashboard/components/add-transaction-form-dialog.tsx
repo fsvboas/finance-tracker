@@ -26,6 +26,7 @@ import { useMutation } from "@tanstack/react-query";
 import { Loader2Icon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
+import { toast } from "sonner";
 import * as z from "zod";
 
 interface AddTransactionFormDialogProps {
@@ -63,10 +64,15 @@ const AddTransactionFormDialog = ({
     onSuccess: () => {
       queryClient?.invalidateQueries({ queryKey: ["transactions"] });
       setIsOpen(false);
+      toast.success("Transação adicionada com sucesso!", {
+        className: "!bg-green-600/80 !text-white",
+      });
     },
     onError: (error) => {
-      // TO-DO: TOAST
-      console.log(error);
+      // TO-DO: Translate error messages
+      toast.error(error.message, {
+        className: "!bg-red-600/80 !text-white",
+      });
     },
   });
 
