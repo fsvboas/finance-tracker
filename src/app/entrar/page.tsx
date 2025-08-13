@@ -1,5 +1,5 @@
 import LoginForm from "@/src/app/entrar/components/login-form";
-import { AuthGuard } from "@/src/components/utils/auth-guard";
+import AuthGuard from "@/src/components/utils/auth-guard";
 
 export default function LoginScreen() {
   return (

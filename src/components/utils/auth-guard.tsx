@@ -1,10 +1,8 @@
 "use client";
 
-import { supabaseClient } from "@/src/libs/supabase/supabase-client";
-import type { Session } from "@supabase/supabase-js";
+import { useAuth } from "@/src/hooks/use-auth";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import Header from "../header";
+import { useEffect } from "react";
 import { TopLoadingBar } from "../top-loading-bar";
 
 interface AuthGuardProps {
@@ -13,67 +11,31 @@ interface AuthGuardProps {
   redirectTo?: string;
 }
 
-export function AuthGuard({
+const AuthGuard = ({
   children,
   requireAuth = true,
   redirectTo = "/entrar",
-}: AuthGuardProps) {
-  // TO-DO: Fix redirect when requiredAuth is false
-
+}: AuthGuardProps) => {
   const router = useRouter();
-  const [session, setSession] = useState<Session | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    let isMounted = true;
-
-    async function fetchSession() {
-      const { data } = await supabaseClient.auth.getSession();
-      if (isMounted) {
-        setSession(data.session);
-        setLoading(false);
-      }
-    }
-
-    fetchSession();
-
-    const { data: authListener } = supabaseClient.auth.onAuthStateChange(
-      (_event, newSession) => {
-        if (isMounted) {
-          setSession(newSession);
-        }
-      }
-    );
-
-    return () => {
-      isMounted = false;
-      authListener.subscription.unsubscribe();
-    };
-  }, []);
+  const { isAuthenticated, loading } = useAuth();
 
   useEffect(() => {
     if (loading) return;
 
-    if (requireAuth && !session) {
-      router.push(redirectTo);
-    } else if (!requireAuth && session) {
+    const shouldRedirect = requireAuth ? !isAuthenticated : isAuthenticated;
+
+    if (shouldRedirect) {
       router.push(redirectTo);
     }
-  }, [loading, session, requireAuth, redirectTo, router]);
+  }, [loading, isAuthenticated, requireAuth, redirectTo, router]);
 
-  const hasAccess = (requireAuth && session) || (!requireAuth && !session);
+  if (loading) return <TopLoadingBar isLoading={true} />;
 
-  return (
-    <>
-      <TopLoadingBar isLoading={loading} />
-      {!loading && hasAccess && (
-        <>
-          {requireAuth && <Header />}
-          <div className="min-h-screen w-full flex bg-[#f4f2ee] items-center sm:justify-center">
-            {children}
-          </div>
-        </>
-      )}
-    </>
-  );
-}
+  const hasAccess = requireAuth ? isAuthenticated : !isAuthenticated;
+
+  if (!hasAccess) return;
+
+  return <>{children}</>;
+};
+
+export default AuthGuard;
