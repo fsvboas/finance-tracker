@@ -18,7 +18,9 @@ import { Tabs, TabsList, TabsTrigger } from "@/src/components/tabs";
 import Column from "@/src/components/utils/column";
 import Flex from "@/src/components/utils/flex";
 import Show from "@/src/components/utils/show";
+import { usePin } from "@/src/contexts/user-pin-context";
 import { currencyFormatter } from "@/src/helpers/currency-formatter";
+import { useUser } from "@/src/hooks/use-user";
 import { queryClient } from "@/src/libs/tanstack-query";
 import { TransactionType } from "@/src/types/transaction-type";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -39,7 +41,7 @@ const schema = z.object({
     .string()
     .min(1, { message: "Adicione uma descrição para a transação." }),
   value: z.string().min(1, { message: "Adicione o valor da transação." }),
-  date: z.date(),
+  created_at: z.date(),
 });
 
 type TransactionFormSchemaType = z.infer<typeof schema>;
@@ -47,6 +49,9 @@ type TransactionFormSchemaType = z.infer<typeof schema>;
 const AddTransactionFormDialog = ({
   trigger,
 }: AddTransactionFormDialogProps) => {
+  const { pin } = usePin();
+  const user = useUser();
+
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const { control, handleSubmit, reset } = useForm<TransactionFormSchemaType>({
@@ -55,14 +60,14 @@ const AddTransactionFormDialog = ({
       transactionType: "incoming",
       description: "",
       value: "",
-      date: new Date(),
+      created_at: new Date(),
     },
   });
 
   const { mutate: post, isPending: pendingPostTransaction } = useMutation({
     mutationFn: postTransaction,
-    onSuccess: () => {
-      queryClient?.invalidateQueries({ queryKey: ["transactions"] });
+    onSuccess: async () => {
+      await queryClient?.invalidateQueries({ queryKey: ["transactions"] });
       setIsOpen(false);
       toast.success("Transação adicionada com sucesso!", {
         className: "!bg-green-600/80 !text-white",
@@ -79,9 +84,11 @@ const AddTransactionFormDialog = ({
   const handleAddTransaction = (transaction: TransactionFormSchemaType) => {
     const payload: TransactionType = {
       id: crypto.randomUUID(),
+      user_id: user!.id,
       ...transaction,
+      created_at: transaction.created_at.toISOString(),
     };
-    post({ transaction: payload });
+    post({ transaction: payload, pin: pin! });
   };
 
   useEffect(() => {
@@ -190,7 +197,7 @@ const AddTransactionFormDialog = ({
               />
             </Column>
             <Controller
-              name="date"
+              name="created_at"
               control={control}
               render={({ field: { value, onChange } }) => (
                 <DatePicker
