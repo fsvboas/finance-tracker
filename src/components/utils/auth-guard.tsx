@@ -15,8 +15,10 @@ interface AuthGuardProps {
 export function AuthGuard({
   children,
   requireAuth = true,
-  redirectTo = "/login",
+  redirectTo = "/entrar",
 }: AuthGuardProps) {
+  // TO-DO: Fix redirect when requiredAuth is false
+
   const router = useRouter();
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
