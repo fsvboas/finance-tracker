@@ -13,7 +13,7 @@ import TimePeriodSelector from "./time-period-selector";
 import TransactionSection from "./transaction-section";
 
 export default function FinancialDashboard() {
-  const { pin } = useUserSecrets();
+  const { credentials } = useUserSecrets();
   const user = useUser();
 
   const getCurrentMonth = new Date().getMonth() + 1;
@@ -29,7 +29,7 @@ export default function FinancialDashboard() {
   });
 
   const { data, isPending: pendingGetTransactions } = useQuery({
-    queryFn: () => getTransactions(pin!),
+    queryFn: () => getTransactions({ userSecrets: credentials! }),
     queryKey: ["transactions"],
   });
 

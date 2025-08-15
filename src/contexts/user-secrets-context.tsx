@@ -1,4 +1,5 @@
 "use client";
+
 import {
   createContext,
   ReactNode,
@@ -6,14 +7,13 @@ import {
   useEffect,
   useState,
 } from "react";
+import { UserCredentials } from "../types/user-credentials";
 
 interface UserSecretsContextProps {
-  salt: string | null;
-  setSalt: (salt: string) => void;
-  clearSalt: () => void;
-  pin: string | null;
-  setPin: (pin: string) => void;
-  clearPin: () => void;
+  credentials: UserCredentials | null;
+  setCredentials: (credentials: UserCredentials) => void;
+  clearCredentials: () => void;
+  isAuthenticated: boolean;
 }
 
 const UserSecretsContext = createContext<UserSecretsContextProps | undefined>(
@@ -21,39 +21,38 @@ const UserSecretsContext = createContext<UserSecretsContextProps | undefined>(
 );
 
 export function UserSecretsProvider({ children }: { children: ReactNode }) {
-  const [pin, setPinState] = useState<string | null>(null);
-  const [salt, setSaltState] = useState<string | null>(null);
+  const [credentials, setCredentialsState] = useState<UserCredentials | null>(
+    null
+  );
 
   useEffect(() => {
-    const storedPin = sessionStorage.getItem("user_pin");
-    const storedSalt = sessionStorage.getItem("user_salt");
-    if (storedPin) setPinState(storedPin);
-    if (storedSalt) setPinState(storedSalt);
+    const storedCredentials = sessionStorage.getItem("user_credentials");
+    if (storedCredentials) {
+      const parsed = JSON.parse(storedCredentials) as UserCredentials;
+      setCredentialsState(parsed);
+    }
   }, []);
 
-  const setPin = (newPin: string) => {
-    sessionStorage.setItem("user_pin", newPin);
-    setPinState(newPin);
+  const setCredentials = (newCredentials: UserCredentials) => {
+    sessionStorage.setItem("user_credentials", JSON.stringify(newCredentials));
+    setCredentialsState(newCredentials);
   };
 
-  const clearPin = () => {
-    sessionStorage.removeItem("user_pin");
-    setPinState(null);
+  const clearCredentials = () => {
+    sessionStorage.removeItem("user_credentials");
+    setCredentialsState(null);
   };
 
-  const setSalt = (newSalt: string) => {
-    sessionStorage.setItem("user_salt", newSalt);
-    setSaltState(newSalt);
-  };
-
-  const clearSalt = () => {
-    sessionStorage.removeItem("user_salt");
-    setSaltState(null);
-  };
+  const isAuthenticated = credentials !== null;
 
   return (
     <UserSecretsContext.Provider
-      value={{ pin, setPin, clearPin, salt, setSalt, clearSalt }}
+      value={{
+        credentials,
+        setCredentials,
+        clearCredentials,
+        isAuthenticated,
+      }}
     >
       {children}
     </UserSecretsContext.Provider>
@@ -62,6 +61,10 @@ export function UserSecretsProvider({ children }: { children: ReactNode }) {
 
 export function useUserSecrets() {
   const context = useContext(UserSecretsContext);
-  if (!context) throw new Error("UserSecrets Error");
+  if (!context) {
+    throw new Error(
+      "useUserSecrets deve ser usado dentro de UserSecretsProvider"
+    );
+  }
   return context;
 }

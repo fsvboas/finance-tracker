@@ -1,16 +1,16 @@
 import { supabaseClient } from "@/src/libs/supabase/supabase-client";
 import { TransactionType } from "@/src/types/transaction-type";
+import { UserCredentials } from "@/src/types/user-credentials";
 import { decryptData, deriveKey } from "@/src/utils/encrypt-data";
-import { validateUserPin } from "./user-pin";
 
 interface DeleteTransactionProps {
   transaction: TransactionType;
-  pin: string;
+  userSecrets: UserCredentials;
 }
 
 export async function deleteTransaction({
   transaction,
-  pin,
+  userSecrets,
 }: DeleteTransactionProps) {
   const {
     data: { user },
@@ -18,10 +18,6 @@ export async function deleteTransaction({
   } = await supabaseClient.auth.getUser();
 
   if (authError || !user) throw new Error("Usuário não autenticado");
-
-  const salt = await validateUserPin({ userId: user.id, pin });
-
-  if (!salt) throw new Error("PIN inválido");
 
   const { data, error } = await supabaseClient
     .from("transactions")
@@ -33,7 +29,7 @@ export async function deleteTransaction({
 
   if (error) throw error;
 
-  const keyHex = deriveKey(pin, salt);
+  const keyHex = deriveKey(userSecrets.pin, userSecrets.salt!);
 
   return {
     id: data.id,

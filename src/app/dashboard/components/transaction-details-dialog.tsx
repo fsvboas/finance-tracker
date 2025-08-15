@@ -32,7 +32,7 @@ const TransactionDetailsDialog = ({
   trigger,
   transaction,
 }: TransactionDetailsDialog) => {
-  const { pin } = useUserSecrets();
+  const { credentials } = useUserSecrets();
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
@@ -64,7 +64,7 @@ const TransactionDetailsDialog = ({
   });
 
   const handleDeleteTransaction = (transaction: TransactionType) => {
-    del({ transaction, pin: pin! });
+    del({ transaction, userSecrets: credentials! });
   };
 
   return (

@@ -1,21 +1,18 @@
 import { supabaseClient } from "@/src/libs/supabase/supabase-client";
+import { UserCredentials } from "@/src/types/user-credentials";
 import { decryptData, deriveKey } from "@/src/utils/encrypt-data";
 
-export async function getTransactions(pin: string) {
+interface GetTransactionsProps {
+  userSecrets: UserCredentials;
+}
+
+export async function getTransactions({ userSecrets }: GetTransactionsProps) {
   const {
     data: { user },
   } = await supabaseClient.auth.getUser();
   if (!user) throw new Error("Usuário não autenticado");
 
-  const { data: userSecret } = await supabaseClient
-    .from("user_secrets")
-    .select("salt")
-    .eq("user_id", user.id)
-    .single();
-
-  if (!userSecret?.salt) throw new Error("PIN não configurado");
-
-  const keyHex = deriveKey(pin, userSecret.salt);
+  const keyHex = deriveKey(userSecrets.pin, userSecrets.salt!);
 
   const { data, error } = await supabaseClient
     .from("transactions")

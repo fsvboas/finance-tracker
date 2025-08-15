@@ -1,17 +1,16 @@
 import { supabaseClient } from "@/src/libs/supabase/supabase-client";
 import { TransactionType } from "@/src/types/transaction-type";
+import { UserCredentials } from "@/src/types/user-credentials";
 import { deriveKey, encryptData } from "@/src/utils/encrypt-data";
 
 interface PostTransactionProps {
   transaction: TransactionType;
-  pin: string;
-  salt: string;
+  userSecrets: UserCredentials;
 }
 
 export async function postTransaction({
   transaction,
-  pin,
-  salt,
+  userSecrets,
 }: PostTransactionProps) {
   // TO-DO: USE ACCESS TOKEN INSTEAD CALL THE GET USER IN EVERY REQUEST
   const {
@@ -21,7 +20,7 @@ export async function postTransaction({
 
   if (authError || !user) throw new Error("Usuário não autenticado");
 
-  const keyHex = deriveKey(pin, salt);
+  const keyHex = deriveKey(userSecrets.pin, userSecrets.salt);
 
   const encryptedTransaction: Partial<TransactionType> = {
     user_id: user.id,

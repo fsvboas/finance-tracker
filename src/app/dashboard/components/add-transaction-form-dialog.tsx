@@ -49,7 +49,7 @@ type TransactionFormSchemaType = z.infer<typeof schema>;
 const AddTransactionFormDialog = ({
   trigger,
 }: AddTransactionFormDialogProps) => {
-  const { pin, salt } = useUserSecrets();
+  const { credentials } = useUserSecrets();
   const user = useUser();
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -88,7 +88,8 @@ const AddTransactionFormDialog = ({
       ...transaction,
       created_at: transaction.created_at.toISOString(),
     };
-    post({ transaction: payload, pin: pin!, salt: salt! });
+
+    post({ transaction: payload, userSecrets: credentials! });
   };
 
   useEffect(() => {
