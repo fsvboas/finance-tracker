@@ -30,19 +30,33 @@ import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import * as z from "zod";
+import CardSelectInput from "./card-select-combobox-input";
+import PaymentMethodSelectInput from "./payment-method-select-input";
 
 interface AddTransactionFormDialogProps {
   trigger: React.ReactNode;
 }
 
-const schema = z.object({
-  type: z.enum(["incoming", "outcoming"]),
-  description: z
-    .string()
-    .min(1, { message: "Adicione uma descrição para a transação." }),
-  value: z.string().min(1, { message: "Adicione o valor da transação." }),
-  created_at: z.date(),
-});
+const schema = z
+  .object({
+    type: z.enum(["incoming", "outcoming"]),
+    description: z.string().min(1, { message: "Campo obrigatório." }),
+    value: z.string().min(1, { message: "Campo obrigatório." }),
+    created_at: z.date(),
+    payment_method: z.string(),
+    card: z.string().optional(),
+  })
+  .refine(
+    (data) =>
+      !(
+        data.payment_method === "Crédito" || data.payment_method === "Débito"
+      ) ||
+      (data.card && data.card.trim() !== ""),
+    {
+      message: "Campo obrigatório.",
+      path: ["card"],
+    }
+  );
 
 type TransactionFormSchemaType = z.infer<typeof schema>;
 
@@ -54,15 +68,23 @@ const AddTransactionFormDialog = ({
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
-  const { control, handleSubmit, reset } = useForm<TransactionFormSchemaType>({
-    resolver: zodResolver(schema),
-    defaultValues: {
-      type: "incoming",
-      description: "",
-      value: "",
-      created_at: new Date(),
-    },
-  });
+  const { control, handleSubmit, reset, watch, setValue } =
+    useForm<TransactionFormSchemaType>({
+      resolver: zodResolver(schema),
+      defaultValues: {
+        description: "",
+        value: "",
+        type: "incoming",
+        created_at: new Date(),
+        payment_method: "",
+        card: "",
+      },
+    });
+
+  const paymentMethodFieldValue = watch("payment_method");
+  const isNotCreditOrDebitCard =
+    paymentMethodFieldValue !== "Crédito" &&
+    paymentMethodFieldValue !== "Débito";
 
   const { mutate: post, isPending: pendingPostTransaction } = useMutation({
     mutationFn: postTransaction,
@@ -82,15 +104,26 @@ const AddTransactionFormDialog = ({
   });
 
   const handleAddTransaction = (transaction: TransactionFormSchemaType) => {
+    const paymentMethod = isNotCreditOrDebitCard
+      ? transaction.payment_method
+      : `${transaction.payment_method}/${transaction.card}`;
+
     const payload: TransactionType = {
       id: crypto.randomUUID(),
       user_id: user!.id,
       ...transaction,
       created_at: transaction.created_at.toISOString(),
+      payment_method: paymentMethod,
     };
 
     post({ transaction: payload, userSecrets: credentials! });
   };
+
+  useEffect(() => {
+    if (isNotCreditOrDebitCard) {
+      setValue("card", "", { shouldValidate: false });
+    }
+  }, [isNotCreditOrDebitCard, setValue]);
 
   useEffect(() => {
     if (isOpen) {
@@ -136,35 +169,35 @@ const AddTransactionFormDialog = ({
               )}
             />
           </DialogHeader>
-          <Column className="space-y-2">
-            <Label htmlFor="transaction">Transação</Label>
-            <Controller
-              name="description"
-              control={control}
-              render={({
-                field: { onChange, value },
-                fieldState: { error },
-              }) => (
-                <Column>
-                  <Input
-                    id="transaction"
-                    placeholder="Salário"
-                    value={value}
-                    onChange={onChange}
-                    className={`${error && "border-red-600"}`}
-                  />
-                  <div className="h-2 -mt-1">
-                    <Show when={error}>
-                      <span className="text-xs text-red-600">
-                        {error?.message}
-                      </span>
-                    </Show>
-                  </div>
-                </Column>
-              )}
-            />
-          </Column>
-          <Flex className="min-[500px]:space-x-2 max-[500px]:flex-col max-[500px]:space-y-4">
+          <Flex className="gap-2">
+            <Column className="space-y-2">
+              <Label htmlFor="transaction">Transação</Label>
+              <Controller
+                name="description"
+                control={control}
+                render={({
+                  field: { onChange, value },
+                  fieldState: { error },
+                }) => (
+                  <Column>
+                    <Input
+                      id="transaction"
+                      placeholder="Salário"
+                      value={value}
+                      onChange={onChange}
+                      className={`${error && "border-red-600"}`}
+                    />
+                    <div className="h-2 -mt-1">
+                      <Show when={error}>
+                        <span className="text-xs text-red-600">
+                          {error?.message}
+                        </span>
+                      </Show>
+                    </div>
+                  </Column>
+                )}
+              />
+            </Column>
             <Column className="space-y-2">
               <Label htmlFor="value">Valor</Label>
               <Controller
@@ -183,7 +216,9 @@ const AddTransactionFormDialog = ({
                         const rawValue = event.target.value.replace(/\D/g, "");
                         onChange(rawValue);
                       }}
-                      className={`${error ? "border-red-600" : ""}`}
+                      className={`max-w-[150px] ${
+                        error ? "border-red-600" : ""
+                      }`}
                     />
 
                     <div className="h-2 -mt-1">
@@ -197,16 +232,62 @@ const AddTransactionFormDialog = ({
                 )}
               />
             </Column>
-            <Controller
-              name="created_at"
-              control={control}
-              render={({ field: { value, onChange } }) => (
-                <DatePicker
-                  value={value}
-                  onValueChange={(date) => onChange(date)}
+            <Column className="space-y-2">
+              <Label htmlFor="created_at">Data</Label>
+              <Controller
+                name="created_at"
+                control={control}
+                render={({ field: { value, onChange } }) => (
+                  <DatePicker
+                    value={value}
+                    onValueChange={(date) => onChange(date)}
+                  />
+                )}
+              />
+            </Column>
+          </Flex>
+          <Flex className="space-x-2">
+            <Column className="space-y-2">
+              <Label htmlFor="payment_method">Método de pagamento</Label>
+              <Column>
+                <Controller
+                  name="payment_method"
+                  control={control}
+                  render={({ field: { value, onChange } }) => (
+                    <PaymentMethodSelectInput
+                      value={value}
+                      onChange={onChange}
+                    />
+                  )}
                 />
-              )}
-            />
+              </Column>
+            </Column>
+            <Column className="space-y-2">
+              <Label htmlFor="card">Cartão</Label>
+              <Controller
+                name="card"
+                control={control}
+                render={({
+                  field: { onChange, value },
+                  fieldState: { error },
+                }) => (
+                  <Column>
+                    <CardSelectInput
+                      value={value ?? ""}
+                      onChange={onChange}
+                      disabled={isNotCreditOrDebitCard}
+                    />
+                    <div className="h-2 -mt-1">
+                      <Show when={error}>
+                        <span className="text-xs text-red-600">
+                          {error?.message}
+                        </span>
+                      </Show>
+                    </div>
+                  </Column>
+                )}
+              />
+            </Column>
           </Flex>
           <DialogFooter>
             <DialogClose asChild>
