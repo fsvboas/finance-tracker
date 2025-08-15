@@ -26,6 +26,9 @@ export async function postTransaction({
     description: encryptData(transaction.description, keyHex),
     value: encryptData(transaction.value, keyHex),
     type: encryptData(transaction.type, keyHex) as "incoming" | "outcoming",
+    payment_method: transaction.payment_method
+      ? encryptData(transaction.payment_method, keyHex)
+      : undefined,
   };
 
   const { data, error } = await supabaseClient
@@ -41,7 +44,8 @@ export async function postTransaction({
     user_id: data.user_id,
     value: transaction.value,
     description: transaction.description,
-    transactionType: transaction.type,
+    type: transaction.type,
     created_at: data.created_at,
+    payment_method: transaction.payment_method,
   };
 }
