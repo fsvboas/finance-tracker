@@ -21,12 +21,12 @@ import Show from "./utils/show";
 const UserMenu = () => {
   const user = useUser();
   const route = useRouter();
-  const { clearPin } = useUserSecrets();
+  const { clearCredentials } = useUserSecrets();
 
   const { mutate: logout, isPending: pendingLogout } = useMutation({
     mutationFn: doLogout,
     onSuccess: () => {
-      clearPin();
+      clearCredentials();
       route.push("/entrar");
     },
     onError: (error) => {
