@@ -284,6 +284,7 @@ const AddTransactionFormDialog = ({
                         value={value ?? ""}
                         onChange={onChange}
                         disabled={isNotCreditOrDebitCard}
+                        error={Boolean(error)}
                       />
                       <div className="h-2 -mt-1">
                         <Show when={error}>

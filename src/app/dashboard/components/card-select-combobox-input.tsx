@@ -20,12 +20,14 @@ interface CardSelectInputProps {
   value: string;
   onChange: (value: string) => void;
   disabled: boolean;
+  error: boolean;
 }
 
 const CardSelectInput = ({
   value,
   onChange,
   disabled,
+  error,
 }: CardSelectInputProps) => {
   const [open, setOpen] = useState(false);
 
@@ -65,7 +67,9 @@ const CardSelectInput = ({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-full justify-between"
+          className={`w-full justify-between  ${
+            error ? "border-red-500" : ""
+          } font-normal`}
           disabled={disabled}
         >
           {value || "Selecione um cartão..."}
