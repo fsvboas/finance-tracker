@@ -20,7 +20,7 @@ export async function postTransaction({
 
   if (authError || !user) throw new Error("Usuário não autenticado");
 
-  const keyHex = deriveKey(userSecrets.pin, userSecrets.salt);
+  const keyHex = deriveKey(userSecrets.pin, userSecrets.salt!);
 
   const encryptedTransaction: Partial<TransactionType> = {
     user_id: user.id,
