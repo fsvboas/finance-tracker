@@ -3,6 +3,8 @@ export type TransactionType = {
   user_id: string;
   description: string;
   value: string;
-  transactionType: "incoming" | "outcoming";
+  type: "incoming" | "outcoming";
   created_at: string;
+  updated_at?: string;
+  payment_method?: string;
 };

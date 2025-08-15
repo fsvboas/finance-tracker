@@ -49,13 +49,13 @@ export default function FinancialDashboard() {
 
   const financialSummary = useMemo(() => {
     const totalIncoming = filteredTransactions.reduce((sum, transaction) => {
-      return transaction.transactionType === "incoming"
+      return transaction.type === "incoming"
         ? sum + Number(transaction.value)
         : sum;
     }, 0);
 
     const totalOutcoming = filteredTransactions.reduce((sum, transaction) => {
-      return transaction.transactionType === "outcoming"
+      return transaction.type === "outcoming"
         ? sum + Number(transaction.value)
         : sum;
     }, 0);

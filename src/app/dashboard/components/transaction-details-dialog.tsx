@@ -82,12 +82,12 @@ const TransactionDetailsDialog = ({
               <dt className="font-semibold">Tipo de Transação:</dt>
               <dd
                 className={`font-semibold  ${
-                  transaction.transactionType === "incoming"
+                  transaction.type === "incoming"
                     ? "text-green-600"
                     : "text-red-600"
                 }`}
               >
-                {transactionTypeTranslation[transaction.transactionType]}
+                {transactionTypeTranslation[transaction.type]}
               </dd>
             </Row>
             <Row className="space-x-2">
@@ -102,12 +102,10 @@ const TransactionDetailsDialog = ({
                 <DateFormatter>{transactionDate}</DateFormatter>
               </dd>
             </Row>
-            {/* <Show when={hasTransactionTimeMock}>
-              <Row className="space-x-2">
-                <dt className="font-medium">Horário:</dt>
-                <dd>10:30 AM</dd>
-              </Row>
-            </Show> */}
+            <Row className="space-x-2">
+              <dt className="font-semibold">Método de Pagamento:</dt>
+              <dd>Dinheiro</dd>
+            </Row>
             {/* <Show when={transaction.transactionType === "outcoming"}>
               <Row className="space-x-2">
                 <dt className="font-medium">Percentual das entradas:</dt>

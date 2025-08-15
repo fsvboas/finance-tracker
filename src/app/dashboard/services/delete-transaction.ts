@@ -36,7 +36,7 @@ export async function deleteTransaction({
     user_id: data.user_id,
     value: decryptData(data.value, keyHex),
     description: decryptData(data.description, keyHex),
-    transactionType: decryptData(data.transactionType, keyHex),
+    type: decryptData(data.type, keyHex),
     created_at: data.created_at,
   };
 }

@@ -25,6 +25,6 @@ export async function getTransactions({ userSecrets }: GetTransactionsProps) {
     ...tx,
     description: decryptData(tx.description, keyHex),
     value: decryptData(tx.value, keyHex),
-    transactionType: decryptData(tx.transactionType, keyHex),
+    type: decryptData(tx.type, keyHex),
   }));
 }

@@ -36,7 +36,7 @@ interface AddTransactionFormDialogProps {
 }
 
 const schema = z.object({
-  transactionType: z.enum(["incoming", "outcoming"]),
+  type: z.enum(["incoming", "outcoming"]),
   description: z
     .string()
     .min(1, { message: "Adicione uma descrição para a transação." }),
@@ -57,7 +57,7 @@ const AddTransactionFormDialog = ({
   const { control, handleSubmit, reset } = useForm<TransactionFormSchemaType>({
     resolver: zodResolver(schema),
     defaultValues: {
-      transactionType: "incoming",
+      type: "incoming",
       description: "",
       value: "",
       created_at: new Date(),
@@ -110,7 +110,7 @@ const AddTransactionFormDialog = ({
           <DialogHeader>
             <DialogTitle />
             <Controller
-              name="transactionType"
+              name="type"
               control={control}
               render={({ field }) => (
                 <Tabs
