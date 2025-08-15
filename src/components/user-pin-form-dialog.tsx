@@ -76,8 +76,8 @@ export function UserPinFormDialog({ userId, mode }: UserPinFormDialogProps) {
 
   const { mutate: create, isPending: pendingCreateUserPin } = useMutation({
     mutationFn: createUserPin,
-    onSuccess: (_, variables) => {
-      setCredentials({ pin: variables.pin });
+    onSuccess: (data, variables) => {
+      setCredentials({ pin: variables.pin, salt: data });
       setIsOpen(false);
     },
     onError: (error) => {

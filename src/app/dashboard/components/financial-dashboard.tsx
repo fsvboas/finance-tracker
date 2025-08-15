@@ -30,7 +30,8 @@ export default function FinancialDashboard() {
 
   const { data, isPending: pendingGetTransactions } = useQuery({
     queryFn: () => getTransactions({ userSecrets: credentials! }),
-    queryKey: ["transactions"],
+    queryKey: ["transactions", credentials],
+    enabled: Boolean(credentials),
   });
 
   const userPinFormDialogMode = pinExists ? "validate" : "create";
