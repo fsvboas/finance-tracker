@@ -56,7 +56,7 @@ export default function TransactionSection({
       <Show when={transactions.length > 0}>
         <AddTransactionFormDialog
           trigger={
-            <Button className="cursor-pointer w-fit">
+            <Button className="cursor-pointer w-fit max-md:hidden">
               <ListPlus className="!w-5 !h-5" />
               Nova Transação
             </Button>
