@@ -2,11 +2,12 @@
 
 import { Button } from "@/src/components/button";
 import { ScrollArea } from "@/src/components/scroll-area";
+import { Skeleton } from "@/src/components/skeleton";
 import Column from "@/src/components/utils/column";
 import Row from "@/src/components/utils/row";
 import Show from "@/src/components/utils/show";
 import { TransactionType } from "@/src/types/transaction-type";
-import { ListPlus, Loader2Icon } from "lucide-react";
+import { ListPlus } from "lucide-react";
 import AddTransactionFormDialog from "./add-transaction-form-dialog";
 import EmptyTransactionHistory from "./empty-transaction-history";
 import TransactionCard from "./transaction-card";
@@ -20,6 +21,10 @@ export default function TransactionSection({
   transactions,
   pendingTransactions,
 }: TransactionSectionProps) {
+  const pendingData = Array.from({ length: 4 }, (_, index) => (
+    <Skeleton key={index} className="w-full h-20" />
+  ));
+
   return (
     <>
       <Row className="justify-between w-full h-10 items-center max-[1020px]:px-2">
@@ -34,29 +39,30 @@ export default function TransactionSection({
           }
         />
       </Row>
-      <ScrollArea className="w-full h-90">
-        <Show
-          when={!pendingTransactions}
-          fallback={
-            // TO-DO: Create a pending component (maybe change to skeleton)
-            <Column className="p-6 bg-white h-full w-full items-center justify-center rounded space-y-4">
-              <Loader2Icon size={40} className="animate-spin" />
-              <span className="text-center">Carregando transações</span>
-            </Column>
-          }
-        >
-          <Show
-            when={transactions.length > 0}
-            fallback={<EmptyTransactionHistory />}
-          >
-            <Column className="space-y-1">
-              {transactions?.map((transaction, index) => (
+      <ScrollArea className="w-full h-full max-h-90 mb-6">
+        <Column className="space-y-2">
+          <Show when={!pendingTransactions} fallback={pendingData}>
+            <Show
+              when={transactions.length > 0}
+              fallback={<EmptyTransactionHistory />}
+            >
+              {transactions.map((transaction, index) => (
                 <TransactionCard key={index} transaction={transaction} />
               ))}
-            </Column>
+            </Show>
           </Show>
-        </Show>
+        </Column>
       </ScrollArea>
+      <Show when={transactions.length > 0}>
+        <AddTransactionFormDialog
+          trigger={
+            <Button className="cursor-pointer">
+              <ListPlus className="!w-5 !h-5" />
+              Nova Transação
+            </Button>
+          }
+        />
+      </Show>
     </>
   );
 }

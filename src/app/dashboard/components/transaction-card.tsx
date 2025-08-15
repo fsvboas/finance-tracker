@@ -21,7 +21,7 @@ export default function TransactionCard({ transaction }: TransactionCardProps) {
       transaction={transaction}
       trigger={
         <Row
-          className={`p-4 bg-white rounded hover:bg-black/5 duration-300 justify-between items-center`}
+          className={`p-4 h-20 bg-neutral-100 rounded hover:bg-neutral-200 duration-300 justify-between items-center`}
         >
           <Column>
             <p className="font-semibold text-lg">{transaction?.description}</p>
@@ -37,7 +37,7 @@ export default function TransactionCard({ transaction }: TransactionCardProps) {
             >
               <CurrencyFormatter>{transaction.value}</CurrencyFormatter>
             </p>
-            <span className="text-xs text-end">no cartão Nubank</span>
+            {/* <span className="text-xs text-end">no cartão Nubank</span> */}
           </Column>
         </Row>
       }

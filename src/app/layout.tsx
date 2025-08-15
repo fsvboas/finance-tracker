@@ -29,7 +29,7 @@ export default function RootLayout({
           <UserPinProvider>
             <TopLoadingBar />
             <Header />
-            <main className="min-h-screen w-full flex bg-[#f4f2ee] items-center sm:justify-center">
+            <main className="min-h-screen w-full flex bg-white">
               {children}
             </main>
           </UserPinProvider>

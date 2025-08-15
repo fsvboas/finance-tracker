@@ -70,7 +70,7 @@ const TimePeriodSelector = ({
         <Button
           size="icon"
           variant="outline"
-          className="cursor-pointer"
+          className="cursor-pointer bg-neutral-100"
           onClick={handlePreviousYear}
           disabled={selectedYear <= minYear}
         >
@@ -80,7 +80,7 @@ const TimePeriodSelector = ({
         <Button
           size="icon"
           variant="outline"
-          className="cursor-pointer"
+          className="cursor-pointer bg-neutral-100"
           onClick={handleNextYear}
           disabled={selectedYear >= maxYear}
         >
@@ -103,7 +103,7 @@ const TimePeriodSelector = ({
                 ${
                   selectedMonth === month.number
                     ? "bg-black text-white"
-                    : "bg-white text-black hover:bg-black/10"
+                    : "bg-neutral-100 text-black hover:bg-black/10"
                 }
               `}
                 aria-pressed={selectedMonth === month.number}
