@@ -169,126 +169,135 @@ const AddTransactionFormDialog = ({
               )}
             />
           </DialogHeader>
-          <Flex className="gap-2">
-            <Column className="space-y-2">
-              <Label htmlFor="transaction">Transação</Label>
-              <Controller
-                name="description"
-                control={control}
-                render={({
-                  field: { onChange, value },
-                  fieldState: { error },
-                }) => (
-                  <Column>
-                    <Input
-                      id="transaction"
-                      placeholder="Salário"
-                      value={value}
-                      onChange={onChange}
-                      className={`${error && "border-red-600"}`}
-                    />
-                    <div className="h-2 -mt-1">
-                      <Show when={error}>
-                        <span className="text-xs text-red-600">
-                          {error?.message}
-                        </span>
-                      </Show>
-                    </div>
-                  </Column>
-                )}
-              />
-            </Column>
-            <Column className="space-y-2">
-              <Label htmlFor="value">Valor</Label>
-              <Controller
-                name="value"
-                control={control}
-                render={({
-                  field: { onChange, value },
-                  fieldState: { error },
-                }) => (
-                  <Column>
-                    <Input
-                      id="value"
-                      placeholder="R$ 2.000,00"
-                      value={currencyFormatter(Number(value))}
-                      onChange={(event) => {
-                        const rawValue = event.target.value.replace(/\D/g, "");
-                        onChange(rawValue);
-                      }}
-                      className={`max-w-[150px] ${
-                        error ? "border-red-600" : ""
-                      }`}
-                    />
+          <Column>
+            <Flex className="flex-col sm:flex-row max-sm:space-y-4 sm:space-x-2">
+              <Column className="space-y-2">
+                <Label htmlFor="transaction">Transação</Label>
+                <Controller
+                  name="description"
+                  control={control}
+                  render={({
+                    field: { onChange, value },
+                    fieldState: { error },
+                  }) => (
+                    <Column>
+                      <Input
+                        id="transaction"
+                        placeholder="Salário"
+                        value={value}
+                        onChange={onChange}
+                        className={`min-w-[200px] ${error && "border-red-600"}`}
+                      />
+                      <div className="h-2 -mt-1">
+                        <Show when={error}>
+                          <span className="text-xs text-red-600">
+                            {error?.message}
+                          </span>
+                        </Show>
+                      </div>
+                    </Column>
+                  )}
+                />
+              </Column>
+              <Column className="space-y-2">
+                <Label htmlFor="value">Valor</Label>
+                <Controller
+                  name="value"
+                  control={control}
+                  render={({
+                    field: { onChange, value },
+                    fieldState: { error },
+                  }) => (
+                    <Column>
+                      <Input
+                        id="value"
+                        placeholder="R$ 2.000,00"
+                        value={currencyFormatter(Number(value))}
+                        onChange={(event) => {
+                          const rawValue = event.target.value.replace(
+                            /\D/g,
+                            ""
+                          );
+                          onChange(rawValue);
+                        }}
+                        className={`w-full sm:max-w-[150px] ${
+                          error ? "border-red-600" : ""
+                        }`}
+                      />
 
-                    <div className="h-2 -mt-1">
-                      <Show when={error}>
-                        <span className="text-xs text-red-600">
-                          {error?.message}
-                        </span>
-                      </Show>
-                    </div>
-                  </Column>
-                )}
-              />
-            </Column>
-            <Column className="space-y-2">
-              <Label htmlFor="created_at">Data</Label>
-              <Controller
-                name="created_at"
-                control={control}
-                render={({ field: { value, onChange } }) => (
-                  <DatePicker
-                    value={value}
-                    onValueChange={(date) => onChange(date)}
-                  />
-                )}
-              />
-            </Column>
-          </Flex>
-          <Flex className="space-x-2">
-            <Column className="space-y-2">
-              <Label htmlFor="payment_method">Método de pagamento</Label>
-              <Column>
+                      <div className="h-2 -mt-1">
+                        <Show when={error}>
+                          <span className="text-xs text-red-600">
+                            {error?.message}
+                          </span>
+                        </Show>
+                      </div>
+                    </Column>
+                  )}
+                />
+              </Column>
+              <Column className="space-y-2 mb-4">
+                <Label htmlFor="created_at">Data</Label>
+                <Controller
+                  name="created_at"
+                  control={control}
+                  render={({ field: { value, onChange } }) => (
+                    <Column>
+                      <DatePicker
+                        value={value}
+                        onValueChange={(date) => onChange(date)}
+                      />
+                      <div className="h-2 -mt-1" />
+                    </Column>
+                  )}
+                />
+              </Column>
+            </Flex>
+            <Flex className="flex-col sm:flex-row max-sm:space-y-4 sm:space-x-2">
+              <Column className="space-y-2">
+                <Label htmlFor="payment_method">Método de pagamento</Label>
                 <Controller
                   name="payment_method"
                   control={control}
                   render={({ field: { value, onChange } }) => (
-                    <PaymentMethodSelectInput
-                      value={value}
-                      onChange={onChange}
-                    />
+                    <Column>
+                      <PaymentMethodSelectInput
+                        value={value}
+                        onChange={onChange}
+                      />
+                      <div className="h-2 -mt-1" />
+                    </Column>
                   )}
                 />
               </Column>
-            </Column>
-            <Column className="space-y-2">
-              <Label htmlFor="card">Cartão</Label>
-              <Controller
-                name="card"
-                control={control}
-                render={({
-                  field: { onChange, value },
-                  fieldState: { error },
-                }) => (
-                  <Column>
-                    <CardSelectInput
-                      value={value ?? ""}
-                      onChange={onChange}
-                      disabled={isNotCreditOrDebitCard}
-                    />
-                    <div className="h-2 -mt-1">
-                      <Show when={error}>
-                        <span className="text-xs text-red-600">
-                          {error?.message}
-                        </span>
-                      </Show>
-                    </div>
-                  </Column>
-                )}
-              />
-            </Column>
-          </Flex>
+              <Column className="space-y-2 w-full">
+                <Label htmlFor="card">Cartão</Label>
+                <Controller
+                  name="card"
+                  control={control}
+                  render={({
+                    field: { onChange, value },
+                    fieldState: { error },
+                  }) => (
+                    <Column>
+                      <CardSelectInput
+                        value={value ?? ""}
+                        onChange={onChange}
+                        disabled={isNotCreditOrDebitCard}
+                      />
+                      <div className="h-2 -mt-1">
+                        <Show when={error}>
+                          <span className="text-xs text-red-600">
+                            {error?.message}
+                          </span>
+                        </Show>
+                      </div>
+                    </Column>
+                  )}
+                />
+              </Column>
+            </Flex>
+          </Column>
           <DialogFooter>
             <DialogClose asChild>
               <Button className="hover:cursor-pointer" variant="secondary">

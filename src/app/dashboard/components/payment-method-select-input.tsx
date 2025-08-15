@@ -28,7 +28,7 @@ const PaymentMethodSelectInput = ({
 
   return (
     <Select value={value} onValueChange={onChange}>
-      <SelectTrigger className="w-[180px]">
+      <SelectTrigger className="w-full sm:w-[200px]">
         <SelectValue placeholder="Dinheiro" />
       </SelectTrigger>
       <SelectContent>

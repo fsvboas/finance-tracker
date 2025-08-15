@@ -65,7 +65,7 @@ const CardSelectInput = ({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-[230px] justify-between"
+          className="w-full justify-between"
           disabled={disabled}
         >
           {value || "Selecione um cartão..."}
