@@ -1,6 +1,6 @@
 "use client";
 
-import { usePin } from "@/src/contexts/user-pin-context";
+import { useUserSecrets } from "@/src/contexts/user-secrets-context";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import { useMutation } from "@tanstack/react-query";
@@ -32,7 +32,7 @@ interface UserPinFormDialogProps {
 }
 
 export function UserPinFormDialog({ userId, mode }: UserPinFormDialogProps) {
-  const { pin, setPin } = usePin();
+  const { pin, setPin, setSalt } = useUserSecrets();
   const [isOpen, setIsOpen] = useState<boolean>(!pin);
 
   const { handleSubmit, control } = useForm<PinFormSchemaType>({
@@ -89,7 +89,12 @@ export function UserPinFormDialog({ userId, mode }: UserPinFormDialogProps) {
 
   const { mutate: validate, isPending: pendingValidateUserPin } = useMutation({
     mutationFn: validateUserPin,
-    onSuccess: (_, variables) => {
+    onSuccess: async (_, variables) => {
+      const salt = await validateUserPin({
+        userId: variables.userId,
+        pin: variables.pin,
+      });
+      setSalt(salt);
       setPin(variables.pin);
       queryClient?.invalidateQueries({ queryKey: ["transactions"] });
       setIsOpen(false);

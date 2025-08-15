@@ -2,12 +2,10 @@
 
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { usePin } from "../contexts/user-pin-context";
 import { Progress } from "./progress";
 
 const TopLoadingBar = () => {
   const pathname = usePathname();
-  const { pin } = usePin();
 
   const [isLoading, setIsLoading] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -18,7 +16,7 @@ const TopLoadingBar = () => {
     requestAnimationFrame(() => {
       setIsLoading(false);
     });
-  }, [pathname, pin]);
+  }, [pathname]);
 
   useEffect(() => {
     if (isLoading) {

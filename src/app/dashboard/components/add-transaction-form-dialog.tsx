@@ -18,7 +18,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/src/components/tabs";
 import Column from "@/src/components/utils/column";
 import Flex from "@/src/components/utils/flex";
 import Show from "@/src/components/utils/show";
-import { usePin } from "@/src/contexts/user-pin-context";
+import { useUserSecrets } from "@/src/contexts/user-secrets-context";
 import { currencyFormatter } from "@/src/helpers/currency-formatter";
 import { useUser } from "@/src/hooks/use-user";
 import { queryClient } from "@/src/libs/tanstack-query";
@@ -49,7 +49,7 @@ type TransactionFormSchemaType = z.infer<typeof schema>;
 const AddTransactionFormDialog = ({
   trigger,
 }: AddTransactionFormDialogProps) => {
-  const { pin } = usePin();
+  const { pin, salt } = useUserSecrets();
   const user = useUser();
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -88,7 +88,7 @@ const AddTransactionFormDialog = ({
       ...transaction,
       created_at: transaction.created_at.toISOString(),
     };
-    post({ transaction: payload, pin: pin! });
+    post({ transaction: payload, pin: pin!, salt: salt! });
   };
 
   useEffect(() => {
