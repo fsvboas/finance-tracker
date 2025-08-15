@@ -1,39 +1,35 @@
 import { supabaseClient } from "@/src/libs/supabase/supabase-client";
 import { TransactionType } from "@/src/types/transaction-type";
+import { UserCredentials } from "@/src/types/user-credentials";
 import { decryptData, deriveKey } from "@/src/utils/encrypt-data";
-import { validateUserPin } from "./user-pin";
 
 interface DeleteTransactionProps {
   transaction: TransactionType;
-  pin: string;
+  userSecrets: UserCredentials;
 }
 
 export async function deleteTransaction({
   transaction,
-  pin,
+  userSecrets,
 }: DeleteTransactionProps) {
   const {
-    data: { user },
+    data: { session },
     error: authError,
-  } = await supabaseClient.auth.getUser();
+  } = await supabaseClient.auth.getSession();
 
-  if (authError || !user) throw new Error("Usuário não autenticado");
-
-  const salt = await validateUserPin({ userId: user.id, pin });
-
-  if (!salt) throw new Error("PIN inválido");
+  if (authError || !session) throw new Error("Usuário não autenticado");
 
   const { data, error } = await supabaseClient
     .from("transactions")
     .delete()
     .eq("id", transaction.id)
-    .eq("user_id", user.id)
+    .eq("user_id", session.user.id)
     .select()
     .single();
 
   if (error) throw error;
 
-  const keyHex = deriveKey(pin, salt);
+  const keyHex = deriveKey(userSecrets.pin, userSecrets.salt!);
 
   return {
     id: data.id,

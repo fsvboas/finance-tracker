@@ -4,7 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 import { Loader2Icon, LogOut, UserIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { doLogout } from "../app/entrar/services";
-import { usePin } from "../contexts/user-pin-context";
+import { useUserSecrets } from "../contexts/user-secrets-context";
 import { useUser } from "../hooks/use-user";
 import {
   DropdownMenu,
@@ -21,12 +21,12 @@ import Show from "./utils/show";
 const UserMenu = () => {
   const user = useUser();
   const route = useRouter();
-  const { clearPin } = usePin();
+  const { clearCredentials } = useUserSecrets();
 
   const { mutate: logout, isPending: pendingLogout } = useMutation({
     mutationFn: doLogout,
     onSuccess: () => {
-      clearPin();
+      clearCredentials();
       route.push("/entrar");
     },
     onError: (error) => {

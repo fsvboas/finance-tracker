@@ -17,7 +17,8 @@ export async function createUserPin({ userId, pin }: UserPinProps) {
     .eq("user_id", userId);
 
   if (error) throw error;
-  return { salt, pinHash };
+
+  return salt;
 }
 
 export async function validateUserPin({ userId, pin }: UserPinProps) {

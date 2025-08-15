@@ -4,7 +4,7 @@ import Footer from "../components/footer";
 import Header from "../components/header";
 import { Toaster } from "../components/sonner";
 import TopLoadingBar from "../components/top-loading-bar";
-import { UserPinProvider } from "../contexts/user-pin-context";
+import { UserSecretsProvider } from "../contexts/user-secrets-context";
 import { TanstackQueryProvider } from "../libs/tanstack-query";
 import "./globals.css";
 
@@ -27,14 +27,14 @@ export default function RootLayout({
     <html lang="pt-BR">
       <body className={`${inter.className} antialiased`}>
         <TanstackQueryProvider>
-          <UserPinProvider>
+          <UserSecretsProvider>
             <TopLoadingBar />
             <Header />
             <main className="min-h-screen w-full flex bg-white">
               {children}
             </main>
             <Footer />
-          </UserPinProvider>
+          </UserSecretsProvider>
         </TanstackQueryProvider>
         <Toaster visibleToasts={1} />
       </body>

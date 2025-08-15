@@ -13,7 +13,7 @@ import {
 import Column from "@/src/components/utils/column";
 import Row from "@/src/components/utils/row";
 import Show from "@/src/components/utils/show";
-import { usePin } from "@/src/contexts/user-pin-context";
+import { useUserSecrets } from "@/src/contexts/user-secrets-context";
 import CurrencyFormatter from "@/src/helpers/currency-formatter";
 import DateFormatter from "@/src/helpers/date-formatter";
 import { queryClient } from "@/src/libs/tanstack-query";
@@ -32,7 +32,7 @@ const TransactionDetailsDialog = ({
   trigger,
   transaction,
 }: TransactionDetailsDialog) => {
-  const { pin } = usePin();
+  const { credentials } = useUserSecrets();
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
@@ -64,7 +64,7 @@ const TransactionDetailsDialog = ({
   });
 
   const handleDeleteTransaction = (transaction: TransactionType) => {
-    del({ transaction, pin: pin! });
+    del({ transaction, userSecrets: credentials! });
   };
 
   return (

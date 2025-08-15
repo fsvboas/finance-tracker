@@ -1,29 +1,28 @@
 import { supabaseClient } from "@/src/libs/supabase/supabase-client";
 import { TransactionType } from "@/src/types/transaction-type";
+import { UserCredentials } from "@/src/types/user-credentials";
 import { deriveKey, encryptData } from "@/src/utils/encrypt-data";
-import { validateUserPin } from "./user-pin";
 
 interface PostTransactionProps {
   transaction: TransactionType;
-  pin: string;
+  userSecrets: UserCredentials;
 }
 
 export async function postTransaction({
   transaction,
-  pin,
+  userSecrets,
 }: PostTransactionProps) {
   const {
-    data: { user },
+    data: { session },
     error: authError,
-  } = await supabaseClient.auth.getUser();
+  } = await supabaseClient.auth.getSession();
 
-  if (authError || !user) throw new Error("Usuário não autenticado");
+  if (authError || !session) throw new Error("Usuário não autenticado");
 
-  const salt = await validateUserPin({ userId: user.id, pin });
-  const keyHex = deriveKey(pin, salt);
+  const keyHex = deriveKey(userSecrets.pin, userSecrets.salt!);
 
   const encryptedTransaction: Partial<TransactionType> = {
-    user_id: user.id,
+    user_id: session.user.id,
     description: encryptData(transaction.description, keyHex),
     value: encryptData(transaction.value, keyHex),
     transactionType: encryptData(transaction.transactionType, keyHex) as

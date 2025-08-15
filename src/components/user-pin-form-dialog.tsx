@@ -1,6 +1,6 @@
 "use client";
 
-import { usePin } from "@/src/contexts/user-pin-context";
+import { useUserSecrets } from "@/src/contexts/user-secrets-context";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import { useMutation } from "@tanstack/react-query";
@@ -32,8 +32,8 @@ interface UserPinFormDialogProps {
 }
 
 export function UserPinFormDialog({ userId, mode }: UserPinFormDialogProps) {
-  const { pin, setPin } = usePin();
-  const [isOpen, setIsOpen] = useState<boolean>(!pin);
+  const { credentials, setCredentials } = useUserSecrets();
+  const [isOpen, setIsOpen] = useState<boolean>(!credentials?.pin);
 
   const { handleSubmit, control } = useForm<PinFormSchemaType>({
     resolver: zodResolver(PinFormSchema),
@@ -76,8 +76,8 @@ export function UserPinFormDialog({ userId, mode }: UserPinFormDialogProps) {
 
   const { mutate: create, isPending: pendingCreateUserPin } = useMutation({
     mutationFn: createUserPin,
-    onSuccess: (_, variables) => {
-      setPin(variables.pin);
+    onSuccess: (data, variables) => {
+      setCredentials({ pin: variables.pin, salt: data });
       setIsOpen(false);
     },
     onError: (error) => {
@@ -89,8 +89,12 @@ export function UserPinFormDialog({ userId, mode }: UserPinFormDialogProps) {
 
   const { mutate: validate, isPending: pendingValidateUserPin } = useMutation({
     mutationFn: validateUserPin,
-    onSuccess: (_, variables) => {
-      setPin(variables.pin);
+    onSuccess: async (_, variables) => {
+      const salt = await validateUserPin({
+        userId: variables.userId,
+        pin: variables.pin,
+      });
+      setCredentials({ pin: variables.pin, salt: salt });
       queryClient?.invalidateQueries({ queryKey: ["transactions"] });
       setIsOpen(false);
     },
@@ -112,7 +116,7 @@ export function UserPinFormDialog({ userId, mode }: UserPinFormDialogProps) {
     <Dialog
       open={isOpen}
       onOpenChange={(open) => {
-        if (!open && !pin) return;
+        if (!open && !credentials?.pin) return;
         setIsOpen(open);
       }}
       modal

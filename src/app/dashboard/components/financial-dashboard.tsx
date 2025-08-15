@@ -4,7 +4,7 @@ import { checkPinExists, getTransactions } from "@/src/app/dashboard/services";
 import { UserPinFormDialog } from "@/src/components/user-pin-form-dialog";
 import Column from "@/src/components/utils/column";
 import Show from "@/src/components/utils/show";
-import { usePin } from "@/src/contexts/user-pin-context";
+import { useUserSecrets } from "@/src/contexts/user-secrets-context";
 import { useUser } from "@/src/hooks/use-user";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
@@ -13,7 +13,7 @@ import TimePeriodSelector from "./time-period-selector";
 import TransactionSection from "./transaction-section";
 
 export default function FinancialDashboard() {
-  const { pin } = usePin();
+  const { credentials } = useUserSecrets();
   const user = useUser();
 
   const getCurrentMonth = new Date().getMonth() + 1;
@@ -29,8 +29,9 @@ export default function FinancialDashboard() {
   });
 
   const { data, isPending: pendingGetTransactions } = useQuery({
-    queryFn: () => getTransactions(pin!),
-    queryKey: ["transactions"],
+    queryFn: () => getTransactions({ userSecrets: credentials! }),
+    queryKey: ["transactions", credentials],
+    enabled: Boolean(credentials),
   });
 
   const userPinFormDialogMode = pinExists ? "validate" : "create";
