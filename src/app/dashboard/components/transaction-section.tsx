@@ -26,7 +26,7 @@ export default function TransactionSection({
   ));
 
   return (
-    <>
+    <Column className="w-full h-full mb-2 items-center">
       <Row className="justify-between w-full h-10 items-center max-[1020px]:px-2">
         <AddTransactionFormDialog
           trigger={
@@ -39,8 +39,8 @@ export default function TransactionSection({
           }
         />
       </Row>
-      <ScrollArea className="w-full h-full max-h-90 mb-6">
-        <Column className="space-y-2">
+      <ScrollArea className="w-full mb-4">
+        <Column className="space-y-2 h-full max-h-109">
           <Show when={!pendingTransactions} fallback={pendingData}>
             <Show
               when={transactions.length > 0}
@@ -56,13 +56,13 @@ export default function TransactionSection({
       <Show when={transactions.length > 0}>
         <AddTransactionFormDialog
           trigger={
-            <Button className="cursor-pointer">
+            <Button className="cursor-pointer w-fit">
               <ListPlus className="!w-5 !h-5" />
               Nova Transação
             </Button>
           }
         />
       </Show>
-    </>
+    </Column>
   );
 }

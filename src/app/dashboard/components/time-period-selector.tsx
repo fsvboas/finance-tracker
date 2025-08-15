@@ -70,7 +70,7 @@ const TimePeriodSelector = ({
         <Button
           size="icon"
           variant="outline"
-          className="cursor-pointer bg-neutral-100"
+          className="cursor-pointer bg-neutral-100 hover:bg-neutral-200"
           onClick={handlePreviousYear}
           disabled={selectedYear <= minYear}
         >
@@ -80,7 +80,7 @@ const TimePeriodSelector = ({
         <Button
           size="icon"
           variant="outline"
-          className="cursor-pointer bg-neutral-100"
+          className="cursor-pointer bg-neutral-100 hover:bg-neutral-200"
           onClick={handleNextYear}
           disabled={selectedYear >= maxYear}
         >

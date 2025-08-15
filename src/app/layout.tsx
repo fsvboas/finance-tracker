@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import Footer from "../components/footer";
 import Header from "../components/header";
 import { Toaster } from "../components/sonner";
 import TopLoadingBar from "../components/top-loading-bar";
@@ -32,6 +33,7 @@ export default function RootLayout({
             <main className="min-h-screen w-full flex bg-white">
               {children}
             </main>
+            <Footer />
           </UserPinProvider>
         </TanstackQueryProvider>
         <Toaster visibleToasts={1} />
