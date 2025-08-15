@@ -69,7 +69,7 @@ export default function FinancialDashboard() {
   if (!user) return;
 
   return (
-    <Column className="items-center w-full space-y-2 max-w-5xl mx-auto mt-16">
+    <Column className="items-center h-fit w-full space-y-2 max-w-5xl mx-auto mt-16">
       <Show when={!pendingCheckPinExists}>
         <Show when={user}>
           <UserPinFormDialog userId={user!.id} mode={userPinFormDialogMode} />
@@ -85,6 +85,7 @@ export default function FinancialDashboard() {
         totalIncoming={financialSummary.totalIncoming}
         totalOutcoming={financialSummary.totalOutcoming}
         total={financialSummary.total}
+        pending={pendingGetTransactions}
       />
       <TransactionSection
         transactions={filteredTransactions}
