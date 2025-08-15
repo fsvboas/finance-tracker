@@ -13,17 +13,17 @@ export async function deleteTransaction({
   userSecrets,
 }: DeleteTransactionProps) {
   const {
-    data: { user },
+    data: { session },
     error: authError,
-  } = await supabaseClient.auth.getUser();
+  } = await supabaseClient.auth.getSession();
 
-  if (authError || !user) throw new Error("Usuário não autenticado");
+  if (authError || !session) throw new Error("Usuário não autenticado");
 
   const { data, error } = await supabaseClient
     .from("transactions")
     .delete()
     .eq("id", transaction.id)
-    .eq("user_id", user.id)
+    .eq("user_id", session.user.id)
     .select()
     .single();
 

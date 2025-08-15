@@ -12,18 +12,17 @@ export async function postTransaction({
   transaction,
   userSecrets,
 }: PostTransactionProps) {
-  // TO-DO: USE ACCESS TOKEN INSTEAD CALL THE GET USER IN EVERY REQUEST
   const {
-    data: { user },
+    data: { session },
     error: authError,
-  } = await supabaseClient.auth.getUser();
+  } = await supabaseClient.auth.getSession();
 
-  if (authError || !user) throw new Error("Usuário não autenticado");
+  if (authError || !session) throw new Error("Usuário não autenticado");
 
   const keyHex = deriveKey(userSecrets.pin, userSecrets.salt!);
 
   const encryptedTransaction: Partial<TransactionType> = {
-    user_id: user.id,
+    user_id: session.user.id,
     description: encryptData(transaction.description, keyHex),
     value: encryptData(transaction.value, keyHex),
     transactionType: encryptData(transaction.transactionType, keyHex) as
