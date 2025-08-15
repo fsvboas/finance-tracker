@@ -13,6 +13,7 @@ export async function postTransaction({
   pin,
   salt,
 }: PostTransactionProps) {
+  // TO-DO: USE ACCESS TOKEN INSTEAD CALL THE GET USER IN EVERY REQUEST
   const {
     data: { user },
     error: authError,
