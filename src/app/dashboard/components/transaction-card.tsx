@@ -2,6 +2,7 @@
 
 import Column from "@/src/components/utils/column";
 import Row from "@/src/components/utils/row";
+import Show from "@/src/components/utils/show";
 import CurrencyFormatter from "@/src/helpers/currency-formatter";
 import DateFormatter from "@/src/helpers/date-formatter";
 import { TransactionType } from "@/src/types/transaction-type";
@@ -15,6 +16,10 @@ export default function TransactionCard({ transaction }: TransactionCardProps) {
   const transactionDate = new Date(transaction?.created_at).toISOString();
 
   const isIncomeValue = transaction?.type === "income";
+
+  const splitCardFromPaymentMethod = transaction?.payment_method?.split("/");
+  const paymentMethod = splitCardFromPaymentMethod?.[0];
+  const card = splitCardFromPaymentMethod?.[1];
 
   return (
     <TransactionDetailsDialog
@@ -37,7 +42,11 @@ export default function TransactionCard({ transaction }: TransactionCardProps) {
             >
               <CurrencyFormatter>{transaction.value}</CurrencyFormatter>
             </p>
-            {/* <span className="text-xs text-end">no cartão Nubank</span> */}
+            <Show when={transaction?.payment_method}>
+              <span className="text-xs text-end">
+                {paymentMethod} - <strong>{card}</strong>
+              </span>
+            </Show>
           </Column>
         </Row>
       }
