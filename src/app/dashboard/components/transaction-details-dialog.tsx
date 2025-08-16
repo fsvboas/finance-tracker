@@ -49,7 +49,7 @@ const TransactionDetailsDialog = ({
       queryClient?.invalidateQueries({ queryKey: ["transactions"] });
       setIsOpen(false);
       toast.success(
-        `Transação ${variables.transaction.description}" removida com sucesso!`,
+        `Transação "${variables.transaction.description}" removida com sucesso!`,
         {
           className: "!bg-green-600/80 !text-white",
         }
