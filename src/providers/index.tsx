@@ -12,7 +12,7 @@ const Providers = ({ children }: ProvidersProps) => {
       <UserSecretsProvider>
         <ThemeProvider
           attribute="class"
-          defaultTheme="dark"
+          defaultTheme="light"
           enableSystem
           disableTransitionOnChange
         >

@@ -5,7 +5,7 @@ import { useUserSecrets } from "@/src/providers/user-secrets-provider";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import { useMutation } from "@tanstack/react-query";
-import { Loader2Icon } from "lucide-react";
+import { BrushCleaning, Delete, Loader2Icon } from "lucide-react";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -142,22 +142,32 @@ const UserPinFormDialog = ({ userId, mode }: UserPinFormDialogProps) => {
                     className="text-center tracking-widest"
                   />
                   <div className="grid grid-cols-3 gap-1">
-                    {buttons.map((button, index) => (
-                      <Button
-                        key={index}
-                        type="button"
-                        className="cursor-pointer bg-neutral-200 text-black hover:bg-neutral-300"
-                        onClick={() =>
-                          handleButtonClick(button, value, onChange)
-                        }
-                        disabled={
-                          (button === "Apagar" || button === "Limpar") &&
-                          value.length === 0
-                        }
-                      >
-                        {button}
-                      </Button>
-                    ))}
+                    {buttons.map((button, index) => {
+                      const buttonLabel =
+                        button === "Apagar" ? (
+                          <Delete />
+                        ) : button === "Limpar" ? (
+                          <BrushCleaning />
+                        ) : (
+                          button
+                        );
+                      return (
+                        <Button
+                          key={index}
+                          type="button"
+                          className="cursor-pointer bg-neutral-200 dark:bg-[#202020] text-black dark:text-white hover:bg-neutral-300 dark:hover:bg-[#101010]"
+                          onClick={() =>
+                            handleButtonClick(button, value, onChange)
+                          }
+                          disabled={
+                            (button === "Apagar" || button === "Limpar") &&
+                            value.length === 0
+                          }
+                        >
+                          {buttonLabel}
+                        </Button>
+                      );
+                    })}
                   </div>
                   <DialogFooter>
                     <Button
