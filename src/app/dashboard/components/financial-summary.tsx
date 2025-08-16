@@ -10,12 +10,12 @@ interface FinancialSummaryProps {
   pending: boolean;
 }
 
-export default function FinancialSummary({
+const FinancialSummary = ({
   totalIncome,
   totalExpense,
   total,
   pending,
-}: FinancialSummaryProps) {
+}: FinancialSummaryProps) => {
   return (
     <Show when={!pending} fallback={<FinancialSummarySkeleton />}>
       <Flex className="sm:space-x-2 max-sm:space-y-2 flex-col sm:flex-row w-full justify-center items-center">
@@ -25,4 +25,6 @@ export default function FinancialSummary({
       </Flex>
     </Show>
   );
-}
+};
+
+export default FinancialSummary;

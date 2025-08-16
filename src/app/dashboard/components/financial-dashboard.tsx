@@ -1,7 +1,7 @@
 "use client";
 
 import { checkPinExists, getTransactions } from "@/src/app/dashboard/services";
-import { UserPinFormDialog } from "@/src/components/user-pin-form-dialog";
+import UserPinFormDialog from "@/src/components/user-pin-form-dialog";
 import Column from "@/src/components/utils/column";
 import Show from "@/src/components/utils/show";
 import { useUserSecrets } from "@/src/contexts/user-secrets-context";

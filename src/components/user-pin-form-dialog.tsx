@@ -31,7 +31,7 @@ interface UserPinFormDialogProps {
   mode: "create" | "validate";
 }
 
-export function UserPinFormDialog({ userId, mode }: UserPinFormDialogProps) {
+const UserPinFormDialog = ({ userId, mode }: UserPinFormDialogProps) => {
   const { credentials, setCredentials } = useUserSecrets();
   const [isOpen, setIsOpen] = useState<boolean>(!credentials?.pin);
 
@@ -179,4 +179,6 @@ export function UserPinFormDialog({ userId, mode }: UserPinFormDialogProps) {
       </DialogContent>
     </Dialog>
   );
-}
+};
+
+export default UserPinFormDialog;

@@ -17,10 +17,10 @@ interface TransactionSectionProps {
   pendingTransactions: boolean;
 }
 
-export default function TransactionSection({
+const TransactionSection = ({
   transactions,
   pendingTransactions,
-}: TransactionSectionProps) {
+}: TransactionSectionProps) => {
   const pendingData = Array.from({ length: 4 }, (_, index) => (
     <Skeleton key={index} className="w-full h-20" />
   ));
@@ -65,4 +65,6 @@ export default function TransactionSection({
       </Show>
     </Column>
   );
-}
+};
+
+export default TransactionSection;
