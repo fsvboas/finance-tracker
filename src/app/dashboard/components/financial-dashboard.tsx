@@ -26,12 +26,15 @@ export default function FinancialDashboard() {
     queryFn: () => checkPinExists({ userId: user?.id }),
     queryKey: ["pin-exists", user?.id],
     enabled: !!user?.id,
+    staleTime: Infinity,
   });
 
   const { data, isPending: pendingGetTransactions } = useQuery({
     queryFn: () => getTransactions({ userSecrets: credentials! }),
     queryKey: ["transactions", credentials],
     enabled: Boolean(credentials),
+    staleTime: 15 * 60 * 1000,
+    gcTime: 45 * 60 * 1000,
   });
 
   const userPinFormDialogMode = pinExists ? "validate" : "create";
