@@ -5,7 +5,7 @@ import { Loader2Icon, LogOut, UserIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { doLogout } from "../app/entrar/services";
 import { useUserSecrets } from "../contexts/user-secrets-context";
-import { useUser } from "../hooks/use-user";
+import { useAuth } from "../hooks/use-auth";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,7 +19,7 @@ import {
 import Show from "./utils/show";
 
 const UserMenu = () => {
-  const user = useUser();
+  const { user } = useAuth();
   const route = useRouter();
   const { clearCredentials } = useUserSecrets();
 

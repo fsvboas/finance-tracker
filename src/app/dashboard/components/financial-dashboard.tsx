@@ -5,7 +5,7 @@ import { UserPinFormDialog } from "@/src/components/user-pin-form-dialog";
 import Column from "@/src/components/utils/column";
 import Show from "@/src/components/utils/show";
 import { useUserSecrets } from "@/src/contexts/user-secrets-context";
-import { useUser } from "@/src/hooks/use-user";
+import { useAuth } from "@/src/hooks/use-auth";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import FinancialSummary from "./financial-summary";
@@ -14,7 +14,7 @@ import TransactionSection from "./transaction-section";
 
 export default function FinancialDashboard() {
   const { credentials } = useUserSecrets();
-  const user = useUser();
+  const { user } = useAuth();
 
   const getCurrentMonth = new Date().getMonth() + 1;
   const getCurrentYear = new Date().getFullYear();

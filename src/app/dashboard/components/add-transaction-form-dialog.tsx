@@ -20,7 +20,7 @@ import Flex from "@/src/components/utils/flex";
 import Show from "@/src/components/utils/show";
 import { useUserSecrets } from "@/src/contexts/user-secrets-context";
 import { currencyFormatter } from "@/src/helpers/currency-formatter";
-import { useUser } from "@/src/hooks/use-user";
+import { useAuth } from "@/src/hooks/use-auth";
 import { queryClient } from "@/src/libs/tanstack-query";
 import { TransactionType } from "@/src/types/transaction-type";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -64,7 +64,7 @@ const AddTransactionFormDialog = ({
   trigger,
 }: AddTransactionFormDialogProps) => {
   const { credentials } = useUserSecrets();
-  const user = useUser();
+  const { user } = useAuth();
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
