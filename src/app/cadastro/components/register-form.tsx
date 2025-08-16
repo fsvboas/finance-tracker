@@ -51,9 +51,12 @@ const RegisterForm = () => {
   const { mutate: signUp, isPending: pendingSignUp } = useMutation({
     mutationFn: doSignUp,
     onSuccess: () => {
-      toast.success("Cadastro realizado com sucesso!", {
-        className: "!bg-green-600/80 !text-white",
-      });
+      toast.success(
+        "Cadastro realizado com sucesso! Verifique sua caixa de entrada.",
+        {
+          className: "!bg-green-600/80 !text-white",
+        }
+      );
       // TO-DO: Replace when create the e-mail validation
       router.push("/dashboard");
       // router.push("/entrar");
