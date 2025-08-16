@@ -26,6 +26,7 @@ export async function postTransaction({
     description: encryptData(transaction.description, keyHex),
     value: encryptData(transaction.value, keyHex),
     type: encryptData(transaction.type, keyHex) as "income" | "expense",
+    created_at: transaction.created_at,
     payment_method: transaction.payment_method
       ? encryptData(transaction.payment_method, keyHex)
       : undefined,
@@ -45,7 +46,7 @@ export async function postTransaction({
     value: transaction.value,
     description: transaction.description,
     type: transaction.type,
-    created_at: data.created_at,
+    created_at: transaction.created_at,
     payment_method: transaction.payment_method,
   };
 }

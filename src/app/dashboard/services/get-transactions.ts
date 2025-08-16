@@ -30,6 +30,7 @@ export async function getTransactions({ userSecrets }: GetTransactionsProps) {
       description: decryptData(transaction.description, keyHex),
       value: decryptData(transaction.value, keyHex),
       type: decryptData(transaction.type, keyHex),
+      created_at: transaction.created_at,
       payment_method: transaction.payment_method
         ? decryptData(transaction.payment_method, keyHex)
         : undefined,
