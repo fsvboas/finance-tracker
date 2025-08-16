@@ -9,7 +9,6 @@ import { useAuth } from "../hooks/use-auth";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
@@ -41,20 +40,19 @@ const UserMenu = () => {
           <UserIcon size={20} />
         </div>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56" align="start">
-        {/* TO-DO: CHANGE TO USER NAME */}
+      <DropdownMenuContent className="w-56" align="end">
         <DropdownMenuLabel>
-          Olá, {user?.user_metadata?.display_name || "Usuário"}!
+          Olá, {user?.user_metadata?.display_name}!
         </DropdownMenuLabel>
-        <DropdownMenuGroup>
-          {/* <DropdownMenuItem>
+        {/* <DropdownMenuGroup> */}
+        {/* <DropdownMenuItem onClick={() => route.push("/perfil")}>
             Minha Conta
             <DropdownMenuShortcut>
-              <Settings />
+              <User />
             </DropdownMenuShortcut>
           </DropdownMenuItem> */}
-          <DropdownMenuSeparator />
-        </DropdownMenuGroup>
+        {/* </DropdownMenuGroup> */}
+        <DropdownMenuSeparator />
         <DropdownMenuItem
           className="!text-red-600 hover:!bg-red-50 cursor-pointer"
           onClick={() => logout()}

@@ -3,7 +3,7 @@ import FinancialDashboard from "./components/financial-dashboard";
 
 export default function Home() {
   return (
-    <AuthGuard requireAuth redirectTo="/entrar">
+    <AuthGuard requireAuth>
       <FinancialDashboard />
     </AuthGuard>
   );
