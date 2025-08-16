@@ -19,12 +19,14 @@ const Card = ({ title, value }: CardProps) => {
       : "text-black";
 
   return (
-    <Column className="p-4 bg-neutral-100 w-full justify-between rounded">
+    <Column className="p-4 bg-neutral-100 dark:bg-[#202020] w-full justify-between rounded">
       <Row className="justify-between">
         <p>{title}</p>
         <span>{cardIconMap[title]}</span>
       </Row>
-      <p className={`text-2xl font-medium ${availableBalanceStyle}`}>
+      <p
+        className={`text-2xl font-medium ${availableBalanceStyle} text-primary`}
+      >
         <CurrencyFormatter>{value}</CurrencyFormatter>
       </p>
     </Column>

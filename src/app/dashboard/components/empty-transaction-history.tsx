@@ -5,7 +5,7 @@ import AddTransactionFormDialog from "./add-transaction-form-dialog";
 
 const EmptyTransactionHistory = () => {
   return (
-    <Column className="p-6 bg-neutral-100 h-full w-full items-center justify-center rounded space-y-4">
+    <Column className="p-6 bg-neutral-100 dark:bg-[#202020] h-full w-full items-center justify-center rounded space-y-4">
       <CircleSlash2 size={40} />
       <p className="text-center">Nenhuma transação foi adicionada neste mês.</p>
       <AddTransactionFormDialog

@@ -31,7 +31,7 @@ export default function TransactionCard({
       totalIncome={totalIncome}
       trigger={
         <Row
-          className={`p-4 h-20 bg-neutral-100 rounded hover:bg-neutral-200 duration-300 justify-between items-center`}
+          className={`p-4 h-20 rounded bg-neutral-100 dark:bg-[#202020] hover:bg-neutral-200 dark:hover:bg-[#101010] duration-300 justify-between items-center`}
         >
           <Column>
             <p className="font-semibold text-lg text-ellipsis overflow-hidden max-[400px]:max-w-[150px] max-[500px]:max-w-[250px] [150px]:max-w-full">

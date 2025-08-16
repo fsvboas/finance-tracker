@@ -102,8 +102,8 @@ const TimePeriodSelector = ({
                 flex-1 text-sm font-medium transition-all duration-200 rounded-none border-r last:border-0
                 ${
                   selectedMonth === month.number
-                    ? "bg-black text-white"
-                    : "bg-neutral-100 text-black hover:bg-black/10"
+                    ? "bg-black text-white hover:!bg-[#101010]"
+                    : "bg-neutral-100 dark:bg-[#202020] text-black dark:text-white hover:bg-neutral-200 dark:hover:bg-[#101010]"
                 }
               `}
                 aria-pressed={selectedMonth === month.number}

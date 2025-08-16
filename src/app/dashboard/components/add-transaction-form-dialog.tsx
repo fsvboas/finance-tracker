@@ -159,13 +159,13 @@ const AddTransactionFormDialog = ({
                 >
                   <TabsList className="w-[80%] sm:w-1/2">
                     <TabsTrigger
-                      className="text-green-600 hover:cursor-pointer"
+                      className="!text-green-600 hover:cursor-pointer"
                       value="income"
                     >
                       Entrada
                     </TabsTrigger>
                     <TabsTrigger
-                      className="text-red-600 hover:cursor-pointer"
+                      className="!text-red-600 hover:cursor-pointer"
                       value="expense"
                     >
                       Saída

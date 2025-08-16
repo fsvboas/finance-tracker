@@ -6,21 +6,26 @@ import { useRouter } from "next/navigation";
 import { doLogout } from "../app/entrar/services";
 import { useAuth } from "../hooks/use-auth";
 import { useUserSecrets } from "../providers/user-secrets-provider";
+
+import { useTheme } from "next-themes";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "./dropdown-menu";
+import { Switch } from "./switch";
 import Show from "./utils/show";
 
 const UserMenu = () => {
   const { user } = useAuth();
   const route = useRouter();
   const { clearCredentials } = useUserSecrets();
+  const { theme, setTheme } = useTheme();
 
   const { mutate: logout, isPending: pendingLogout } = useMutation({
     mutationFn: doLogout,
@@ -33,10 +38,14 @@ const UserMenu = () => {
     },
   });
 
+  const handleThemeToggle = (checked: boolean) => {
+    setTheme(checked ? "dark" : "light");
+  };
+
   return (
-    <DropdownMenu>
+    <DropdownMenu modal>
       <DropdownMenuTrigger asChild className="cursor-pointer">
-        <div className="bg-transparent border rounded-full w-8 h-8 flex items-center justify-center">
+        <div className="bg-transparent rounded-full w-8 h-8 flex items-center justify-center">
           <UserIcon size={20} />
         </div>
       </DropdownMenuTrigger>
@@ -44,17 +53,21 @@ const UserMenu = () => {
         <DropdownMenuLabel>
           Olá, {user?.user_metadata?.display_name}!
         </DropdownMenuLabel>
-        {/* <DropdownMenuGroup> */}
-        {/* <DropdownMenuItem onClick={() => route.push("/perfil")}>
-            Minha Conta
-            <DropdownMenuShortcut>
-              <User />
+        <DropdownMenuSeparator />
+        <DropdownMenuGroup>
+          <DropdownMenuItem className="hover:!bg-transparent">
+            Tema (Beta)
+            <DropdownMenuShortcut className="space-x-1">
+              <Switch
+                checked={theme === "dark"}
+                onCheckedChange={handleThemeToggle}
+              />
             </DropdownMenuShortcut>
-          </DropdownMenuItem> */}
-        {/* </DropdownMenuGroup> */}
+          </DropdownMenuItem>
+        </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem
-          className="!text-red-600 hover:!bg-red-50 cursor-pointer"
+          className="!text-red-600  cursor-pointer"
           onClick={() => logout()}
         >
           Sair
