@@ -34,7 +34,9 @@ export default function TransactionCard({
           className={`p-4 h-20 bg-neutral-100 rounded hover:bg-neutral-200 duration-300 justify-between items-center`}
         >
           <Column>
-            <p className="font-semibold text-lg">{transaction?.description}</p>
+            <p className="font-semibold text-lg text-ellipsis overflow-hidden max-[400px]:max-w-[150px] max-[500px]:max-w-[250px] [150px]:max-w-full">
+              {transaction?.description}
+            </p>
             <span className="text-xs">
               <DateFormatter>{transactionDate}</DateFormatter>
             </span>
