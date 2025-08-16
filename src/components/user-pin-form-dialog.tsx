@@ -1,6 +1,7 @@
 "use client";
 
-import { useUserSecrets } from "@/src/contexts/user-secrets-context";
+import { queryClient } from "@/src/libs/tanstack-query/query-client";
+import { useUserSecrets } from "@/src/providers/user-secrets-provider";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import { useMutation } from "@tanstack/react-query";
@@ -13,7 +14,6 @@ import {
   createUserPin,
   validateUserPin,
 } from "../app/dashboard/services/user-pin";
-import { queryClient } from "../libs/tanstack-query";
 import { Button } from "./button";
 import { Dialog, DialogContent, DialogFooter, DialogHeader } from "./dialog";
 import { Input } from "./input";

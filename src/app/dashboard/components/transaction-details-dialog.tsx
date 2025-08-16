@@ -13,10 +13,10 @@ import {
 import Column from "@/src/components/utils/column";
 import Row from "@/src/components/utils/row";
 import Show from "@/src/components/utils/show";
-import { useUserSecrets } from "@/src/contexts/user-secrets-context";
 import CurrencyFormatter from "@/src/helpers/currency-formatter";
 import DateFormatter from "@/src/helpers/date-formatter";
-import { queryClient } from "@/src/libs/tanstack-query";
+import { queryClient } from "@/src/libs/tanstack-query/query-client";
+import { useUserSecrets } from "@/src/providers/user-secrets-provider";
 import { TransactionType } from "@/src/types/transaction-type";
 import { useMutation } from "@tanstack/react-query";
 import { Loader2Icon } from "lucide-react";

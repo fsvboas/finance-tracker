@@ -5,8 +5,7 @@ import Footer from "../components/footer";
 import Header from "../components/header";
 import { Toaster } from "../components/sonner";
 import TopLoadingBar from "../components/top-loading-bar";
-import { UserSecretsProvider } from "../contexts/user-secrets-context";
-import { TanstackQueryProvider } from "../libs/tanstack-query";
+import Providers from "../providers";
 import "./globals.css";
 
 const inter = Inter({
@@ -25,19 +24,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR">
+    <html lang="pt-BR" suppressHydrationWarning>
       <body className={`${inter.className} antialiased`}>
-        <TanstackQueryProvider>
-          <UserSecretsProvider>
-            <TopLoadingBar />
-            <Header />
-            <main className="min-h-screen w-full flex bg-white">
-              {children}
-            </main>
-            <Footer />
-          </UserSecretsProvider>
-        </TanstackQueryProvider>
-        <Toaster visibleToasts={1} className="!mb-8" />
+        <Providers>
+          <TopLoadingBar />
+          <Header />
+          <main className="min-h-screen w-full flex bg-white">{children}</main>
+          <Footer />
+          <Toaster visibleToasts={1} className="!mb-8" />
+        </Providers>
       </body>
     </html>
   );

@@ -4,8 +4,8 @@ import { useMutation } from "@tanstack/react-query";
 import { Loader2Icon, LogOut, UserIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { doLogout } from "../app/entrar/services";
-import { useUserSecrets } from "../contexts/user-secrets-context";
 import { useAuth } from "../hooks/use-auth";
+import { useUserSecrets } from "../providers/user-secrets-provider";
 import {
   DropdownMenu,
   DropdownMenuContent,
