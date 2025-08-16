@@ -25,8 +25,11 @@ const AuthGuard = ({
 
     if (shouldRedirect) {
       router.push(redirectTo);
+      return;
     }
   }, [loading, isAuthenticated, requireAuth, redirectTo, router]);
+
+  if (loading) return <>{children}</>;
 
   const hasAccess = requireAuth ? isAuthenticated : !isAuthenticated;
 
