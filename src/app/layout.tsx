@@ -37,7 +37,7 @@ export default function RootLayout({
             <Footer />
           </UserSecretsProvider>
         </TanstackQueryProvider>
-        <Toaster visibleToasts={1} />
+        <Toaster visibleToasts={1} className="!mb-8" />
       </body>
     </html>
   );
