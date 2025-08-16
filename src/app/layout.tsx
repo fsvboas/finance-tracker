@@ -25,11 +25,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR" suppressHydrationWarning>
-      <body className={`${inter.className} antialiased`}>
+      <body className={`${inter.className} antialiased `}>
         <Providers>
           <TopLoadingBar />
           <Header />
-          <main className="min-h-screen w-full flex bg-white">{children}</main>
+          <main className="min-h-screen w-full flex">{children}</main>
           <Footer />
           <Toaster visibleToasts={1} className="!mb-8" />
         </Providers>
