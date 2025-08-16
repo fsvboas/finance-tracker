@@ -91,15 +91,15 @@ const AddTransactionFormDialog = ({
 
   const { mutate: post, isPending: pendingPostTransaction } = useMutation({
     mutationFn: postTransaction,
-    onSuccess: (_, variables) => {
-      queryClient?.invalidateQueries({ queryKey: ["transactions"] });
-      setIsOpen(false);
+    onSuccess: async (_, variables) => {
+      await queryClient?.invalidateQueries({ queryKey: ["transactions"] });
       toast.success(
         `Transação "${variables.transaction.description}" adicionada com sucesso!`,
         {
           className: "!bg-green-600/80 !text-white",
         }
       );
+      setIsOpen(false);
     },
     onError: (error) => {
       // TO-DO: Translate error messages
@@ -309,7 +309,11 @@ const AddTransactionFormDialog = ({
           </Column>
           <DialogFooter>
             <DialogClose asChild>
-              <Button className="hover:cursor-pointer" variant="secondary">
+              <Button
+                className="hover:cursor-pointer"
+                variant="secondary"
+                disabled={pendingPostTransaction}
+              >
                 Cancelar
               </Button>
             </DialogClose>
