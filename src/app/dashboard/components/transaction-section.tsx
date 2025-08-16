@@ -15,11 +15,13 @@ import TransactionCard from "./transaction-card";
 interface TransactionSectionProps {
   transactions: TransactionType[];
   pendingTransactions: boolean;
+  totalIncome: number;
 }
 
 const TransactionSection = ({
   transactions,
   pendingTransactions,
+  totalIncome,
 }: TransactionSectionProps) => {
   const pendingData = Array.from({ length: 4 }, (_, index) => (
     <Skeleton key={index} className="w-full h-20" />
@@ -47,7 +49,11 @@ const TransactionSection = ({
               fallback={<EmptyTransactionHistory />}
             >
               {transactions.map((transaction, index) => (
-                <TransactionCard key={index} transaction={transaction} />
+                <TransactionCard
+                  key={index}
+                  transaction={transaction}
+                  totalIncome={totalIncome}
+                />
               ))}
             </Show>
           </Show>

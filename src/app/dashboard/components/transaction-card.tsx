@@ -10,9 +10,13 @@ import TransactionDetailsDialog from "./transaction-details-dialog";
 
 interface TransactionCardProps {
   transaction: TransactionType;
+  totalIncome: number;
 }
 
-export default function TransactionCard({ transaction }: TransactionCardProps) {
+export default function TransactionCard({
+  transaction,
+  totalIncome,
+}: TransactionCardProps) {
   const transactionDate = new Date(transaction?.created_at).toISOString();
 
   const isIncomeValue = transaction?.type === "income";
@@ -24,6 +28,7 @@ export default function TransactionCard({ transaction }: TransactionCardProps) {
   return (
     <TransactionDetailsDialog
       transaction={transaction}
+      totalIncome={totalIncome}
       trigger={
         <Row
           className={`p-4 h-20 bg-neutral-100 rounded hover:bg-neutral-200 duration-300 justify-between items-center`}
@@ -44,7 +49,10 @@ export default function TransactionCard({ transaction }: TransactionCardProps) {
             </p>
             <Show when={transaction?.payment_method}>
               <span className="text-xs text-end">
-                {paymentMethod} - <strong>{card}</strong>
+                {paymentMethod}{" "}
+                <Show when={card}>
+                  - <strong>{card}</strong>
+                </Show>
               </span>
             </Show>
           </Column>

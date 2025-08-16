@@ -91,6 +91,7 @@ export default function FinancialDashboard() {
       <TransactionSection
         transactions={filteredTransactions}
         pendingTransactions={pendingGetTransactions}
+        totalIncome={financialSummary.totalIncome}
       />
     </Column>
   );

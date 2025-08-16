@@ -25,11 +25,14 @@ export async function getTransactions({ userSecrets }: GetTransactionsProps) {
 
     if (error) throw error;
 
-    return (data || []).map((tx) => ({
-      ...tx,
-      description: decryptData(tx.description, keyHex),
-      value: decryptData(tx.value, keyHex),
-      type: decryptData(tx.type, keyHex),
+    return (data || []).map((transaction) => ({
+      ...transaction,
+      description: decryptData(transaction.description, keyHex),
+      value: decryptData(transaction.value, keyHex),
+      type: decryptData(transaction.type, keyHex),
+      payment_method: transaction.payment_method
+        ? decryptData(transaction.payment_method, keyHex)
+        : undefined,
     }));
   })();
 

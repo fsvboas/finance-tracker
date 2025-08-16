@@ -26,11 +26,13 @@ import { toast } from "sonner";
 interface TransactionDetailsDialog {
   trigger: React.ReactNode;
   transaction: TransactionType;
+  totalIncome: number;
 }
 
 const TransactionDetailsDialog = ({
   trigger,
   transaction,
+  totalIncome,
 }: TransactionDetailsDialog) => {
   const { credentials } = useUserSecrets();
 
@@ -67,6 +69,16 @@ const TransactionDetailsDialog = ({
     del({ transaction, userSecrets: credentials! });
   };
 
+  const splitCardFromPaymentMethod = transaction?.payment_method?.split("/");
+  const paymentMethod = splitCardFromPaymentMethod?.[0];
+  const card = splitCardFromPaymentMethod?.[1];
+  const fullPaymentMethod = `${paymentMethod} - ${card}`;
+
+  const percentageOfTotalIncome = (
+    (Number(transaction.value) / totalIncome) *
+    100
+  ).toFixed(1);
+
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
@@ -102,16 +114,18 @@ const TransactionDetailsDialog = ({
                 <DateFormatter>{transactionDate}</DateFormatter>
               </dd>
             </Row>
-            <Row className="space-x-2">
-              <dt className="font-semibold">Método de Pagamento:</dt>
-              <dd>Dinheiro</dd>
-            </Row>
-            {/* <Show when={transaction.transactionType === "expense"}>
+            <Show when={Boolean(transaction?.payment_method)}>
               <Row className="space-x-2">
-                <dt className="font-medium">Percentual das entradas:</dt>
-                <dd>23%</dd>
+                <dt className="font-semibold">Método:</dt>
+                <dd>{fullPaymentMethod}</dd>
               </Row>
-            </Show> */}
+            </Show>
+            <Show when={transaction.type === "expense"}>
+              <Row className="space-x-2">
+                <dt className="font-semibold">Percentual:</dt>
+                <dd>{percentageOfTotalIncome}%</dd>
+              </Row>
+            </Show>
           </dl>
         </Column>
         <DialogFooter>
