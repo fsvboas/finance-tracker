@@ -1,11 +1,11 @@
 "use client";
 
 import { checkPinExists, getTransactions } from "@/src/app/dashboard/services";
-import { UserPinFormDialog } from "@/src/components/user-pin-form-dialog";
+import UserPinFormDialog from "@/src/components/user-pin-form-dialog";
 import Column from "@/src/components/utils/column";
 import Show from "@/src/components/utils/show";
-import { usePin } from "@/src/contexts/user-pin-context";
-import { useUser } from "@/src/hooks/use-user";
+import { useUserSecrets } from "@/src/contexts/user-secrets-context";
+import { useAuth } from "@/src/hooks/use-auth";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import FinancialSummary from "./financial-summary";
@@ -13,8 +13,8 @@ import TimePeriodSelector from "./time-period-selector";
 import TransactionSection from "./transaction-section";
 
 export default function FinancialDashboard() {
-  const { pin } = usePin();
-  const user = useUser();
+  const { credentials } = useUserSecrets();
+  const { user, loading: authLoading } = useAuth();
 
   const getCurrentMonth = new Date().getMonth() + 1;
   const getCurrentYear = new Date().getFullYear();
@@ -29,8 +29,9 @@ export default function FinancialDashboard() {
   });
 
   const { data, isPending: pendingGetTransactions } = useQuery({
-    queryFn: () => getTransactions(pin!),
-    queryKey: ["transactions"],
+    queryFn: () => getTransactions({ userSecrets: credentials! }),
+    queryKey: ["transactions", credentials],
+    enabled: Boolean(credentials),
   });
 
   const userPinFormDialogMode = pinExists ? "validate" : "create";
@@ -47,32 +48,32 @@ export default function FinancialDashboard() {
   }, [month, year, transactions]);
 
   const financialSummary = useMemo(() => {
-    const totalIncoming = filteredTransactions.reduce((sum, transaction) => {
-      return transaction.transactionType === "incoming"
+    const totalIncome = filteredTransactions.reduce((sum, transaction) => {
+      return transaction.type === "income"
         ? sum + Number(transaction.value)
         : sum;
     }, 0);
 
-    const totalOutcoming = filteredTransactions.reduce((sum, transaction) => {
-      return transaction.transactionType === "outcoming"
+    const totalExpense = filteredTransactions.reduce((sum, transaction) => {
+      return transaction.type === "expense"
         ? sum + Number(transaction.value)
         : sum;
     }, 0);
 
     return {
-      totalIncoming,
-      totalOutcoming,
-      total: totalIncoming - totalOutcoming,
+      totalIncome,
+      totalExpense,
+      total: totalIncome - totalExpense,
     };
   }, [filteredTransactions]);
 
-  if (!user) return;
+  if (authLoading || !user) return null;
 
   return (
-    <Column className="items-center w-full space-y-2 max-w-5xl mx-auto mt-16">
+    <Column className="items-center h-fit w-full space-y-2 max-w-5xl mx-auto mt-16 mb-8">
       <Show when={!pendingCheckPinExists}>
         <Show when={user}>
-          <UserPinFormDialog userId={user!.id} mode={userPinFormDialogMode} />
+          <UserPinFormDialog userId={user.id} mode={userPinFormDialogMode} />
         </Show>
       </Show>
       <TimePeriodSelector
@@ -82,13 +83,15 @@ export default function FinancialDashboard() {
         setSelectedMonth={setMonth}
       />
       <FinancialSummary
-        totalIncoming={financialSummary.totalIncoming}
-        totalOutcoming={financialSummary.totalOutcoming}
+        totalIncome={financialSummary.totalIncome}
+        totalExpense={financialSummary.totalExpense}
         total={financialSummary.total}
+        pending={pendingGetTransactions}
       />
       <TransactionSection
         transactions={filteredTransactions}
         pendingTransactions={pendingGetTransactions}
+        totalIncome={financialSummary.totalIncome}
       />
     </Column>
   );

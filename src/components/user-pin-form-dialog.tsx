@@ -1,6 +1,6 @@
 "use client";
 
-import { usePin } from "@/src/contexts/user-pin-context";
+import { useUserSecrets } from "@/src/contexts/user-secrets-context";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import { useMutation } from "@tanstack/react-query";
@@ -15,7 +15,7 @@ import {
 } from "../app/dashboard/services/user-pin";
 import { queryClient } from "../libs/tanstack-query";
 import { Button } from "./button";
-import { Dialog, DialogContent } from "./dialog";
+import { Dialog, DialogContent, DialogFooter, DialogHeader } from "./dialog";
 import { Input } from "./input";
 import Column from "./utils/column";
 import Show from "./utils/show";
@@ -31,9 +31,9 @@ interface UserPinFormDialogProps {
   mode: "create" | "validate";
 }
 
-export function UserPinFormDialog({ userId, mode }: UserPinFormDialogProps) {
-  const { pin, setPin } = usePin();
-  const [isOpen, setIsOpen] = useState<boolean>(!pin);
+const UserPinFormDialog = ({ userId, mode }: UserPinFormDialogProps) => {
+  const { credentials, setCredentials } = useUserSecrets();
+  const [isOpen, setIsOpen] = useState<boolean>(!credentials?.pin);
 
   const { handleSubmit, control } = useForm<PinFormSchemaType>({
     resolver: zodResolver(PinFormSchema),
@@ -76,8 +76,8 @@ export function UserPinFormDialog({ userId, mode }: UserPinFormDialogProps) {
 
   const { mutate: create, isPending: pendingCreateUserPin } = useMutation({
     mutationFn: createUserPin,
-    onSuccess: (_, variables) => {
-      setPin(variables.pin);
+    onSuccess: (data, variables) => {
+      setCredentials({ pin: variables.pin, salt: data });
       setIsOpen(false);
     },
     onError: (error) => {
@@ -89,8 +89,12 @@ export function UserPinFormDialog({ userId, mode }: UserPinFormDialogProps) {
 
   const { mutate: validate, isPending: pendingValidateUserPin } = useMutation({
     mutationFn: validateUserPin,
-    onSuccess: (_, variables) => {
-      setPin(variables.pin);
+    onSuccess: async (_, variables) => {
+      const salt = await validateUserPin({
+        userId: variables.userId,
+        pin: variables.pin,
+      });
+      setCredentials({ pin: variables.pin, salt: salt });
       queryClient?.invalidateQueries({ queryKey: ["transactions"] });
       setIsOpen(false);
     },
@@ -106,12 +110,23 @@ export function UserPinFormDialog({ userId, mode }: UserPinFormDialogProps) {
     validate({ userId, pin: data.pin });
   };
 
+  const pending = pendingCreateUserPin || pendingValidateUserPin;
+
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="w-full !max-w-xs">
-        <DialogTitle>
-          {mode === "create" ? "Crie seu PIN" : "Digite seu PIN"}
-        </DialogTitle>
+    <Dialog
+      open={isOpen}
+      onOpenChange={(open) => {
+        if (!open && !credentials?.pin) return;
+        setIsOpen(open);
+      }}
+      modal
+    >
+      <DialogContent showCloseButton={false} className="w-full !max-w-xs">
+        <DialogHeader>
+          <DialogTitle className="text-center">
+            {mode === "create" ? "Crie seu PIN" : "Digite seu PIN"}
+          </DialogTitle>
+        </DialogHeader>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Column className="space-y-2">
             <Controller
@@ -131,7 +146,7 @@ export function UserPinFormDialog({ userId, mode }: UserPinFormDialogProps) {
                       <Button
                         key={index}
                         type="button"
-                        className="cursor-pointer"
+                        className="cursor-pointer bg-neutral-200 text-black hover:bg-neutral-300"
                         onClick={() =>
                           handleButtonClick(button, value, onChange)
                         }
@@ -144,20 +159,18 @@ export function UserPinFormDialog({ userId, mode }: UserPinFormDialogProps) {
                       </Button>
                     ))}
                   </div>
-                  <Button
-                    type="submit"
-                    className="cursor-pointer bg-green-600 hover:bg-green-500"
-                    disabled={
-                      value.length !== 4 ||
-                      pendingCreateUserPin ||
-                      pendingValidateUserPin
-                    }
-                  >
-                    <Show when={pendingCreateUserPin || pendingValidateUserPin}>
-                      <Loader2Icon className="animate-spin" />
-                    </Show>
-                    {submitButtonLabel}
-                  </Button>
+                  <DialogFooter>
+                    <Button
+                      type="submit"
+                      className="cursor-pointer bg-green-500 hover:bg-green-400 w-full"
+                      disabled={value.length !== 4 || pending}
+                    >
+                      <Show when={pending}>
+                        <Loader2Icon className="animate-spin" />
+                      </Show>
+                      {submitButtonLabel}
+                    </Button>
+                  </DialogFooter>
                 </>
               )}
             />
@@ -166,4 +179,6 @@ export function UserPinFormDialog({ userId, mode }: UserPinFormDialogProps) {
       </DialogContent>
     </Dialog>
   );
-}
+};
+
+export default UserPinFormDialog;

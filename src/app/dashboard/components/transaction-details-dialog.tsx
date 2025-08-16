@@ -13,7 +13,7 @@ import {
 import Column from "@/src/components/utils/column";
 import Row from "@/src/components/utils/row";
 import Show from "@/src/components/utils/show";
-import { usePin } from "@/src/contexts/user-pin-context";
+import { useUserSecrets } from "@/src/contexts/user-secrets-context";
 import CurrencyFormatter from "@/src/helpers/currency-formatter";
 import DateFormatter from "@/src/helpers/date-formatter";
 import { queryClient } from "@/src/libs/tanstack-query";
@@ -26,19 +26,21 @@ import { toast } from "sonner";
 interface TransactionDetailsDialog {
   trigger: React.ReactNode;
   transaction: TransactionType;
+  totalIncome: number;
 }
 
 const TransactionDetailsDialog = ({
   trigger,
   transaction,
+  totalIncome,
 }: TransactionDetailsDialog) => {
-  const { pin } = usePin();
+  const { credentials } = useUserSecrets();
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const transactionTypeTranslation = {
-    incoming: "Entrada",
-    outcoming: "Saída",
+    income: "Entrada",
+    expense: "Saída",
   } as const;
 
   const transactionDate = new Date(transaction.created_at).toISOString();
@@ -49,7 +51,7 @@ const TransactionDetailsDialog = ({
       queryClient?.invalidateQueries({ queryKey: ["transactions"] });
       setIsOpen(false);
       toast.success(
-        `Transação ${variables.transaction.description}" removida com sucesso!`,
+        `Transação "${variables.transaction.description}" removida com sucesso!`,
         {
           className: "!bg-green-600/80 !text-white",
         }
@@ -64,8 +66,18 @@ const TransactionDetailsDialog = ({
   });
 
   const handleDeleteTransaction = (transaction: TransactionType) => {
-    del({ transaction, pin: pin! });
+    del({ transaction, userSecrets: credentials! });
   };
+
+  const splitCardFromPaymentMethod = transaction?.payment_method?.split("/");
+  const paymentMethod = splitCardFromPaymentMethod?.[0];
+  const card = splitCardFromPaymentMethod?.[1];
+  const fullPaymentMethod = `${paymentMethod} - ${card}`;
+
+  const percentageOfTotalIncome = (
+    (Number(transaction.value) / totalIncome) *
+    100
+  ).toFixed(1);
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -82,12 +94,12 @@ const TransactionDetailsDialog = ({
               <dt className="font-semibold">Tipo de Transação:</dt>
               <dd
                 className={`font-semibold  ${
-                  transaction.transactionType === "incoming"
+                  transaction.type === "income"
                     ? "text-green-600"
                     : "text-red-600"
                 }`}
               >
-                {transactionTypeTranslation[transaction.transactionType]}
+                {transactionTypeTranslation[transaction.type]}
               </dd>
             </Row>
             <Row className="space-x-2">
@@ -102,18 +114,18 @@ const TransactionDetailsDialog = ({
                 <DateFormatter>{transactionDate}</DateFormatter>
               </dd>
             </Row>
-            {/* <Show when={hasTransactionTimeMock}>
+            <Show when={Boolean(transaction?.payment_method)}>
               <Row className="space-x-2">
-                <dt className="font-medium">Horário:</dt>
-                <dd>10:30 AM</dd>
+                <dt className="font-semibold">Método:</dt>
+                <dd>{fullPaymentMethod}</dd>
               </Row>
-            </Show> */}
-            {/* <Show when={transaction.transactionType === "outcoming"}>
+            </Show>
+            <Show when={transaction.type === "expense"}>
               <Row className="space-x-2">
-                <dt className="font-medium">Percentual das entradas:</dt>
-                <dd>23%</dd>
+                <dt className="font-semibold">Percentual:</dt>
+                <dd>{percentageOfTotalIncome}%</dd>
               </Row>
-            </Show> */}
+            </Show>
           </dl>
         </Column>
         <DialogFooter>

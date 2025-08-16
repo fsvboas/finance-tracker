@@ -1,33 +1,42 @@
 import { supabaseClient } from "@/src/libs/supabase/supabase-client";
+import { UserCredentials } from "@/src/types/user-credentials";
 import { decryptData, deriveKey } from "@/src/utils/encrypt-data";
+import NProgress from "nprogress";
 
-export async function getTransactions(pin: string) {
-  const {
-    data: { user },
-  } = await supabaseClient.auth.getUser();
-  if (!user) throw new Error("Usuário não autenticado");
+interface GetTransactionsProps {
+  userSecrets: UserCredentials;
+}
 
-  const { data: userSecret } = await supabaseClient
-    .from("user_secrets")
-    .select("salt")
-    .eq("user_id", user.id)
-    .single();
+export async function getTransactions({ userSecrets }: GetTransactionsProps) {
+  NProgress.start();
 
-  if (!userSecret?.salt) throw new Error("PIN não configurado");
+  const result = (async () => {
+    const {
+      data: { session },
+    } = await supabaseClient.auth.getSession();
+    if (!session) throw new Error("Usuário não autenticado");
 
-  const keyHex = deriveKey(pin, userSecret.salt);
+    const keyHex = deriveKey(userSecrets.pin, userSecrets.salt!);
 
-  const { data, error } = await supabaseClient
-    .from("transactions")
-    .select("*")
-    .order("created_at", { ascending: false });
+    const { data, error } = await supabaseClient
+      .from("transactions")
+      .select("*")
+      .order("created_at", { ascending: false });
 
-  if (error) throw error;
+    if (error) throw error;
 
-  return (data || []).map((tx) => ({
-    ...tx,
-    description: decryptData(tx.description, keyHex),
-    value: decryptData(tx.value, keyHex),
-    transactionType: decryptData(tx.transactionType, keyHex),
-  }));
+    return (data || []).map((transaction) => ({
+      ...transaction,
+      description: decryptData(transaction.description, keyHex),
+      value: decryptData(transaction.value, keyHex),
+      type: decryptData(transaction.type, keyHex),
+      payment_method: transaction.payment_method
+        ? decryptData(transaction.payment_method, keyHex)
+        : undefined,
+    }));
+  })();
+
+  return result.finally(() => {
+    NProgress.done();
+  });
 }
