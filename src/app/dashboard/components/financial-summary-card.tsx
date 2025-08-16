@@ -16,7 +16,7 @@ const Card = ({ title, value }: CardProps) => {
       ? "text-green-600"
       : isNegativeValue
       ? "text-red-600"
-      : "text-black";
+      : "text-primary";
 
   return (
     <Column className="p-4 bg-neutral-100 dark:bg-[#202020] w-full justify-between rounded">
@@ -24,9 +24,7 @@ const Card = ({ title, value }: CardProps) => {
         <p>{title}</p>
         <span>{cardIconMap[title]}</span>
       </Row>
-      <p
-        className={`text-2xl font-medium ${availableBalanceStyle} text-primary`}
-      >
+      <p className={`text-2xl font-medium ${availableBalanceStyle}`}>
         <CurrencyFormatter>{value}</CurrencyFormatter>
       </p>
     </Column>
