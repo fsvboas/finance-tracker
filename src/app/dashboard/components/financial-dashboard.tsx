@@ -48,22 +48,22 @@ export default function FinancialDashboard() {
   }, [month, year, transactions]);
 
   const financialSummary = useMemo(() => {
-    const totalIncoming = filteredTransactions.reduce((sum, transaction) => {
-      return transaction.type === "incoming"
+    const totalIncome = filteredTransactions.reduce((sum, transaction) => {
+      return transaction.type === "income"
         ? sum + Number(transaction.value)
         : sum;
     }, 0);
 
-    const totalOutcoming = filteredTransactions.reduce((sum, transaction) => {
-      return transaction.type === "outcoming"
+    const totalExpense = filteredTransactions.reduce((sum, transaction) => {
+      return transaction.type === "expense"
         ? sum + Number(transaction.value)
         : sum;
     }, 0);
 
     return {
-      totalIncoming,
-      totalOutcoming,
-      total: totalIncoming - totalOutcoming,
+      totalIncome,
+      totalExpense,
+      total: totalIncome - totalExpense,
     };
   }, [filteredTransactions]);
 
@@ -83,8 +83,8 @@ export default function FinancialDashboard() {
         setSelectedMonth={setMonth}
       />
       <FinancialSummary
-        totalIncoming={financialSummary.totalIncoming}
-        totalOutcoming={financialSummary.totalOutcoming}
+        totalIncome={financialSummary.totalIncome}
+        totalExpense={financialSummary.totalExpense}
         total={financialSummary.total}
         pending={pendingGetTransactions}
       />

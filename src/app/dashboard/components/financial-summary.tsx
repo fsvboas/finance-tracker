@@ -4,23 +4,23 @@ import Card from "./financial-summary-card";
 import FinancialSummarySkeleton from "./skeleton/financial-summary-skeleton";
 
 interface FinancialSummaryProps {
-  totalIncoming: number;
-  totalOutcoming: number;
+  totalIncome: number;
+  totalExpense: number;
   total: number;
   pending: boolean;
 }
 
 export default function FinancialSummary({
-  totalIncoming,
-  totalOutcoming,
+  totalIncome,
+  totalExpense,
   total,
   pending,
 }: FinancialSummaryProps) {
   return (
     <Show when={!pending} fallback={<FinancialSummarySkeleton />}>
       <Flex className="sm:space-x-2 max-sm:space-y-2 flex-col sm:flex-row w-full justify-center items-center">
-        <Card title="Entradas" value={totalIncoming} />
-        <Card title="Saídas" value={totalOutcoming} />
+        <Card title="Entradas" value={totalIncome} />
+        <Card title="Saídas" value={totalExpense} />
         <Card title="Disponível" value={total} />
       </Flex>
     </Show>

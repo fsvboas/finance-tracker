@@ -14,7 +14,7 @@ interface TransactionCardProps {
 export default function TransactionCard({ transaction }: TransactionCardProps) {
   const transactionDate = new Date(transaction?.created_at).toISOString();
 
-  const isIncomingValue = transaction?.type === "incoming";
+  const isIncomeValue = transaction?.type === "income";
 
   return (
     <TransactionDetailsDialog
@@ -32,7 +32,7 @@ export default function TransactionCard({ transaction }: TransactionCardProps) {
           <Column>
             <p
               className={`text-xl text-end ${
-                isIncomingValue ? "text-green-600" : "text-red-600"
+                isIncomeValue ? "text-green-600" : "text-red-600"
               }  font-medium`}
             >
               <CurrencyFormatter>{transaction.value}</CurrencyFormatter>

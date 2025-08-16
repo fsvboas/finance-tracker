@@ -37,8 +37,8 @@ const TransactionDetailsDialog = ({
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const transactionTypeTranslation = {
-    incoming: "Entrada",
-    outcoming: "Saída",
+    income: "Entrada",
+    expense: "Saída",
   } as const;
 
   const transactionDate = new Date(transaction.created_at).toISOString();
@@ -82,7 +82,7 @@ const TransactionDetailsDialog = ({
               <dt className="font-semibold">Tipo de Transação:</dt>
               <dd
                 className={`font-semibold  ${
-                  transaction.type === "incoming"
+                  transaction.type === "income"
                     ? "text-green-600"
                     : "text-red-600"
                 }`}
@@ -106,7 +106,7 @@ const TransactionDetailsDialog = ({
               <dt className="font-semibold">Método de Pagamento:</dt>
               <dd>Dinheiro</dd>
             </Row>
-            {/* <Show when={transaction.transactionType === "outcoming"}>
+            {/* <Show when={transaction.transactionType === "expense"}>
               <Row className="space-x-2">
                 <dt className="font-medium">Percentual das entradas:</dt>
                 <dd>23%</dd>

@@ -39,7 +39,7 @@ interface AddTransactionFormDialogProps {
 
 const schema = z
   .object({
-    type: z.enum(["incoming", "outcoming"]),
+    type: z.enum(["income", "expense"]),
     description: z.string().min(1, { message: "Campo obrigatório." }),
     value: z.string().min(1, { message: "Campo obrigatório." }),
     created_at: z.date(),
@@ -74,7 +74,7 @@ const AddTransactionFormDialog = ({
       defaultValues: {
         description: "",
         value: "",
-        type: "incoming",
+        type: "income",
         created_at: new Date(),
         payment_method: "",
         card: "",
@@ -85,6 +85,9 @@ const AddTransactionFormDialog = ({
   const isNotCreditOrDebitCard =
     paymentMethodFieldValue !== "Crédito" &&
     paymentMethodFieldValue !== "Débito";
+
+  const transactionType = watch("type");
+  const isExpenseTransaction = transactionType === "expense";
 
   const { mutate: post, isPending: pendingPostTransaction } = useMutation({
     mutationFn: postTransaction,
@@ -154,13 +157,13 @@ const AddTransactionFormDialog = ({
                   <TabsList className="w-[80%] sm:w-1/2">
                     <TabsTrigger
                       className="text-green-600 hover:cursor-pointer"
-                      value="incoming"
+                      value="income"
                     >
                       Entrada
                     </TabsTrigger>
                     <TabsTrigger
                       className="text-red-600 hover:cursor-pointer"
-                      value="outcoming"
+                      value="expense"
                     >
                       Saída
                     </TabsTrigger>
@@ -253,51 +256,53 @@ const AddTransactionFormDialog = ({
                 />
               </Column>
             </Flex>
-            <Flex className="flex-col sm:flex-row max-sm:space-y-4 sm:space-x-2">
-              <Column className="space-y-2">
-                <Label htmlFor="payment_method">Método de pagamento</Label>
-                <Controller
-                  name="payment_method"
-                  control={control}
-                  render={({ field: { value, onChange } }) => (
-                    <Column>
-                      <PaymentMethodSelectInput
-                        value={value}
-                        onChange={onChange}
-                      />
-                      <div className="h-2 -mt-1" />
-                    </Column>
-                  )}
-                />
-              </Column>
-              <Column className="space-y-2 w-full">
-                <Label htmlFor="card">Cartão</Label>
-                <Controller
-                  name="card"
-                  control={control}
-                  render={({
-                    field: { onChange, value },
-                    fieldState: { error },
-                  }) => (
-                    <Column>
-                      <CardSelectInput
-                        value={value ?? ""}
-                        onChange={onChange}
-                        disabled={isNotCreditOrDebitCard}
-                        error={Boolean(error)}
-                      />
-                      <div className="h-2 -mt-1">
-                        <Show when={error}>
-                          <span className="text-xs text-red-600">
-                            {error?.message}
-                          </span>
-                        </Show>
-                      </div>
-                    </Column>
-                  )}
-                />
-              </Column>
-            </Flex>
+            <Show when={isExpenseTransaction}>
+              <Flex className="flex-col sm:flex-row max-sm:space-y-4 sm:space-x-2">
+                <Column className="space-y-2">
+                  <Label htmlFor="payment_method">Método de pagamento</Label>
+                  <Controller
+                    name="payment_method"
+                    control={control}
+                    render={({ field: { value, onChange } }) => (
+                      <Column>
+                        <PaymentMethodSelectInput
+                          value={value}
+                          onChange={onChange}
+                        />
+                        <div className="h-2 -mt-1" />
+                      </Column>
+                    )}
+                  />
+                </Column>
+                <Column className="space-y-2 w-full">
+                  <Label htmlFor="card">Cartão</Label>
+                  <Controller
+                    name="card"
+                    control={control}
+                    render={({
+                      field: { onChange, value },
+                      fieldState: { error },
+                    }) => (
+                      <Column>
+                        <CardSelectInput
+                          value={value ?? ""}
+                          onChange={onChange}
+                          disabled={isNotCreditOrDebitCard}
+                          error={Boolean(error)}
+                        />
+                        <div className="h-2 -mt-1">
+                          <Show when={error}>
+                            <span className="text-xs text-red-600">
+                              {error?.message}
+                            </span>
+                          </Show>
+                        </div>
+                      </Column>
+                    )}
+                  />
+                </Column>
+              </Flex>
+            </Show>
           </Column>
           <DialogFooter>
             <DialogClose asChild>

@@ -25,7 +25,7 @@ export async function postTransaction({
     user_id: session.user.id,
     description: encryptData(transaction.description, keyHex),
     value: encryptData(transaction.value, keyHex),
-    type: encryptData(transaction.type, keyHex) as "incoming" | "outcoming",
+    type: encryptData(transaction.type, keyHex) as "income" | "expense",
     payment_method: transaction.payment_method
       ? encryptData(transaction.payment_method, keyHex)
       : undefined,
