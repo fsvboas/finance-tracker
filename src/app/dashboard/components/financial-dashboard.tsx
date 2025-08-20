@@ -95,6 +95,7 @@ export default function FinancialDashboard() {
         transactions={filteredTransactions}
         pendingTransactions={pendingGetTransactions}
         totalIncome={financialSummary.totalIncome}
+        selectedMonth={month}
       />
     </Column>
   );

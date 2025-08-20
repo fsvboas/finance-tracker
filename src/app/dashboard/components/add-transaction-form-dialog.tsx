@@ -35,50 +35,50 @@ import PaymentMethodSelectInput from "./payment-method-select-input";
 
 interface AddTransactionFormDialogProps {
   trigger: React.ReactNode;
+  selectedMonth: number;
 }
 
-const schema = z
-  .object({
-    type: z.enum(["income", "expense"]),
-    description: z.string().min(1, { message: "Campo obrigatório." }),
-    value: z.string().min(1, { message: "Campo obrigatório." }),
-    created_at: z.date(),
-    payment_method: z.string(),
-    card: z.string().optional(),
-  })
-  .refine(
-    (data) =>
-      !(
-        data.payment_method === "Crédito" || data.payment_method === "Débito"
-      ) ||
-      (data.card && data.card.trim() !== ""),
-    {
-      message: "Campo obrigatório.",
-      path: ["card"],
-    }
-  );
+const schema = z.object({
+  type: z.enum(["income", "expense"]),
+  description: z.string().min(1, { message: "Campo obrigatório." }),
+  value: z.string().min(1, { message: "Campo obrigatório." }),
+  created_at: z.date(),
+  payment_method: z.string(),
+  card: z.string().optional(),
+});
 
 type TransactionFormSchemaType = z.infer<typeof schema>;
 
 const AddTransactionFormDialog = ({
   trigger,
+  selectedMonth,
 }: AddTransactionFormDialogProps) => {
   const { credentials } = useUserSecrets();
   const { user } = useAuth();
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
+  const defaultDateValue = new Date();
+  defaultDateValue.setMonth(selectedMonth);
+
+  const getDefaultFormValues = (month: number) => {
+    const date = new Date();
+    date.setMonth(month);
+
+    return {
+      description: "",
+      value: "",
+      type: "income" as const,
+      created_at: date,
+      payment_method: "",
+      card: "",
+    };
+  };
+
   const { control, handleSubmit, reset, watch, setValue } =
     useForm<TransactionFormSchemaType>({
       resolver: zodResolver(schema),
-      defaultValues: {
-        description: "",
-        value: "",
-        type: "income",
-        created_at: new Date(),
-        payment_method: "",
-        card: "",
-      },
+      defaultValues: getDefaultFormValues(selectedMonth),
     });
 
   const paymentMethodFieldValue = watch("payment_method");
@@ -102,7 +102,6 @@ const AddTransactionFormDialog = ({
       setIsOpen(false);
     },
     onError: (error) => {
-      // TO-DO: Translate error messages
       toast.error(error.message, {
         className: "!bg-red-600/80 !text-white",
       });
@@ -133,9 +132,9 @@ const AddTransactionFormDialog = ({
 
   useEffect(() => {
     if (isOpen) {
-      reset();
+      reset(getDefaultFormValues(selectedMonth));
     }
-  }, [isOpen, reset]);
+  }, [isOpen, reset, selectedMonth]);
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>

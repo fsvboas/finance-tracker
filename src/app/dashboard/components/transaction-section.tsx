@@ -16,12 +16,14 @@ interface TransactionSectionProps {
   transactions: TransactionType[];
   pendingTransactions: boolean;
   totalIncome: number;
+  selectedMonth: number;
 }
 
 const TransactionSection = ({
   transactions,
   pendingTransactions,
   totalIncome,
+  selectedMonth,
 }: TransactionSectionProps) => {
   const pendingData = Array.from({ length: 4 }, (_, index) => (
     <Skeleton key={index} className="w-full h-20" />
@@ -31,6 +33,7 @@ const TransactionSection = ({
     <Column className="w-full h-full mb-2 items-center">
       <Row className="justify-between w-full h-10 items-center max-[1020px]:px-2">
         <AddTransactionFormDialog
+          selectedMonth={selectedMonth}
           trigger={
             <Button variant="link" className="cursor-pointer px-0 h-full">
               <Row className="items-center space-x-1.5 h-full">
@@ -46,7 +49,9 @@ const TransactionSection = ({
           <Show when={!pendingTransactions} fallback={pendingData}>
             <Show
               when={transactions.length > 0}
-              fallback={<EmptyTransactionHistory />}
+              fallback={
+                <EmptyTransactionHistory selectedMonth={selectedMonth} />
+              }
             >
               {transactions.map((transaction, index) => (
                 <TransactionCard
@@ -61,6 +66,7 @@ const TransactionSection = ({
       </ScrollArea>
       <Show when={transactions.length > 0}>
         <AddTransactionFormDialog
+          selectedMonth={selectedMonth}
           trigger={
             <Button className="cursor-pointer w-fit max-md:hidden">
               <ListPlus className="!w-5 !h-5" />
