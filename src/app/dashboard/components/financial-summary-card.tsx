@@ -21,7 +21,7 @@ const Card = ({ title, value }: CardProps) => {
   return (
     <Column className="p-4 bg-neutral-100 dark:bg-[#202020] w-full justify-between rounded">
       <Row className="justify-between">
-        <p>{title}</p>
+        <p className="text-gray-500">{title}</p>
         <span>{cardIconMap[title]}</span>
       </Row>
       <p className={`text-2xl font-medium ${availableBalanceStyle}`}>
