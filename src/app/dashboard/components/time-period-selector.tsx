@@ -28,26 +28,23 @@ const TimePeriodSelector = ({
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       const selectedButtonRef = buttonRefs.current[selectedMonth - 1];
-      let scrollAreaElement: HTMLElement | null = null;
 
-      if (scrollAreaRef.current) {
-        scrollAreaElement = scrollAreaRef.current.querySelector(
+      const findScrollAreaElement = (): HTMLElement | null => {
+        if (!scrollAreaRef.current) return null;
+
+        return (scrollAreaRef.current.querySelector(
           "[data-radix-scroll-area-viewport]"
-        ) as HTMLElement;
-        if (!scrollAreaElement) {
-          scrollAreaElement = scrollAreaRef.current.querySelector(
-            ".scroll-area-viewport"
-          ) as HTMLElement;
-        }
-        if (!scrollAreaElement) {
-          scrollAreaElement = scrollAreaRef.current;
-        }
-      }
+        ) ||
+          scrollAreaRef.current.querySelector(".scroll-area-viewport") ||
+          scrollAreaRef.current) as HTMLElement;
+      };
+
+      const scrollAreaElement = findScrollAreaElement();
 
       if (selectedButtonRef && scrollAreaElement) {
         requestAnimationFrame(() => {
           const buttonRect = selectedButtonRef.getBoundingClientRect();
-          const scrollRect = scrollAreaElement!.getBoundingClientRect();
+          const scrollRect = scrollAreaElement.getBoundingClientRect();
           const isButtonVisible =
             buttonRect.left >= scrollRect.left &&
             buttonRect.right <= scrollRect.right;
@@ -56,14 +53,15 @@ const TimePeriodSelector = ({
             const buttonCenter =
               selectedButtonRef.offsetLeft + selectedButtonRef.offsetWidth / 2;
             const scrollPosition =
-              buttonCenter - scrollAreaElement!.clientWidth / 2;
+              buttonCenter - scrollAreaElement.clientWidth / 2;
+            const finalScrollPosition = Math.max(0, scrollPosition);
 
-            scrollAreaElement!.scrollTo({
-              left: Math.max(0, scrollPosition),
+            scrollAreaElement.scrollTo({
+              left: finalScrollPosition,
               behavior: "smooth",
             });
 
-            scrollAreaElement!.scrollLeft = Math.max(0, scrollPosition);
+            scrollAreaElement.scrollLeft = finalScrollPosition;
           }
         });
       }
