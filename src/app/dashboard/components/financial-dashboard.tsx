@@ -43,34 +43,36 @@ export default function FinancialDashboard() {
 
   const transactions = useMemo(() => data || [], [data]);
 
-  const filteredTransactions = useMemo(() => {
+  const transactionsByDate = useMemo(() => {
     return transactions.filter((transaction) => {
       const transactionDate = new Date(transaction.created_at);
       const transactionMonth = transactionDate.getMonth() + 1;
       const transactionYear = transactionDate.getFullYear();
 
-      const matchDate = transactionMonth === month && transactionYear === year;
-
-      const matchType = filter === "all" || transaction.type === filter;
-
-      return matchDate && matchType;
+      return transactionMonth === month && transactionYear === year;
     });
-  }, [month, year, filter, transactions]);
+  }, [month, year, transactions]);
+
+  const filteredTransactions = useMemo(() => {
+    return transactionsByDate.filter((transaction) => {
+      return filter === "all" || transaction.type === filter;
+    });
+  }, [transactionsByDate, filter]);
 
   const financialSummary = useMemo(() => {
-    const totalIncome = filteredTransactions.reduce((sum, transaction) => {
+    const totalIncome = transactionsByDate.reduce((sum, transaction) => {
       return transaction.type === "income"
         ? sum + Number(transaction.value)
         : sum;
     }, 0);
 
-    const totalExpense = filteredTransactions.reduce((sum, transaction) => {
+    const totalExpense = transactionsByDate.reduce((sum, transaction) => {
       return transaction.type === "expense"
         ? sum + Number(transaction.value)
         : sum;
     }, 0);
 
-    const totalInvestment = filteredTransactions.reduce((sum, transaction) => {
+    const totalInvestment = transactionsByDate.reduce((sum, transaction) => {
       return transaction.type === "investment"
         ? sum + Number(transaction.value)
         : sum;
@@ -82,7 +84,7 @@ export default function FinancialDashboard() {
       totalInvestment,
       total: totalIncome - totalExpense - totalInvestment,
     };
-  }, [filteredTransactions]);
+  }, [transactionsByDate]);
 
   if (authLoading || !user) return null;
 
