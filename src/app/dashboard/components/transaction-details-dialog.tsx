@@ -94,7 +94,7 @@ const TransactionDetailsDialog = ({
         <Column className="space-y-2">
           <dl className="space-y-2">
             <Row className="space-x-2">
-              <dt className="font-semibold">Tipo de Transação:</dt>
+              <dt className="font-semibold">Tipo:</dt>
               <dd
                 className={`font-semibold  ${
                   isIncomeValue
@@ -125,7 +125,13 @@ const TransactionDetailsDialog = ({
                 <dd>{fullPaymentMethod}</dd>
               </Row>
             </Show>
-            <Show when={transaction.type === "expense"}>
+            <Show
+              when={
+                totalIncome !== 0 &&
+                (transaction.type === "expense" ||
+                  transaction.type === "investment")
+              }
+            >
               <Row className="space-x-2">
                 <dt className="font-semibold">Percentual:</dt>
                 <dd>{percentageOfTotalIncome}%</dd>
