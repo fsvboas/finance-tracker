@@ -3,14 +3,14 @@ import CryptoJS from "crypto-js";
 export function hashPin(pin: string, salt: string) {
   return CryptoJS.PBKDF2(pin, CryptoJS.enc.Hex.parse(salt), {
     keySize: 256 / 32,
-    iterations: 200000,
+    iterations: 50000,
   }).toString();
 }
 
 export function deriveKey(pin: string, salt: string) {
   return CryptoJS.PBKDF2(pin, CryptoJS.enc.Hex.parse(salt), {
     keySize: 256 / 32,
-    iterations: 200000,
+    iterations: 50000,
   }).toString();
 }
 
