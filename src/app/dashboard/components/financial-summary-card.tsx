@@ -13,15 +13,10 @@ interface CardProps {
   value: number;
 }
 const Card = ({ title, value }: CardProps) => {
-  const isPositiveBalance = value > 0;
   const isNegativeValue = value < 0;
 
   const availableBalanceStyle =
-    title === "Disponível" && isPositiveBalance
-      ? "text-green-600"
-      : isNegativeValue
-      ? "text-red-600"
-      : "text-primary";
+    title === "Disponível" && isNegativeValue ? "text-red-600" : "text-primary";
 
   return (
     <Column className="p-4 bg-neutral-100 dark:bg-[#202020] w-full justify-between rounded">
