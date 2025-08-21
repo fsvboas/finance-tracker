@@ -25,7 +25,7 @@ import { useUserSecrets } from "@/src/providers/user-secrets-provider";
 import { TransactionType } from "@/src/types/transaction-type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
-import { Loader2Icon } from "lucide-react";
+import { Loader2Icon, PlusIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -331,7 +331,7 @@ const AddTransactionFormDialog = ({
               type="submit"
               disabled={pendingPostTransaction}
             >
-              <Show when={pendingPostTransaction}>
+              <Show when={pendingPostTransaction} fallback={<PlusIcon />}>
                 <Loader2Icon className="animate-spin" />
               </Show>
               Adicionar
