@@ -35,11 +35,43 @@ interface UserPinFormDialogProps {
 
 const UserPinFormDialog = ({ userId, mode }: UserPinFormDialogProps) => {
   const { credentials, setCredentials } = useUserSecrets();
+
   const [isOpen, setIsOpen] = useState<boolean>(!credentials?.pin);
 
   const { handleSubmit, control } = useForm<PinFormSchemaType>({
     resolver: zodResolver(PinFormSchema),
     defaultValues: { pin: "" },
+  });
+
+  const { mutate: create, isPending: pendingCreateUserPin } = useMutation({
+    mutationFn: createUserPin,
+    onSuccess: (data, variables) => {
+      setCredentials({ pin: variables.pin, salt: data });
+      setIsOpen(false);
+    },
+    onError: (error) => {
+      toast.error(error.message, {
+        className: "!bg-red-600/80 !text-white",
+      });
+    },
+  });
+
+  const { mutate: validate, isPending: pendingValidateUserPin } = useMutation({
+    mutationFn: validateUserPin,
+    onSuccess: async (_, variables) => {
+      const salt = await validateUserPin({
+        userId: variables.userId,
+        pin: variables.pin,
+      });
+      setCredentials({ pin: variables.pin, salt: salt });
+      queryClient?.invalidateQueries({ queryKey: ["transactions"] });
+      setIsOpen(false);
+    },
+    onError: (error) => {
+      toast.error(error.message, {
+        className: "!bg-red-600/80 !text-white",
+      });
+    },
   });
 
   const buttons = [
@@ -73,44 +105,12 @@ const UserPinFormDialog = ({ userId, mode }: UserPinFormDialogProps) => {
     }
   };
 
-  const submitButtonLabel = mode === "create" ? "Criar PIN" : "Validar PIN";
-
-  const { mutate: create, isPending: pendingCreateUserPin } = useMutation({
-    mutationFn: createUserPin,
-    onSuccess: (data, variables) => {
-      setCredentials({ pin: variables.pin, salt: data });
-      setIsOpen(false);
-    },
-    onError: (error) => {
-      toast.error(error.message, {
-        className: "!bg-red-600/80 !text-white",
-      });
-    },
-  });
-
-  const { mutate: validate, isPending: pendingValidateUserPin } = useMutation({
-    mutationFn: validateUserPin,
-    onSuccess: async (_, variables) => {
-      const salt = await validateUserPin({
-        userId: variables.userId,
-        pin: variables.pin,
-      });
-      setCredentials({ pin: variables.pin, salt: salt });
-      queryClient?.invalidateQueries({ queryKey: ["transactions"] });
-      setIsOpen(false);
-    },
-    onError: (error) => {
-      toast.error(error.message, {
-        className: "!bg-red-600/80 !text-white",
-      });
-    },
-  });
-
   const onSubmit = async (data: PinFormSchemaType) => {
     if (mode === "create") return create({ userId, pin: data.pin });
     validate({ userId, pin: data.pin });
   };
 
+  const submitButtonLabel = mode === "create" ? "Criar PIN" : "Validar PIN";
   const pending = pendingCreateUserPin || pendingValidateUserPin;
 
   return (
