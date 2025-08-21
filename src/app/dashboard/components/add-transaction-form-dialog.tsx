@@ -63,7 +63,7 @@ const AddTransactionFormDialog = ({
 
   const getDefaultFormValues = (month: number) => {
     const date = new Date();
-    date.setMonth(month);
+    date.setMonth(month - 1);
 
     return {
       description: "",
