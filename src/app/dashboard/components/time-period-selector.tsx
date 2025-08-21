@@ -94,7 +94,7 @@ const TimePeriodSelector = ({
         >
           <ArrowLeft />
         </Button>
-        <span>{selectedYear}</span>
+        <span className="min-w-[50px] text-center">{selectedYear}</span>
         <Button
           size="icon"
           variant="outline"
