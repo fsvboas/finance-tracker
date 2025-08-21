@@ -19,7 +19,7 @@ import { useState } from "react";
 interface CardSelectInputProps {
   value: string;
   onChange: (value: string) => void;
-  disabled: boolean;
+  disabled?: boolean;
   error: boolean;
 }
 
@@ -31,11 +31,12 @@ const CardSelectInput = ({
 }: CardSelectInputProps) => {
   const [open, setOpen] = useState(false);
 
+  // TO-DO: Permitir cliente adicionar o cartão que quiser, sem depender desse array de opções (criar)
   const cards = [
     "Nubank",
     "PicPay",
     "Banco do Brasil",
-    "Caixa Econômica Federal",
+    "Caixa",
     "Bradesco",
     "Itaú",
     "Santander",
@@ -58,6 +59,7 @@ const CardSelectInput = ({
     "LATAM",
     "Renner",
     "C&A",
+    "Passaí",
   ];
 
   return (
