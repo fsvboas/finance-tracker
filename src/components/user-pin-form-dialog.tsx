@@ -37,6 +37,7 @@ const UserPinFormDialog = ({ userId, mode }: UserPinFormDialogProps) => {
   const { credentials, setCredentials } = useUserSecrets();
 
   const [isOpen, setIsOpen] = useState<boolean>(!credentials?.pin);
+  const [openTooltip, setOpenTooltip] = useState<boolean>(false);
 
   const { handleSubmit, control } = useForm<PinFormSchemaType>({
     resolver: zodResolver(PinFormSchema),
@@ -124,17 +125,32 @@ const UserPinFormDialog = ({ userId, mode }: UserPinFormDialogProps) => {
     >
       <DialogContent showCloseButton={false} className="w-full !max-w-xs">
         <DialogHeader>
-          <Row className="items-center justify-between">
+          <Row className="items-center space-x-2">
             <DialogTitle className="text-center">
               {mode === "create" ? "Crie seu PIN" : "Digite seu PIN"}
             </DialogTitle>
-            <Tooltip>
+            <Tooltip open={openTooltip} onOpenChange={setOpenTooltip}>
               <TooltipTrigger asChild>
-                <Info size={20} />
+                {/* workaround to tooltip component work in mobile devices */}
+                <Button
+                  type="button"
+                  className="bg-transparent shadow-none text-primary hover:bg-transparent !p-0 h-fit"
+                  onClick={() => setOpenTooltip(!openTooltip)}
+                  onMouseEnter={() => setOpenTooltip(true)}
+                  onMouseLeave={() => setOpenTooltip(false)}
+                  onTouchStart={() => setOpenTooltip(!openTooltip)}
+                  onKeyDown={(event) => {
+                    event.preventDefault();
+                    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+                    event.key === "Enter" && setOpenTooltip(!openTooltip);
+                  }}
+                >
+                  <Info size={16} />
+                </Button>
               </TooltipTrigger>
               <TooltipContent>
                 <p>
-                  O PIN garante que suas transações sejam protegidas por
+                  O PIN garante que suas transações sejam <br /> protegidas por
                   criptografia.
                 </p>
               </TooltipContent>
