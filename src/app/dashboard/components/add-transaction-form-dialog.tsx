@@ -38,7 +38,7 @@ interface AddTransactionFormDialogProps {
   selectedMonth: number;
 }
 
-const schema = z.object({
+export const transactionFormSchema = z.object({
   type: z.enum(["income", "expense", "investment"]),
   description: z.string().min(1, { message: "Campo obrigatório." }),
   value: z.string().min(1, { message: "Campo obrigatório." }),
@@ -47,7 +47,7 @@ const schema = z.object({
   card: z.string().optional(),
 });
 
-type TransactionFormSchemaType = z.infer<typeof schema>;
+export type TransactionFormSchemaType = z.infer<typeof transactionFormSchema>;
 
 const AddTransactionFormDialog = ({
   trigger,
@@ -77,7 +77,7 @@ const AddTransactionFormDialog = ({
 
   const { control, handleSubmit, reset, watch, setValue } =
     useForm<TransactionFormSchemaType>({
-      resolver: zodResolver(schema),
+      resolver: zodResolver(transactionFormSchema),
       defaultValues: getDefaultFormValues(selectedMonth),
     });
 
@@ -183,7 +183,7 @@ const AddTransactionFormDialog = ({
           <Column>
             <Flex className="flex-col sm:flex-row max-sm:space-y-4 sm:space-x-2">
               <Column className="space-y-2">
-                <Label htmlFor="transaction">Transação</Label>
+                <Label htmlFor="description">Transação</Label>
                 <Controller
                   name="description"
                   control={control}
@@ -193,7 +193,7 @@ const AddTransactionFormDialog = ({
                   }) => (
                     <Column>
                       <Input
-                        id="transaction"
+                        id="description"
                         placeholder="Salário"
                         value={value}
                         onChange={onChange}
@@ -222,6 +222,7 @@ const AddTransactionFormDialog = ({
                     <Column>
                       <Input
                         id="value"
+                        inputMode="numeric"
                         placeholder="R$ 2.000,00"
                         value={currencyFormatter(Number(value))}
                         onChange={(event) => {
