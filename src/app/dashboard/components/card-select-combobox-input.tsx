@@ -43,7 +43,7 @@ const CardSelectInput = ({
     "Banco Inter",
     "C6 Bank",
     "Mercado Pago",
-    "PagBank (PagSeguro)",
+    "PagBank",
     "Next",
     "Original",
     "BTG Pactual",
