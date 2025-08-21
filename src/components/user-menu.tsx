@@ -1,7 +1,7 @@
 "use client";
 
 import { useMutation } from "@tanstack/react-query";
-import { Loader2Icon, LogOut, UserIcon } from "lucide-react";
+import { Loader2Icon, LogOut } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { doLogout } from "../app/entrar/services";
 import { useAuth } from "../hooks/use-auth";
@@ -19,6 +19,7 @@ import {
   DropdownMenuTrigger,
 } from "./dropdown-menu";
 import { Switch } from "./switch";
+import UserAvatar from "./user-avatar";
 import Show from "./utils/show";
 
 const UserMenu = () => {
@@ -45,9 +46,7 @@ const UserMenu = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild className="cursor-pointer">
-        <div className="bg-transparent rounded-full w-8 h-8 flex items-center justify-center">
-          <UserIcon size={20} />
-        </div>
+        <UserAvatar />
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="end">
         <DropdownMenuLabel>
