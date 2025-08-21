@@ -19,9 +19,10 @@ import { queryClient } from "@/src/libs/tanstack-query/query-client";
 import { useUserSecrets } from "@/src/providers/user-secrets-provider";
 import { TransactionType } from "@/src/types/transaction-type";
 import { useMutation } from "@tanstack/react-query";
-import { Loader2Icon } from "lucide-react";
+import { Edit2Icon, Loader2Icon, Trash2Icon } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
+import UpdateTransactionForm from "./update-transaction-form";
 
 interface TransactionDetailsDialog {
   trigger: React.ReactNode;
@@ -36,18 +37,9 @@ const TransactionDetailsDialog = ({
 }: TransactionDetailsDialog) => {
   const { credentials } = useUserSecrets();
 
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-
-  const transactionTypeTranslation = {
-    income: "Entrada",
-    expense: "Saída",
-    investment: "Investimento",
-  } as const;
-
-  const isIncomeValue = transaction?.type === "income";
-  const isExpenseValue = transaction?.type === "expense";
-
-  const transactionDate = new Date(transaction.created_at).toISOString();
+  const [open, setOpen] = useState<boolean>(false);
+  const [updateTransactionMode, setUpdateTransactionMode] =
+    useState<boolean>(false);
 
   const { mutate: del, isPending: pendingDeleteTransaction } = useMutation({
     mutationFn: deleteTransaction,
@@ -59,7 +51,7 @@ const TransactionDetailsDialog = ({
           className: "!bg-green-600/80 !text-white",
         }
       );
-      setIsOpen(false);
+      setOpen(false);
     },
     onError: (error) => {
       toast.error(error.message, {
@@ -72,10 +64,20 @@ const TransactionDetailsDialog = ({
     del({ transaction, userSecrets: credentials! });
   };
 
+  const transactionTypeTranslation = {
+    income: "Entrada",
+    expense: "Saída",
+    investment: "Investimento",
+  } as const;
+
+  const isIncomeValue = transaction?.type === "income";
+  const isExpenseValue = transaction?.type === "expense";
+
+  const transactionDate = new Date(transaction.created_at).toISOString();
+
   const splitCardFromPaymentMethod = transaction?.payment_method?.split("/");
   const paymentMethod = splitCardFromPaymentMethod?.[0];
   const card = splitCardFromPaymentMethod?.[1];
-  const fullPaymentMethod = `${paymentMethod} - ${card}`;
 
   const percentageOfTotalIncome = (
     (Number(transaction.value) / totalIncome) *
@@ -83,75 +85,103 @@ const TransactionDetailsDialog = ({
   ).toFixed(1);
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent>
-        <DialogHeader className="overflow-hidden border-b-1 border-black/10">
-          <DialogTitle className="overflow-hidden text-ellipsis pb-2">
-            {transaction.description}
-          </DialogTitle>
-        </DialogHeader>
-        <Column className="space-y-2">
-          <dl className="space-y-2">
-            <Row className="space-x-2">
-              <dt className="font-semibold">Tipo:</dt>
-              <dd
-                className={`font-semibold  ${
-                  isIncomeValue
-                    ? "text-green-600"
-                    : isExpenseValue
-                    ? "text-red-600"
-                    : "text-yellow-500"
-                }`}
+      {updateTransactionMode ? (
+        <DialogContent>
+          <UpdateTransactionForm
+            transaction={transaction}
+            totalIncome={totalIncome}
+            cancelUpdateTransaction={() => setUpdateTransactionMode(false)}
+          />
+        </DialogContent>
+      ) : (
+        <DialogContent>
+          <DialogHeader className="overflow-hidden border-b-1 border-black/10">
+            <DialogTitle className="overflow-hidden text-ellipsis pb-2">
+              {transaction.description}
+            </DialogTitle>
+          </DialogHeader>
+          <Column className="space-y-2">
+            <dl className="space-y-2">
+              <Row className="space-x-2">
+                <dt className="font-semibold">Tipo:</dt>
+                <dd
+                  className={`font-semibold  ${
+                    isIncomeValue
+                      ? "text-green-600"
+                      : isExpenseValue
+                      ? "text-red-600"
+                      : "text-yellow-500"
+                  }`}
+                >
+                  {transactionTypeTranslation[transaction.type]}
+                </dd>
+              </Row>
+              <Row className="space-x-2">
+                <dt className="font-semibold">Valor:</dt>
+                <dd>
+                  <CurrencyFormatter>{transaction.value}</CurrencyFormatter>
+                </dd>
+              </Row>
+              <Row className="space-x-2">
+                <dt className="font-semibold">Data:</dt>
+                <dd>
+                  <DateFormatter>{transactionDate}</DateFormatter>
+                </dd>
+              </Row>
+              <Show when={Boolean(transaction?.payment_method)}>
+                <Row className="space-x-2">
+                  <dt className="font-semibold">Método:</dt>
+                  <dd>{paymentMethod}</dd>
+                </Row>
+              </Show>
+              <Show
+                when={Boolean(transaction?.payment_method) && Boolean(card)}
               >
-                {transactionTypeTranslation[transaction.type]}
-              </dd>
-            </Row>
-            <Row className="space-x-2">
-              <dt className="font-semibold">Valor:</dt>
-              <dd>
-                <CurrencyFormatter>{transaction.value}</CurrencyFormatter>
-              </dd>
-            </Row>
-            <Row className="space-x-2">
-              <dt className="font-semibold">Dia:</dt>
-              <dd>
-                <DateFormatter>{transactionDate}</DateFormatter>
-              </dd>
-            </Row>
-            <Show when={Boolean(transaction?.payment_method)}>
-              <Row className="space-x-2">
-                <dt className="font-semibold">Método:</dt>
-                <dd>{fullPaymentMethod}</dd>
-              </Row>
-            </Show>
-            <Show
-              when={
-                totalIncome !== 0 &&
-                (transaction.type === "expense" ||
-                  transaction.type === "investment")
-              }
+                <Row className="space-x-2">
+                  <dt className="font-semibold">Cartão:</dt>
+                  <dd>{card}</dd>
+                </Row>
+              </Show>
+              <Show
+                when={
+                  totalIncome !== 0 &&
+                  (transaction.type === "expense" ||
+                    transaction.type === "investment")
+                }
+              >
+                <Row className="space-x-2">
+                  <dt className="font-semibold">Percentual:</dt>
+                  <dd>{percentageOfTotalIncome}%</dd>
+                </Row>
+              </Show>
+            </dl>
+          </Column>
+          <DialogFooter>
+            <Button
+              className="cursor-pointer bg-red-500 hover:bg-red-400 duration-300 text-white"
+              onClick={() => handleDeleteTransaction(transaction)}
+              disabled={pendingDeleteTransaction}
             >
-              <Row className="space-x-2">
-                <dt className="font-semibold">Percentual:</dt>
-                <dd>{percentageOfTotalIncome}%</dd>
-              </Row>
-            </Show>
-          </dl>
-        </Column>
-        <DialogFooter>
-          <Button
-            className="cursor-pointer"
-            onClick={() => handleDeleteTransaction(transaction)}
-            disabled={pendingDeleteTransaction}
-          >
-            <Show when={pendingDeleteTransaction}>
-              <Loader2Icon className="animate-spin" />
-            </Show>
-            Remover Transação
-          </Button>
-        </DialogFooter>
-      </DialogContent>
+              <Show when={pendingDeleteTransaction} fallback={<Trash2Icon />}>
+                <Loader2Icon className="animate-spin" />
+              </Show>
+              Remover
+            </Button>
+            <Button
+              className="cursor-pointer"
+              onClick={() => setUpdateTransactionMode(true)}
+              disabled={pendingDeleteTransaction}
+            >
+              <Show fallback={<Edit2Icon />}>
+                <Loader2Icon className="animate-spin" />
+              </Show>
+              Editar
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      )}
     </Dialog>
   );
 };
