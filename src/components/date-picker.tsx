@@ -25,7 +25,7 @@ function DatePicker({ value, onValueChange }: DatePickerProps) {
         <Button
           variant="outline"
           id="date-picker"
-          className="w-full sm:max-w-fit justify-between font-normal text-base"
+          className="w-full justify-between font-normal text-base"
         >
           <Show when={value} fallback={"Selecione a data"}>
             <DateFormatter>{transactionDateFormatted}</DateFormatter>

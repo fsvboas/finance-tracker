@@ -267,13 +267,13 @@ const AddTransactionFormDialog = ({
             </Flex>
             <Show when={isExpenseTransaction}>
               <Flex className="flex-col sm:flex-row max-sm:space-y-4 sm:space-x-2 mt-4">
-                <Column className="space-y-2">
+                <Column className="space-y-2 w-full">
                   <Label htmlFor="payment_method">Método de pagamento</Label>
                   <Controller
                     name="payment_method"
                     control={control}
                     render={({ field: { value, onChange } }) => (
-                      <Column>
+                      <Column className="w-full">
                         <PaymentMethodSelectInput
                           value={value ?? ""}
                           onChange={onChange}

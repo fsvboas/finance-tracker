@@ -91,13 +91,15 @@ const UpdateTransactionForm = ({
   const transactionPaymentMethodFieldValue = watch("payment_method");
 
   const isExpenseType = transactionTypeFieldValue === "expense";
+  const isIncomeType = transactionTypeFieldValue === "income";
+  const isCreditOrDebit =
+    transactionPaymentMethodFieldValue === "Crédito" ||
+    transactionPaymentMethodFieldValue === "Débito";
+
   const percentageOfTotalIncome = (
     (Number(transactionValueFieldValue) / totalIncome) *
     100
   ).toFixed(1);
-  const isCreditOrDebit =
-    transactionPaymentMethodFieldValue === "Crédito" ||
-    transactionPaymentMethodFieldValue === "Débito";
 
   const handleUpdateTransaction = (data: TransactionFormSchemaType) => {
     const isIncome = data.type === "income";
@@ -139,8 +141,13 @@ const UpdateTransactionForm = ({
                 field: { value, onChange },
                 fieldState: { error },
               }) => (
-                <Column>
-                  <Input id="description" value={value} onChange={onChange} />
+                <Column className="w-full">
+                  <Input
+                    id="description"
+                    value={value}
+                    onChange={onChange}
+                    className="w-full"
+                  />
                   <div className="h-2 -mt-1">
                     <Show when={error}>
                       <span className="text-xs text-red-600">
@@ -155,16 +162,16 @@ const UpdateTransactionForm = ({
         </DialogTitle>
       </DialogHeader>
       <Column className="space-y-2">
-        <dl className="space-y-2">
+        <dl className="space-y-5">
           <Row className="space-x-2 items-center">
-            <dt className="font-semibold">Tipo:</dt>
-            <dd>
+            <dt className="font-semibold w-20">Tipo:</dt>
+            <dd className="w-full">
               <Controller
                 name="type"
                 control={control}
                 render={({ field: { value, onChange } }) => (
                   <Select value={value} onValueChange={onChange}>
-                    <SelectTrigger className="w-full sm:w-[200px] text-base">
+                    <SelectTrigger className="w-full text-base">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -184,8 +191,8 @@ const UpdateTransactionForm = ({
             </dd>
           </Row>
           <Row className="space-x-2 items-center">
-            <dt className="font-semibold">Valor:</dt>
-            <dd>
+            <dt className="font-semibold w-20">Valor:</dt>
+            <dd className="w-full">
               <Controller
                 name="value"
                 control={control}
@@ -203,60 +210,54 @@ const UpdateTransactionForm = ({
                         const rawValue = event.target.value.replace(/\D/g, "");
                         onChange(rawValue);
                       }}
-                      className={`w-full sm:max-w-[150px] ${
-                        error ? "border-red-600" : ""
-                      }`}
+                      className={`w-full ${error ? "border-red-600" : ""}`}
                     />
-                    <div className="h-2 -mt-1">
-                      <Show when={error}>
+                    <Show when={error}>
+                      <div className="h-2 -mt-1">
                         <span className="text-xs text-red-600">
                           {error?.message}
                         </span>
-                      </Show>
-                    </div>
+                      </div>
+                    </Show>
                   </Column>
                 )}
               />
             </dd>
           </Row>
           <Row className="space-x-2 items-center">
-            <dt className="font-semibold">Data:</dt>
-            <dd>
+            <dt className="font-semibold w-20">Data:</dt>
+            <dd className="w-full">
               <Controller
                 name="created_at"
                 control={control}
                 render={({ field: { value, onChange } }) => (
-                  <Column>
-                    <DatePicker
-                      value={value}
-                      onValueChange={(date) => onChange(date)}
-                    />
-                  </Column>
+                  <DatePicker
+                    value={value}
+                    onValueChange={(date) => onChange(date)}
+                  />
                 )}
               />
             </dd>
           </Row>
           <Show when={isExpenseType}>
             <Row className="space-x-2 items-center">
-              <dt className="font-semibold">Método:</dt>
-              <dd>
+              <dt className="font-semibold w-20">Método:</dt>
+              <dd className="w-full">
                 <Controller
                   name="payment_method"
                   control={control}
                   render={({ field: { value, onChange } }) => (
-                    <Column>
-                      <PaymentMethodSelectInput
-                        value={value ?? ""}
-                        onChange={onChange}
-                      />
-                    </Column>
+                    <PaymentMethodSelectInput
+                      value={value ?? ""}
+                      onChange={onChange}
+                    />
                   )}
                 />
               </dd>
             </Row>
             <Row className="space-x-2 items-center">
-              <dt className="font-semibold">Cartão:</dt>
-              <dd>
+              <dt className="font-semibold w-20">Cartão:</dt>
+              <dd className="w-full">
                 <Controller
                   name="card"
                   control={control}
@@ -284,9 +285,9 @@ const UpdateTransactionForm = ({
               </dd>
             </Row>
           </Show>
-          <Show when={totalIncome !== 0 && !isExpenseType}>
-            <Row className="space-x-2">
-              <dt className="font-semibold">Percentual:</dt>
+          <Show when={totalIncome !== 0 && !isIncomeType}>
+            <Row className="space-x-4">
+              <dt className="font-semibold w-20">Percentual:</dt>
               <dd>{percentageOfTotalIncome}%</dd>
             </Row>
           </Show>
