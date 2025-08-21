@@ -67,7 +67,7 @@ const CardSelectInput = ({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className={`w-full justify-between  ${
+          className={`w-full justify-between text-base ${
             error ? "border-red-500" : ""
           } font-normal`}
           disabled={disabled}
