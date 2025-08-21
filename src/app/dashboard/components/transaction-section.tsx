@@ -1,7 +1,6 @@
 "use client";
 
 import { Button } from "@/src/components/button";
-import { Label } from "@/src/components/label";
 import { ScrollArea } from "@/src/components/scroll-area";
 import { Skeleton } from "@/src/components/skeleton";
 import Column from "@/src/components/utils/column";
@@ -51,15 +50,10 @@ const TransactionSection = ({
             </Button>
           }
         />
-        <Row className="space-x-2">
-          <Label>Filtrar</Label>
-          <TransactionTypeFilterSelectInput
-            value={filter}
-            onChange={(newValue) =>
-              setFilter(newValue as TransactionFiltersType)
-            }
-          />
-        </Row>
+        <TransactionTypeFilterSelectInput
+          value={filter}
+          onChange={(newValue) => setFilter(newValue as TransactionFiltersType)}
+        />
       </Row>
       <ScrollArea className="w-full mb-4">
         <Column className="space-y-2 h-full max-h-109 ">
