@@ -1,22 +1,28 @@
 "use client";
 
 import { Button } from "@/src/components/button";
+import { Label } from "@/src/components/label";
 import { ScrollArea } from "@/src/components/scroll-area";
 import { Skeleton } from "@/src/components/skeleton";
 import Column from "@/src/components/utils/column";
 import Row from "@/src/components/utils/row";
 import Show from "@/src/components/utils/show";
+import { TransactionFiltersType } from "@/src/types/transaction-filters-type";
 import { TransactionType } from "@/src/types/transaction-type";
 import { ListPlus } from "lucide-react";
+import { Dispatch, SetStateAction } from "react";
 import AddTransactionFormDialog from "./add-transaction-form-dialog";
 import EmptyTransactionHistory from "./empty-transaction-history";
 import TransactionCard from "./transaction-card";
+import TransactionTypeFilterSelectInput from "./transaction-type-filter-select-input";
 
 interface TransactionSectionProps {
   transactions: TransactionType[];
   pendingTransactions: boolean;
   totalIncome: number;
   selectedMonth: number;
+  filter: TransactionFiltersType;
+  setFilter: Dispatch<SetStateAction<TransactionFiltersType>>;
 }
 
 const TransactionSection = ({
@@ -24,6 +30,8 @@ const TransactionSection = ({
   pendingTransactions,
   totalIncome,
   selectedMonth,
+  filter,
+  setFilter,
 }: TransactionSectionProps) => {
   const pendingData = Array.from({ length: 4 }, (_, index) => (
     <Skeleton key={index} className="w-full h-20" />
@@ -31,7 +39,7 @@ const TransactionSection = ({
 
   return (
     <Column className="w-full h-full mb-2 items-center">
-      <Row className="justify-between w-full h-10 items-center max-[1020px]:px-2">
+      <Row className="justify-between w-full h-10 mb-2  items-center max-[1020px]:px-2">
         <AddTransactionFormDialog
           selectedMonth={selectedMonth}
           trigger={
@@ -43,6 +51,15 @@ const TransactionSection = ({
             </Button>
           }
         />
+        <Row className="space-x-2">
+          <Label>Filtrar</Label>
+          <TransactionTypeFilterSelectInput
+            value={filter}
+            onChange={(newValue) =>
+              setFilter(newValue as TransactionFiltersType)
+            }
+          />
+        </Row>
       </Row>
       <ScrollArea className="w-full mb-4">
         <Column className="space-y-2 h-full max-h-109 ">

@@ -6,6 +6,7 @@ import Column from "@/src/components/utils/column";
 import Show from "@/src/components/utils/show";
 import { useAuth } from "@/src/hooks/use-auth";
 import { useUserSecrets } from "@/src/providers/user-secrets-provider";
+import { TransactionFiltersType } from "@/src/types/transaction-filters-type";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import FinancialSummary from "./financial-summary";
@@ -21,6 +22,7 @@ export default function FinancialDashboard() {
 
   const [month, setMonth] = useState<number>(getCurrentMonth);
   const [year, setYear] = useState<number>(getCurrentYear);
+  const [filter, setFilter] = useState<TransactionFiltersType>("all");
 
   const { data: pinExists, isPending: pendingCheckPinExists } = useQuery({
     queryFn: () => checkPinExists({ userId: user?.id }),
@@ -46,9 +48,14 @@ export default function FinancialDashboard() {
       const transactionDate = new Date(transaction.created_at);
       const transactionMonth = transactionDate.getMonth() + 1;
       const transactionYear = transactionDate.getFullYear();
-      return transactionMonth === month && transactionYear === year;
+
+      const matchDate = transactionMonth === month && transactionYear === year;
+
+      const matchType = filter === "all" || transaction.type === filter;
+
+      return matchDate && matchType;
     });
-  }, [month, year, transactions]);
+  }, [month, year, filter, transactions]);
 
   const financialSummary = useMemo(() => {
     const totalIncome = filteredTransactions.reduce((sum, transaction) => {
@@ -104,6 +111,8 @@ export default function FinancialDashboard() {
         pendingTransactions={pendingGetTransactions}
         totalIncome={financialSummary.totalIncome}
         selectedMonth={month}
+        filter={filter}
+        setFilter={setFilter}
       />
     </Column>
   );
