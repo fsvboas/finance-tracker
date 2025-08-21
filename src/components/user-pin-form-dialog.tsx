@@ -5,7 +5,7 @@ import { useUserSecrets } from "@/src/providers/user-secrets-provider";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import { useMutation } from "@tanstack/react-query";
-import { BrushCleaning, Delete, Loader2Icon } from "lucide-react";
+import { BrushCleaning, Delete, Info, Loader2Icon } from "lucide-react";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -17,7 +17,9 @@ import {
 import { Button } from "./button";
 import { Dialog, DialogContent, DialogFooter, DialogHeader } from "./dialog";
 import { Input } from "./input";
+import { Tooltip, TooltipContent, TooltipTrigger } from "./tooltip";
 import Column from "./utils/column";
+import Row from "./utils/row";
 import Show from "./utils/show";
 
 const PinFormSchema = z.object({
@@ -123,9 +125,22 @@ const UserPinFormDialog = ({ userId, mode }: UserPinFormDialogProps) => {
     >
       <DialogContent showCloseButton={false} className="w-full !max-w-xs">
         <DialogHeader>
-          <DialogTitle className="text-center">
-            {mode === "create" ? "Crie seu PIN" : "Digite seu PIN"}
-          </DialogTitle>
+          <Row className="items-center justify-between">
+            <DialogTitle className="text-center">
+              {mode === "create" ? "Crie seu PIN" : "Digite seu PIN"}
+            </DialogTitle>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Info size={20} />
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>
+                  O PIN garante que suas transações sejam protegidas por
+                  criptografia.
+                </p>
+              </TooltipContent>
+            </Tooltip>
+          </Row>
         </DialogHeader>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Column className="space-y-2">
