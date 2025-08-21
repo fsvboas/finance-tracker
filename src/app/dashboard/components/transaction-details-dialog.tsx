@@ -85,7 +85,15 @@ const TransactionDetailsDialog = ({
   ).toFixed(1);
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog
+      open={open}
+      onOpenChange={(isOpen) => {
+        setOpen(isOpen);
+        if (!isOpen) {
+          setUpdateTransactionMode(false);
+        }
+      }}
+    >
       <DialogTrigger asChild>{trigger}</DialogTrigger>
       {updateTransactionMode ? (
         <DialogContent>
