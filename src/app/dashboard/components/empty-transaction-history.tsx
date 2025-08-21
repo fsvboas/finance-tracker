@@ -1,6 +1,6 @@
 import { Button } from "@/src/components/button";
 import Column from "@/src/components/utils/column";
-import { CircleSlash2, ListPlus } from "lucide-react";
+import { ListPlus, ListX } from "lucide-react";
 import AddTransactionFormDialog from "./add-transaction-form-dialog";
 
 interface EmptyTransactionHistoryProps {
@@ -11,9 +11,11 @@ const EmptyTransactionHistory = ({
   selectedMonth,
 }: EmptyTransactionHistoryProps) => {
   return (
-    <Column className="p-6 bg-neutral-100 dark:bg-[#202020] h-full w-full items-center justify-center rounded space-y-4">
-      <CircleSlash2 size={40} />
-      <p className="text-center">Nenhuma transação encontrada.</p>
+    <Column className="p-6 bg-neutral-100 dark:bg-[#202020] h-full w-full items-center justify-center rounded space-y-3">
+      <Column className="items-center">
+        <ListX size={64} />
+        <p className="text-center">Nenhuma transação encontrada</p>
+      </Column>
       <AddTransactionFormDialog
         selectedMonth={selectedMonth}
         trigger={
