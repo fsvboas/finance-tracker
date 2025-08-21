@@ -2,6 +2,7 @@ import { Button } from "@/src/components/button";
 import { ScrollArea, ScrollBar } from "@/src/components/scroll-area";
 import Column from "@/src/components/utils/column";
 import Row from "@/src/components/utils/row";
+import { useMediaQuery } from "@/src/hooks/use-media-query";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Dispatch, SetStateAction, useEffect, useRef } from "react";
 
@@ -20,6 +21,8 @@ const TimePeriodSelector = ({
 }: TimePeriodSelectorProps) => {
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const buttonRefs = useRef<(HTMLButtonElement | null)[]>([]);
+
+  const isDesktop = useMediaQuery("(min-width: 768px)");
 
   const currentYear = new Date().getFullYear();
   const minYear = currentYear - 2;
@@ -105,7 +108,10 @@ const TimePeriodSelector = ({
           <ArrowRight />
         </Button>
       </Row>
-      <ScrollArea className="w-full" ref={scrollAreaRef}>
+      <ScrollArea
+        className={`w-full ${isDesktop ? "" : "pb-2.5"}`}
+        ref={scrollAreaRef}
+      >
         <Row className="rounded overflow-hidden">
           {monthNamesMap.map((month, index) => {
             const shortMonthName = month.name.slice(0, 3);
