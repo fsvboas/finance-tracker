@@ -25,7 +25,10 @@ export async function postTransaction({
     user_id: session.user.id,
     description: encryptData(transaction.description, keyHex),
     value: encryptData(transaction.value, keyHex),
-    type: encryptData(transaction.type, keyHex) as "income" | "expense",
+    type: encryptData(transaction.type, keyHex) as
+      | "income"
+      | "expense"
+      | "investment",
     created_at: transaction.created_at,
     payment_method: transaction.payment_method
       ? encryptData(transaction.payment_method, keyHex)
@@ -43,8 +46,8 @@ export async function postTransaction({
   return {
     id: data.id,
     user_id: data.user_id,
-    value: transaction.value,
     description: transaction.description,
+    value: transaction.value,
     type: transaction.type,
     created_at: transaction.created_at,
     payment_method: transaction.payment_method,
