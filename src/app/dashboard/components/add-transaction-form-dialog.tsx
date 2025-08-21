@@ -43,7 +43,7 @@ export const transactionFormSchema = z.object({
   description: z.string().min(1, { message: "Campo obrigatório." }),
   value: z.string().min(1, { message: "Campo obrigatório." }),
   created_at: z.date(),
-  payment_method: z.string(),
+  payment_method: z.string().optional(),
   card: z.string().optional(),
 });
 
@@ -275,7 +275,7 @@ const AddTransactionFormDialog = ({
                     render={({ field: { value, onChange } }) => (
                       <Column>
                         <PaymentMethodSelectInput
-                          value={value}
+                          value={value ?? ""}
                           onChange={onChange}
                         />
                         <div className="h-2 -mt-1" />

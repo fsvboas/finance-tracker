@@ -51,18 +51,18 @@ const UpdateTransactionForm = ({
   const paymentMethod = splitCardFromPaymentMethod?.[0];
   const card = splitCardFromPaymentMethod?.[1];
 
-  const { control, handleSubmit, reset, watch, setValue } =
-    useForm<TransactionFormSchemaType>({
-      resolver: zodResolver(transactionFormSchema),
-      defaultValues: {
-        description: transaction?.description,
-        value: transaction?.value,
-        type: transaction?.type,
-        created_at: new Date(transaction?.created_at),
-        payment_method: paymentMethod,
-        card: card,
-      },
-    });
+  const { control, handleSubmit, watch } = useForm<TransactionFormSchemaType>({
+    resolver: zodResolver(transactionFormSchema),
+    shouldUnregister: true,
+    defaultValues: {
+      description: transaction?.description,
+      value: transaction?.value,
+      type: transaction?.type,
+      created_at: new Date(transaction?.created_at),
+      payment_method: paymentMethod,
+      card: card,
+    },
+  });
 
   const { mutate: update, isPending: pendingUpdateTransaction } = useMutation({
     mutationFn: updateTransaction,
@@ -83,24 +83,6 @@ const UpdateTransactionForm = ({
     },
   });
 
-  const handleUpdateTransaction = (data: TransactionFormSchemaType) => {
-    const paymentMethod = isNotCreditOrDebitCard
-      ? data.payment_method
-      : `${data.payment_method}/${data.card}`;
-
-    const payload: Omit<TransactionType, "id" | "user_id"> = {
-      ...data,
-      created_at: data.created_at.toISOString(),
-      payment_method: paymentMethod,
-    };
-
-    update({
-      transactionId: transaction.id,
-      transaction: payload,
-      userSecrets: credentials!,
-    });
-  };
-
   const transactionTypeOptions = ["income", "expense", "investment"] as const;
   const transactionTypeTranslation = {
     income: "Entrada",
@@ -109,10 +91,7 @@ const UpdateTransactionForm = ({
   } as const;
 
   const transactionTypeFieldValue = watch("type");
-  const isIncomeType = transactionTypeFieldValue === "income";
-
-  console.log("@@@, transactionTypeFieldValue", transactionTypeFieldValue);
-  console.log("@@@, isIncomeType", isIncomeType);
+  const isExpenseType = transactionTypeFieldValue === "expense";
 
   const transactionValueFieldValue = watch("value");
   const percentageOfTotalIncome = (
@@ -121,11 +100,33 @@ const UpdateTransactionForm = ({
   ).toFixed(1);
 
   const transactionPaymentMethodFieldValue = watch("payment_method");
-  const isNotCreditOrDebitCard =
-    transactionPaymentMethodFieldValue !== "Crédito" &&
-    transactionPaymentMethodFieldValue !== "Débito";
+  const isCreditOrDebit =
+    transactionPaymentMethodFieldValue === "Crédito" ||
+    transactionPaymentMethodFieldValue === "Débito";
 
-  console.log("@@@@ transaction", transaction);
+  const handleUpdateTransaction = (data: TransactionFormSchemaType) => {
+    const isIncome = data.type === "income";
+    const isCreditOrDebitLocal =
+      data.payment_method === "Crédito" || data.payment_method === "Débito";
+
+    const formattedPaymentMethod = isIncome
+      ? undefined
+      : isCreditOrDebitLocal
+      ? `${data.payment_method}/${data.card}`
+      : data.payment_method;
+
+    const payload: Omit<TransactionType, "id" | "user_id"> = {
+      ...data,
+      created_at: data.created_at.toISOString(),
+      payment_method: formattedPaymentMethod,
+    };
+
+    update({
+      transactionId: transaction.id,
+      transaction: payload,
+      userSecrets: credentials!,
+    });
+  };
 
   return (
     <form
@@ -211,7 +212,6 @@ const UpdateTransactionForm = ({
                         error ? "border-red-600" : ""
                       }`}
                     />
-
                     <div className="h-2 -mt-1">
                       <Show when={error}>
                         <span className="text-xs text-red-600">
@@ -236,71 +236,60 @@ const UpdateTransactionForm = ({
                       value={value}
                       onValueChange={(date) => onChange(date)}
                     />
-                    <div className="h-2 -mt-1" />
                   </Column>
                 )}
               />
             </dd>
           </Row>
-          <Show when={!isIncomeType}>
-            <Show when={Boolean(transactionPaymentMethodFieldValue)}>
-              <Row className="space-x-2 items-center">
-                <dt className="font-semibold">Método:</dt>
-                <dd>
-                  <Controller
-                    name="payment_method"
-                    control={control}
-                    render={({ field: { value, onChange } }) => (
-                      <Column>
-                        <PaymentMethodSelectInput
-                          value={value}
-                          onChange={onChange}
-                        />
-                      </Column>
-                    )}
-                  />
-                </dd>
-              </Row>
-            </Show>
-
-            <Show when={Boolean(transactionPaymentMethodFieldValue)}>
-              <Row className="space-x-2 items-center">
-                <dt className="font-semibold">Cartão:</dt>
-                <dd>
-                  <Controller
-                    name="card"
-                    control={control}
-                    render={({
-                      field: { value, onChange },
-                      fieldState: { error },
-                    }) => (
-                      <Column>
-                        <CardSelectInput
-                          value={value ?? ""}
-                          onChange={onChange}
-                          error={Boolean(error)}
-                          disabled={isNotCreditOrDebitCard}
-                        />
+          <Show when={isExpenseType}>
+            <Row className="space-x-2 items-center">
+              <dt className="font-semibold">Método:</dt>
+              <dd>
+                <Controller
+                  name="payment_method"
+                  control={control}
+                  render={({ field: { value, onChange } }) => (
+                    <Column>
+                      <PaymentMethodSelectInput
+                        value={value ?? ""}
+                        onChange={onChange}
+                      />
+                    </Column>
+                  )}
+                />
+              </dd>
+            </Row>
+            <Row className="space-x-2 items-center">
+              <dt className="font-semibold">Cartão:</dt>
+              <dd>
+                <Controller
+                  name="card"
+                  control={control}
+                  render={({
+                    field: { value, onChange },
+                    fieldState: { error },
+                  }) => (
+                    <Column>
+                      <CardSelectInput
+                        value={value ?? ""}
+                        onChange={onChange}
+                        error={Boolean(error)}
+                        disabled={!isCreditOrDebit}
+                      />
+                      <div className="h-2 -mt-1">
                         <Show when={error}>
                           <span className="text-xs text-red-600">
                             {error?.message}
                           </span>
                         </Show>
-                      </Column>
-                    )}
-                  />
-                </dd>
-              </Row>
-            </Show>
+                      </div>
+                    </Column>
+                  )}
+                />
+              </dd>
+            </Row>
           </Show>
-
-          <Show
-            when={
-              totalIncome !== 0 &&
-              (transaction.type === "expense" ||
-                transaction.type === "investment")
-            }
-          >
+          <Show when={totalIncome !== 0 && !isExpenseType}>
             <Row className="space-x-2">
               <dt className="font-semibold">Percentual:</dt>
               <dd>{percentageOfTotalIncome}%</dd>
@@ -312,7 +301,6 @@ const UpdateTransactionForm = ({
         <Button
           className="cursor-pointer"
           onClick={cancelUpdateTransaction}
-          //   disabled={pendingUpdateTransaction}
           variant="outline"
         >
           <XIcon />
@@ -321,13 +309,9 @@ const UpdateTransactionForm = ({
         <Button
           className="cursor-pointer"
           type="submit"
-          //   disabled={pendingUpdateTransaction}
+          disabled={pendingUpdateTransaction}
         >
-          <Show
-            // when={pendingUpdateTransaction}
-            when={false}
-            fallback={<CheckIcon />}
-          >
+          <Show when={pendingUpdateTransaction} fallback={<CheckIcon />}>
             <Loader2Icon className="animate-spin" />
           </Show>
           Aplicar
