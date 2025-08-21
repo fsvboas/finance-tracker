@@ -41,7 +41,11 @@ const TransactionDetailsDialog = ({
   const transactionTypeTranslation = {
     income: "Entrada",
     expense: "Saída",
+    investment: "Investimento",
   } as const;
+
+  const isIncomeValue = transaction?.type === "income";
+  const isExpenseValue = transaction?.type === "expense";
 
   const transactionDate = new Date(transaction.created_at).toISOString();
 
@@ -58,7 +62,6 @@ const TransactionDetailsDialog = ({
       setIsOpen(false);
     },
     onError: (error) => {
-      // TO-DO: Translate error messages
       toast.error(error.message, {
         className: "!bg-red-600/80 !text-white",
       });
@@ -94,9 +97,11 @@ const TransactionDetailsDialog = ({
               <dt className="font-semibold">Tipo de Transação:</dt>
               <dd
                 className={`font-semibold  ${
-                  transaction.type === "income"
+                  isIncomeValue
                     ? "text-green-600"
-                    : "text-red-600"
+                    : isExpenseValue
+                    ? "text-red-600"
+                    : "text-yellow-500"
                 }`}
               >
                 {transactionTypeTranslation[transaction.type]}

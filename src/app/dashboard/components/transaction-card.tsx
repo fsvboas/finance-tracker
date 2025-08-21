@@ -20,6 +20,7 @@ export default function TransactionCard({
   const transactionDate = new Date(transaction?.created_at).toISOString();
 
   const isIncomeValue = transaction?.type === "income";
+  const isExpenseValue = transaction?.type === "expense";
 
   const splitCardFromPaymentMethod = transaction?.payment_method?.split("/");
   const paymentMethod = splitCardFromPaymentMethod?.[0];
@@ -44,7 +45,11 @@ export default function TransactionCard({
           <Column>
             <p
               className={`text-xl text-end ${
-                isIncomeValue ? "text-green-600" : "text-red-600"
+                isIncomeValue
+                  ? "text-green-600"
+                  : isExpenseValue
+                  ? "text-red-600"
+                  : "text-yellow-500"
               }  font-medium`}
             >
               <CurrencyFormatter>{transaction.value}</CurrencyFormatter>

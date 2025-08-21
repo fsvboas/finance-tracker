@@ -39,7 +39,7 @@ interface AddTransactionFormDialogProps {
 }
 
 const schema = z.object({
-  type: z.enum(["income", "expense"]),
+  type: z.enum(["income", "expense", "investment"]),
   description: z.string().min(1, { message: "Campo obrigatório." }),
   value: z.string().min(1, { message: "Campo obrigatório." }),
   created_at: z.date(),
@@ -143,7 +143,7 @@ const AddTransactionFormDialog = ({
         <form
           id="transaction-form"
           onSubmit={handleSubmit(handleAddTransaction)}
-          className="space-y-4"
+          className="space-y-4 my-4"
         >
           <DialogHeader>
             <DialogTitle />
@@ -156,7 +156,7 @@ const AddTransactionFormDialog = ({
                   onValueChange={field.onChange}
                   className="items-center"
                 >
-                  <TabsList className="w-[80%] sm:w-1/2">
+                  <TabsList className="w-full">
                     <TabsTrigger
                       className="!text-green-600 hover:cursor-pointer"
                       value="income"
@@ -168,6 +168,12 @@ const AddTransactionFormDialog = ({
                       value="expense"
                     >
                       Saída
+                    </TabsTrigger>
+                    <TabsTrigger
+                      className="!text-yellow-500 hover:cursor-pointer"
+                      value="investment"
+                    >
+                      Investimento
                     </TabsTrigger>
                   </TabsList>
                 </Tabs>

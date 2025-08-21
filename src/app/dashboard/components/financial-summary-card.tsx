@@ -1,10 +1,15 @@
 import Column from "@/src/components/utils/column";
 import Row from "@/src/components/utils/row";
 import CurrencyFormatter from "@/src/helpers/currency-formatter";
-import { Banknote, BanknoteArrowDown, BanknoteArrowUp } from "lucide-react";
+import {
+  Banknote,
+  BanknoteArrowDown,
+  BanknoteArrowUp,
+  PiggyBank,
+} from "lucide-react";
 
 interface CardProps {
-  title: "Entradas" | "Saídas" | "Disponível";
+  title: "Entradas" | "Saídas" | "Investidos" | "Disponível";
   value: number;
 }
 const Card = ({ title, value }: CardProps) => {
@@ -36,5 +41,6 @@ export default Card;
 const cardIconMap = {
   Entradas: <BanknoteArrowUp className="text-green-600" />,
   Saídas: <BanknoteArrowDown className="text-red-600" />,
+  Investidos: <PiggyBank className="text-yellow-500" />,
   Disponível: <Banknote />,
 };

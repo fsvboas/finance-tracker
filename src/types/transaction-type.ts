@@ -3,7 +3,7 @@ export type TransactionType = {
   user_id: string;
   description: string;
   value: string;
-  type: "income" | "expense";
+  type: "income" | "expense" | "investment";
   created_at: string;
   updated_at?: string;
   payment_method?: string;

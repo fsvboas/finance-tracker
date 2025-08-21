@@ -63,10 +63,17 @@ export default function FinancialDashboard() {
         : sum;
     }, 0);
 
+    const totalInvestment = filteredTransactions.reduce((sum, transaction) => {
+      return transaction.type === "investment"
+        ? sum + Number(transaction.value)
+        : sum;
+    }, 0);
+
     return {
       totalIncome,
       totalExpense,
-      total: totalIncome - totalExpense,
+      totalInvestment,
+      total: totalIncome - totalExpense - totalInvestment,
     };
   }, [filteredTransactions]);
 
@@ -88,6 +95,7 @@ export default function FinancialDashboard() {
       <FinancialSummary
         totalIncome={financialSummary.totalIncome}
         totalExpense={financialSummary.totalExpense}
+        totalInvestment={financialSummary.totalInvestment}
         total={financialSummary.total}
         pending={pendingGetTransactions}
       />
