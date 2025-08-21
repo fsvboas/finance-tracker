@@ -35,7 +35,7 @@ export default function TransactionCard({
           className={`p-4 h-20 rounded bg-neutral-100 dark:bg-[#202020] hover:bg-neutral-200 dark:hover:bg-[#101010] duration-300 justify-between items-center`}
         >
           <Column>
-            <p className="font-semibold text-lg overflow-hidden whitespace-nowrap overflow-ellipsis max-[400px]:max-w-[150px] max-[500px]:max-w-[250px]">
+            <p className="font-semibold text-lg overflow-hidden whitespace-nowrap overflow-ellipsis max-[400px]:max-w-[165px] max-[500px]:max-w-[250px]">
               {transaction?.description}
             </p>
             <span className="text-sm text-gray-500">
