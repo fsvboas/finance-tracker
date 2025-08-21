@@ -41,7 +41,10 @@ interface AddTransactionFormDialogProps {
 export const transactionFormSchema = z.object({
   type: z.enum(["income", "expense", "investment"]),
   description: z.string().min(1, { message: "Campo obrigatório." }),
-  value: z.string().min(1, { message: "Campo obrigatório." }),
+  value: z
+    .string()
+    .min(1, { message: "Campo obrigatório." })
+    .refine((value) => Number(value) > 0, { message: "Campo obrigatório." }),
   created_at: z.date(),
   payment_method: z.string().optional(),
   card: z.string().optional(),
