@@ -26,30 +26,50 @@ const TimePeriodSelector = ({
   const maxYear = currentYear + 2;
 
   useEffect(() => {
-    const selectedButtonRef = buttonRefs.current[selectedMonth - 1];
-    const scrollAreaElement = scrollAreaRef.current?.querySelector(
-      "[data-radix-scroll-area-viewport]"
-    ) as HTMLElement;
+    const timeoutId = setTimeout(() => {
+      const selectedButtonRef = buttonRefs.current[selectedMonth - 1];
+      let scrollAreaElement: HTMLElement | null = null;
 
-    if (selectedButtonRef && scrollAreaElement) {
-      const buttonLeft = selectedButtonRef.offsetLeft;
-      const buttonRight = buttonLeft + selectedButtonRef.offsetWidth;
-      const scrollLeft = scrollAreaElement.scrollLeft;
-      const scrollRight = scrollLeft + scrollAreaElement.clientWidth;
+      if (scrollAreaRef.current) {
+        scrollAreaElement = scrollAreaRef.current.querySelector(
+          "[data-radix-scroll-area-viewport]"
+        ) as HTMLElement;
+        if (!scrollAreaElement) {
+          scrollAreaElement = scrollAreaRef.current.querySelector(
+            ".scroll-area-viewport"
+          ) as HTMLElement;
+        }
+        if (!scrollAreaElement) {
+          scrollAreaElement = scrollAreaRef.current;
+        }
+      }
 
-      const isButtonVisible =
-        buttonLeft >= scrollLeft && buttonRight <= scrollRight;
+      if (selectedButtonRef && scrollAreaElement) {
+        requestAnimationFrame(() => {
+          const buttonRect = selectedButtonRef.getBoundingClientRect();
+          const scrollRect = scrollAreaElement!.getBoundingClientRect();
+          const isButtonVisible =
+            buttonRect.left >= scrollRect.left &&
+            buttonRect.right <= scrollRect.right;
 
-      if (!isButtonVisible) {
-        const buttonCenter = buttonLeft + selectedButtonRef.offsetWidth / 2;
-        const scrollPosition = buttonCenter - scrollAreaElement.clientWidth / 2;
+          if (!isButtonVisible) {
+            const buttonCenter =
+              selectedButtonRef.offsetLeft + selectedButtonRef.offsetWidth / 2;
+            const scrollPosition =
+              buttonCenter - scrollAreaElement!.clientWidth / 2;
 
-        scrollAreaElement.scrollTo({
-          left: Math.max(0, scrollPosition),
-          behavior: "smooth",
+            scrollAreaElement!.scrollTo({
+              left: Math.max(0, scrollPosition),
+              behavior: "smooth",
+            });
+
+            scrollAreaElement!.scrollLeft = Math.max(0, scrollPosition);
+          }
         });
       }
-    }
+    }, 100);
+
+    return () => clearTimeout(timeoutId);
   }, [selectedMonth]);
 
   const handlePreviousYear = () => {
