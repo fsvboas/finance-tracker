@@ -40,6 +40,13 @@ interface UpdateTransactionFormProps {
   cancelUpdateTransaction: () => void;
 }
 
+const transactionTypeOptions = ["income", "expense", "investment"] as const;
+const transactionTypeTranslation = {
+  income: "Entrada",
+  expense: "Saída",
+  investment: "Investimento",
+} as const;
+
 const UpdateTransactionForm = ({
   transaction,
   totalIncome,
@@ -70,36 +77,24 @@ const UpdateTransactionForm = ({
       await queryClient?.invalidateQueries({ queryKey: ["transactions"] });
       toast.success(
         `Transação "${variables.transaction.description}" editada com sucesso!`,
-        {
-          className: "!bg-green-600/80 !text-white",
-        }
+        { className: "!bg-green-600/80 !text-white" }
       );
       cancelUpdateTransaction();
     },
     onError: (error) => {
-      toast.error(error.message, {
-        className: "!bg-red-600/80 !text-white",
-      });
+      toast.error(error.message, { className: "!bg-red-600/80 !text-white" });
     },
   });
 
-  const transactionTypeOptions = ["income", "expense", "investment"] as const;
-  const transactionTypeTranslation = {
-    income: "Entrada",
-    expense: "Saída",
-    investment: "Investimento",
-  } as const;
-
   const transactionTypeFieldValue = watch("type");
-  const isExpenseType = transactionTypeFieldValue === "expense";
-
   const transactionValueFieldValue = watch("value");
+  const transactionPaymentMethodFieldValue = watch("payment_method");
+
+  const isExpenseType = transactionTypeFieldValue === "expense";
   const percentageOfTotalIncome = (
     (Number(transactionValueFieldValue) / totalIncome) *
     100
   ).toFixed(1);
-
-  const transactionPaymentMethodFieldValue = watch("payment_method");
   const isCreditOrDebit =
     transactionPaymentMethodFieldValue === "Crédito" ||
     transactionPaymentMethodFieldValue === "Débito";
