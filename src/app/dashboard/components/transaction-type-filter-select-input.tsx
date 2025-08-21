@@ -6,7 +6,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/src/components/select";
-import { FilterType } from "./transaction-section";
+import { TransactionFiltersType } from "@/src/types/transaction-filters-type";
 
 interface TransactionTypeFilterSelectInputProps {
   value: string;
@@ -17,9 +17,14 @@ const TransactionTypeFilterSelectInput = ({
   value,
   onChange,
 }: TransactionTypeFilterSelectInputProps) => {
-  const filters: FilterType[] = ["all", "income", "expense", "investment"];
+  const filters: TransactionFiltersType[] = [
+    "all",
+    "income",
+    "expense",
+    "investment",
+  ];
 
-  const filterLabels: Record<FilterType, string> = {
+  const filterLabels: Record<TransactionFiltersType, string> = {
     all: "Tudo",
     income: "Entradas",
     expense: "Saídas",
