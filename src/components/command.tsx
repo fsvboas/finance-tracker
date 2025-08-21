@@ -86,11 +86,22 @@ function CommandList({
   className,
   ...props
 }: React.ComponentProps<typeof CommandPrimitive.List>) {
+  const touchStartY = React.useRef(0);
+
   return (
     <CommandPrimitive.List
       data-slot="command-list"
       onWheel={(e) => {
         e.currentTarget.scrollTop += e.deltaY;
+      }}
+      onTouchStart={(e) => {
+        touchStartY.current = e.touches[0].clientY;
+      }}
+      onTouchMove={(e) => {
+        const currentY = e.touches[0].clientY;
+        const delta = touchStartY.current - currentY;
+        e.currentTarget.scrollTop += delta;
+        touchStartY.current = currentY;
       }}
       className={cn(
         "max-h-[300px] scroll-py-1 overflow-x-hidden overflow-y-auto",
