@@ -5,6 +5,5 @@ export type TransactionType = {
   value: string;
   type: "income" | "expense" | "investment";
   created_at: string;
-  updated_at?: string;
   payment_method?: string;
 };
