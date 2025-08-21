@@ -247,7 +247,7 @@ const AddTransactionFormDialog = ({
                   )}
                 />
               </Column>
-              <Column className="space-y-2 mb-4">
+              <Column className="space-y-2">
                 <Label htmlFor="created_at">Data</Label>
                 <Controller
                   name="created_at"
@@ -265,7 +265,7 @@ const AddTransactionFormDialog = ({
               </Column>
             </Flex>
             <Show when={isExpenseTransaction}>
-              <Flex className="flex-col sm:flex-row max-sm:space-y-4 sm:space-x-2">
+              <Flex className="flex-col sm:flex-row max-sm:space-y-4 sm:space-x-2 mt-4">
                 <Column className="space-y-2">
                   <Label htmlFor="payment_method">Método de pagamento</Label>
                   <Controller
