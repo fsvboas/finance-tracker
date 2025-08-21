@@ -191,7 +191,7 @@ const AddTransactionFormDialog = ({
                         placeholder="Salário"
                         value={value}
                         onChange={onChange}
-                        className={`min-w-[200px] ${error && "border-red-600"}`}
+                        className={`min-w-[180px] ${error && "border-red-600"}`}
                       />
                       <div className="h-2 -mt-1">
                         <Show when={error}>
