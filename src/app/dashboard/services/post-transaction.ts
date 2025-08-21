@@ -1,7 +1,7 @@
 import { supabaseClient } from "@/src/libs/supabase/supabase-client";
 import { TransactionType } from "@/src/types/transaction-type";
 import { UserCredentials } from "@/src/types/user-credentials";
-import { deriveKey, encryptData } from "@/src/utils/encrypt-data";
+import { deriveKey, encryptData } from "@/src/utils/crypto";
 
 interface PostTransactionProps {
   transaction: TransactionType;

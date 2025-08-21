@@ -1,6 +1,6 @@
 import { supabaseClient } from "@/src/libs/supabase/supabase-client";
 import { UserCredentials } from "@/src/types/user-credentials";
-import { decryptData, deriveKey } from "@/src/utils/encrypt-data";
+import { decryptData, deriveKey } from "@/src/utils/crypto";
 import NProgress from "nprogress";
 
 interface GetTransactionsProps {
