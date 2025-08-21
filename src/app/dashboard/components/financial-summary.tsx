@@ -23,7 +23,7 @@ const FinancialSummary = ({
       <Flex className="sm:space-x-2 max-sm:space-y-2 flex-col sm:flex-row w-full justify-center items-center">
         <Card title="Entradas" value={totalIncome} />
         <Card title="Saídas" value={totalExpense} />
-        <Card title="Investidos" value={totalInvestment} />
+        <Card title="Investimentos" value={totalInvestment} />
         <Card title="Disponível" value={total} />
       </Flex>
     </Show>

@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 
 interface CardProps {
-  title: "Entradas" | "Saídas" | "Investidos" | "Disponível";
+  title: "Entradas" | "Saídas" | "Investimentos" | "Disponível";
   value: number;
 }
 const Card = ({ title, value }: CardProps) => {
@@ -36,6 +36,6 @@ export default Card;
 const cardIconMap = {
   Entradas: <BanknoteArrowUp className="text-green-600" />,
   Saídas: <BanknoteArrowDown className="text-red-600" />,
-  Investidos: <PiggyBank className="text-yellow-500" />,
+  Investimentos: <PiggyBank className="text-yellow-500" />,
   Disponível: <Banknote />,
 };
