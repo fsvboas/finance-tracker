@@ -49,7 +49,7 @@ export default function TransactionCard({
                   ? "text-green-600"
                   : isExpenseValue
                   ? "text-red-600"
-                  : "text-yellow-500"
+                  : "text-yellow-600"
               }  font-medium`}
             >
               <CurrencyFormatter>{transaction.value}</CurrencyFormatter>

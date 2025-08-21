@@ -120,7 +120,7 @@ const TransactionDetailsDialog = ({
                       ? "text-green-600"
                       : isExpenseValue
                       ? "text-red-600"
-                      : "text-yellow-500"
+                      : "text-yellow-600"
                   }`}
                 >
                   {transactionTypeTranslation[transaction.type]}

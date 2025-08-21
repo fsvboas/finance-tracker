@@ -36,6 +36,6 @@ export default Card;
 const cardIconMap = {
   Entradas: <BanknoteArrowUp className="text-green-600" />,
   Saídas: <BanknoteArrowDown className="text-red-600" />,
-  Investimentos: <PiggyBank className="text-yellow-500" />,
+  Investimentos: <PiggyBank className="text-yellow-600" />,
   Disponível: <Banknote />,
 };

@@ -173,7 +173,7 @@ const AddTransactionFormDialog = ({
                       Saída
                     </TabsTrigger>
                     <TabsTrigger
-                      className="!text-yellow-500 hover:cursor-pointer"
+                      className="!text-yellow-600 hover:cursor-pointer"
                       value="investment"
                     >
                       Investimento
