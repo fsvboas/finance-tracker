@@ -42,17 +42,16 @@ const UserPinFormDialog = ({ userId, mode }: UserPinFormDialogProps) => {
     defaultValues: { pin: "" },
   });
 
-  // CHANGE "APAGAR" AND "APAGAR TUDO" TO ICONS
   const buttons = [
-    "7",
-    "8",
-    "9",
-    "4",
-    "5",
-    "6",
     "1",
     "2",
     "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
     "Limpar",
     "0",
     "Apagar",
