@@ -56,7 +56,7 @@ const TransactionSection = ({
         />
       </Row>
       <ScrollArea className="w-full mb-4">
-        <Column className="space-y-2 h-full max-h-109 ">
+        <Column className="space-y-2 h-full md:max-h-109">
           <Show when={!pendingTransactions} fallback={pendingData}>
             <Show
               when={transactions.length > 0}
