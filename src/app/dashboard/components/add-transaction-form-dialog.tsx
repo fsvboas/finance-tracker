@@ -198,7 +198,7 @@ const AddTransactionFormDialog = ({
           </DialogHeader>
           <Column>
             <Flex className="flex-col sm:flex-row max-sm:space-y-4 sm:space-x-2">
-              <Column className="space-y-2">
+              <Column className="space-y-2 w-full">
                 <Label htmlFor="description">Transação</Label>
                 <Controller
                   name="description"
@@ -213,7 +213,9 @@ const AddTransactionFormDialog = ({
                         placeholder="Salário"
                         value={value}
                         onChange={onChange}
-                        className={`min-w-[180px] ${error && "border-red-600"}`}
+                        className={`min-w-[180px] w-full ${
+                          error && "border-red-600"
+                        }`}
                       />
                       <div className="h-2 -mt-1">
                         <Show when={error}>
@@ -248,11 +250,10 @@ const AddTransactionFormDialog = ({
                           );
                           onChange(rawValue);
                         }}
-                        className={`w-full sm:max-w-[150px] ${
+                        className={`w-full sm:w-[150px] ${
                           error ? "border-red-600" : ""
                         }`}
                       />
-
                       <div className="h-2 -mt-1">
                         <Show when={error}>
                           <span className="text-xs text-red-600">
@@ -260,22 +261,6 @@ const AddTransactionFormDialog = ({
                           </span>
                         </Show>
                       </div>
-                    </Column>
-                  )}
-                />
-              </Column>
-              <Column className="space-y-2">
-                <Label htmlFor="created_at">Data</Label>
-                <Controller
-                  name="created_at"
-                  control={control}
-                  render={({ field: { value, onChange } }) => (
-                    <Column>
-                      <DatePicker
-                        value={value}
-                        onValueChange={(date) => onChange(date)}
-                      />
-                      <div className="h-2 -mt-1" />
                     </Column>
                   )}
                 />
@@ -329,7 +314,23 @@ const AddTransactionFormDialog = ({
               </Flex>
             </Show>
             <Flex className="flex-col sm:flex-row max-sm:space-y-4 sm:space-x-2 mt-4">
-              <Column className="space-y-2 w-full sm:max-w-[188px]">
+              <Column className="space-y-2 sm:w-[150px]">
+                <Label htmlFor="created_at">Data</Label>
+                <Controller
+                  name="created_at"
+                  control={control}
+                  render={({ field: { value, onChange } }) => (
+                    <Column className="w-full">
+                      <DatePicker
+                        value={value}
+                        onValueChange={(date) => onChange(date)}
+                      />
+                      <div className="h-2 -mt-1" />
+                    </Column>
+                  )}
+                />
+              </Column>
+              <Column className="space-y-2 w-full sm:max-w-[146px]">
                 <Label htmlFor="repeat_months">Repetir por</Label>
                 <Controller
                   name="repeat_months"
