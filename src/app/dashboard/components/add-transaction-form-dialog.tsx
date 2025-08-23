@@ -32,6 +32,7 @@ import { toast } from "sonner";
 import * as z from "zod";
 import CardSelectInput from "./card-select-combobox-input";
 import PaymentMethodSelectInput from "./payment-method-select-input";
+import RepeatTransactionSelectInput from "./repeat-transaction-select-input";
 
 interface AddTransactionFormDialogProps {
   trigger: React.ReactNode;
@@ -48,6 +49,7 @@ export const transactionFormSchema = z.object({
   created_at: z.date(),
   payment_method: z.string().optional(),
   card: z.string().optional(),
+  repeat_months: z.string(),
 });
 
 export type TransactionFormSchemaType = z.infer<typeof transactionFormSchema>;
@@ -75,6 +77,7 @@ const AddTransactionFormDialog = ({
       created_at: date,
       payment_method: "",
       card: "",
+      repeat_months: "1",
     };
   };
 
@@ -96,12 +99,16 @@ const AddTransactionFormDialog = ({
     mutationFn: postTransaction,
     onSuccess: async (_, variables) => {
       await queryClient?.invalidateQueries({ queryKey: ["transactions"] });
-      toast.success(
-        `Transação "${variables.transaction.description}" adicionada com sucesso!`,
-        {
-          className: "!bg-green-600/80 !text-white",
-        }
-      );
+      const repeatMonths = Number(variables.repeatMonths || 1);
+      const successMessage =
+        repeatMonths > 1
+          ? `Transação "${variables.transaction.description}" adicionada para os próximos ${repeatMonths} meses com sucesso!`
+          : `Transação "${variables.transaction.description}" adicionada com sucesso!`;
+
+      toast.success(successMessage, {
+        className: "!bg-green-600/80 !text-white",
+      });
+
       setIsOpen(false);
     },
     onError: (error) => {
@@ -124,7 +131,13 @@ const AddTransactionFormDialog = ({
       payment_method: paymentMethod,
     };
 
-    post({ transaction: payload, userSecrets: credentials! });
+    const repeatMonths = Number(transaction.repeat_months || 1);
+
+    post({
+      transaction: payload,
+      userSecrets: credentials!,
+      repeatMonths,
+    });
   };
 
   useEffect(() => {
@@ -315,6 +328,24 @@ const AddTransactionFormDialog = ({
                 </Column>
               </Flex>
             </Show>
+            <Flex className="flex-col sm:flex-row max-sm:space-y-4 sm:space-x-2 mt-4">
+              <Column className="space-y-2 w-full sm:max-w-[188px]">
+                <Label htmlFor="repeat_months">Repetir por</Label>
+                <Controller
+                  name="repeat_months"
+                  control={control}
+                  render={({ field: { value, onChange } }) => (
+                    <Column className="w-full">
+                      <RepeatTransactionSelectInput
+                        value={value}
+                        onChange={onChange}
+                      />
+                      <div className="h-2 -mt-1" />
+                    </Column>
+                  )}
+                />
+              </Column>
+            </Flex>
           </Column>
           <DialogFooter>
             <DialogClose asChild>
