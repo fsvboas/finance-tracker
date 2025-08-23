@@ -57,7 +57,9 @@ const LoginForm = () => {
         className="space-y-4"
       >
         <Column className="space-y-2">
-          <Label htmlFor="email">E-mail</Label>
+          <Label htmlFor="email">
+            E-mail<span className="text-red-500">*</span>
+          </Label>
           <Controller
             name="email"
             control={control}
@@ -83,7 +85,9 @@ const LoginForm = () => {
         </Column>
         <Column className="space-y-2">
           {/* <Row className="justify-between"> */}
-          <Label htmlFor="password">Senha</Label>
+          <Label htmlFor="password">
+            Senha<span className="text-red-500">*</span>
+          </Label>
           {/* <Button
                 type="button"
                 variant="link"

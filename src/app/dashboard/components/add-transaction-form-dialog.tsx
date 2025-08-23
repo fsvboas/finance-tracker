@@ -199,7 +199,9 @@ const AddTransactionFormDialog = ({
           <Column>
             <Flex className="flex-col sm:flex-row max-sm:space-y-4 sm:space-x-2">
               <Column className="space-y-2 w-full">
-                <Label htmlFor="description">Transação</Label>
+                <Label htmlFor="description">
+                  Transação<span className="text-red-500">*</span>
+                </Label>
                 <Controller
                   name="description"
                   control={control}
@@ -229,7 +231,9 @@ const AddTransactionFormDialog = ({
                 />
               </Column>
               <Column className="space-y-2">
-                <Label htmlFor="value">Valor</Label>
+                <Label htmlFor="value">
+                  Valor<span className="text-red-500">*</span>
+                </Label>
                 <Controller
                   name="value"
                   control={control}

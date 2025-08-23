@@ -78,7 +78,9 @@ const RegisterForm = () => {
         className="space-y-4"
       >
         <Column className="space-y-2">
-          <Label htmlFor="name">Nome</Label>
+          <Label htmlFor="name">
+            Nome<span className="text-red-500">*</span>
+          </Label>
           <Controller
             name="name"
             control={control}
@@ -103,7 +105,9 @@ const RegisterForm = () => {
           />
         </Column>
         <Column className="space-y-2">
-          <Label htmlFor="email">E-mail</Label>
+          <Label htmlFor="email">
+            E-mail<span className="text-red-500">*</span>
+          </Label>
           <Controller
             name="email"
             control={control}
@@ -128,7 +132,9 @@ const RegisterForm = () => {
           />
         </Column>
         <Column className="space-y-2">
-          <Label htmlFor="password">Senha</Label>
+          <Label htmlFor="password">
+            Senha<span className="text-red-500">*</span>
+          </Label>
           <Controller
             name="password"
             control={control}
@@ -154,7 +160,9 @@ const RegisterForm = () => {
           />
         </Column>
         <Column className="space-y-2">
-          <Label htmlFor="confirmPassword">Confirmar Senha</Label>
+          <Label htmlFor="confirmPassword">
+            Confirmar Senha<span className="text-red-500">*</span>
+          </Label>
           <Controller
             name="confirmPassword"
             control={control}
