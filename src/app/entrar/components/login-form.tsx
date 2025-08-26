@@ -26,7 +26,7 @@ type LoginFormSchemaType = z.infer<typeof LoginFormSchema>;
 const LoginForm = () => {
   const router = useRouter();
 
-  const { handleSubmit, control } = useForm<LoginFormSchemaType>({
+  const { handleSubmit, control, watch } = useForm<LoginFormSchemaType>({
     resolver: zodResolver(LoginFormSchema),
     defaultValues: {
       email: "",
@@ -48,6 +48,9 @@ const LoginForm = () => {
   const handleLogin = ({ email, password }: LoginFormSchemaType) => {
     login({ email, password });
   };
+
+  const emailInputFieldIsBlank = watch("email") === "";
+  const passwordInputFieldIsBlank = watch("password") === "";
 
   return (
     <Column className="rounded-lg p-6 border shadow-sm max-w-[500px] w-full">
@@ -126,7 +129,11 @@ const LoginForm = () => {
           <Button
             className="hover:cursor-pointer w-full"
             type="submit"
-            disabled={pendingLogin}
+            disabled={
+              pendingLogin ||
+              emailInputFieldIsBlank ||
+              passwordInputFieldIsBlank
+            }
           >
             <Show when={pendingLogin}>
               <Loader2Icon className="animate-spin" />
