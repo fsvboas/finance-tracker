@@ -31,14 +31,13 @@ type UpdateUserInfosFormType = z.infer<typeof UpdateUserInfosSchema>;
 const UpdateUserInfosForm = () => {
   const { user, loading } = useAuth();
 
-  const { handleSubmit, control, reset, setValue } =
-    useForm<UpdateUserInfosFormType>({
-      resolver: zodResolver(UpdateUserInfosSchema),
-      defaultValues: {
-        name: "",
-        email: "",
-      },
-    });
+  const { handleSubmit, control, reset } = useForm<UpdateUserInfosFormType>({
+    resolver: zodResolver(UpdateUserInfosSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+    },
+  });
 
   const { mutate: updateUserInfos, isPending: pendingUpdateUserInfos } =
     useMutation({

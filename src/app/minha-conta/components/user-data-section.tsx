@@ -5,6 +5,7 @@ import Column from "@/src/components/utils/column";
 import Row from "@/src/components/utils/row";
 import Show from "@/src/components/utils/show";
 import { Database, Download, Loader2Icon, UserRoundX } from "lucide-react";
+import DeleteAccountDialog from "./delete-account-dialog";
 
 const UserDataSection = () => {
   return (
@@ -33,15 +34,16 @@ const UserDataSection = () => {
             Não quer mais utilizar o Finance Tracker?
           </dt>
           <dd className="w-full sm:w-[150px]">
-            <Button
-              disabled
-              className="cursor-pointer bg-red-500 hover:bg-red-400 duration-300 text-white w-full"
-            >
-              <Show when={false} fallback={<UserRoundX />}>
-                <Loader2Icon className="animate-spin" />
-              </Show>
-              Excluir Conta
-            </Button>
+            <DeleteAccountDialog
+              trigger={
+                <Button className="cursor-pointer bg-red-500 hover:bg-red-400 duration-300 text-white w-full">
+                  <Show when={false} fallback={<UserRoundX />}>
+                    <Loader2Icon className="animate-spin" />
+                  </Show>
+                  Excluir Conta
+                </Button>
+              }
+            />
           </dd>
         </Row>
       </dl>
