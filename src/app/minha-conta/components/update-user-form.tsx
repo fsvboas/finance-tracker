@@ -176,7 +176,7 @@ const UpdateUserForm = () => {
           </Column>
           <Column className="mt-5">
             <Button
-              className="hover:cursor-pointer self-end"
+              className="hover:cursor-pointer self-end w-full sm:w-[150px]"
               type="submit"
               // disabled={pendingSignUp}
             >
@@ -197,7 +197,10 @@ const UpdateUserForm = () => {
           <Row className="space-x-2 items-center justify-between">
             <dt className="text-sm hidden sm:block">Exportar Dados</dt>
             <dd className="w-full sm:w-[150px]">
-              <Button className="cursor-pointer bg-green-600 hover:bg-green-500 duration-300 text-white w-full">
+              <Button
+                disabled
+                className="cursor-pointer bg-green-600 hover:bg-green-500 duration-300 text-white w-full"
+              >
                 <Show when={false} fallback={<Download />}>
                   <Loader2Icon className="animate-spin" />
                 </Show>
@@ -210,7 +213,10 @@ const UpdateUserForm = () => {
               Não quer mais utilizar o Finance Tracker?
             </dt>
             <dd className="w-full sm:w-[150px]">
-              <Button className="cursor-pointer bg-red-500 hover:bg-red-400 duration-300 text-white w-full">
+              <Button
+                disabled
+                className="cursor-pointer bg-red-500 hover:bg-red-400 duration-300 text-white w-full"
+              >
                 <Show when={false} fallback={<UserRoundX />}>
                   <Loader2Icon className="animate-spin" />
                 </Show>
