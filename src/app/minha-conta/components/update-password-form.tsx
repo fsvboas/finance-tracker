@@ -30,14 +30,15 @@ const UpdatePasswordSchema = z
 type UpdatePasswordFormType = z.infer<typeof UpdatePasswordSchema>;
 
 const UpdatePasswordForm = () => {
-  const { handleSubmit, control, reset } = useForm<UpdatePasswordFormType>({
-    resolver: zodResolver(UpdatePasswordSchema),
-    defaultValues: {
-      oldPassword: "",
-      newPassword: "",
-      confirmNewPassword: "",
-    },
-  });
+  const { handleSubmit, control, reset, watch } =
+    useForm<UpdatePasswordFormType>({
+      resolver: zodResolver(UpdatePasswordSchema),
+      defaultValues: {
+        oldPassword: "",
+        newPassword: "",
+        confirmNewPassword: "",
+      },
+    });
 
   const { mutate: updatePassword, isPending: pendingChangePassword } =
     useMutation({
@@ -61,6 +62,13 @@ const UpdatePasswordForm = () => {
   }: UpdatePasswordFormType) => {
     updatePassword({ oldPassword, newPassword });
   };
+
+  const { oldPassword, newPassword, confirmNewPassword } = watch();
+  const formInputFieldIsBlank = [
+    oldPassword,
+    newPassword,
+    confirmNewPassword,
+  ].some((value) => value === "");
 
   return (
     <Column className="lg:rounded-lg px-2 py-4 lg:p-6 border shadow-sm w-full space-y-6">
@@ -158,7 +166,7 @@ const UpdatePasswordForm = () => {
           <Button
             className="hover:cursor-pointer self-end w-full sm:w-[150px]"
             type="submit"
-            disabled={pendingChangePassword}
+            disabled={pendingChangePassword || formInputFieldIsBlank}
           >
             <Show when={pendingChangePassword}>
               <Loader2Icon className="animate-spin" />

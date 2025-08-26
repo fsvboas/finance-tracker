@@ -31,13 +31,15 @@ type UpdateUserInfosFormType = z.infer<typeof UpdateUserInfosSchema>;
 const UpdateUserInfosForm = () => {
   const { user, loading } = useAuth();
 
-  const { handleSubmit, control, reset } = useForm<UpdateUserInfosFormType>({
-    resolver: zodResolver(UpdateUserInfosSchema),
-    defaultValues: {
-      name: "",
-      email: "",
-    },
-  });
+  const { handleSubmit, control, reset, watch, formState } =
+    useForm<UpdateUserInfosFormType>({
+      resolver: zodResolver(UpdateUserInfosSchema),
+      mode: "onChange",
+      defaultValues: {
+        name: "",
+        email: "",
+      },
+    });
 
   const { mutate: updateUserInfos, isPending: pendingUpdateUserInfos } =
     useMutation({
@@ -58,6 +60,13 @@ const UpdateUserInfosForm = () => {
   const handleUpdateUserInfos = ({ name, email }: UpdateUserInfosFormType) => {
     updateUserInfos({ name, email });
   };
+
+  const { name, email } = watch();
+  const hasEmptyFields = !name || !email;
+  const noChanges =
+    name === user?.user_metadata?.display_name && email === user?.email;
+  const isSubmitButtonEnabled =
+    !hasEmptyFields && !noChanges && formState.isValid;
 
   useEffect(() => {
     if (user && !loading) {
@@ -142,7 +151,7 @@ const UpdateUserInfosForm = () => {
           <Button
             className="hover:cursor-pointer self-end w-full sm:w-[150px]"
             type="submit"
-            disabled={pendingUpdateUserInfos}
+            disabled={pendingUpdateUserInfos || !isSubmitButtonEnabled}
           >
             <Show when={pendingUpdateUserInfos}>
               <Loader2Icon className="animate-spin" />
