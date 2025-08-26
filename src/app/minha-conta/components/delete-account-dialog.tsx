@@ -35,7 +35,7 @@ type UpdateUserInfosFormType = z.infer<typeof UpdateUserInfosSchema>;
 const DeleteAccountDialog = ({ trigger }: DeleteAccountDialogProps) => {
   const [open, setOpen] = useState<boolean>(false);
 
-  const { handleSubmit, control, reset } = useForm<UpdateUserInfosFormType>({
+  const { handleSubmit, control, watch } = useForm<UpdateUserInfosFormType>({
     resolver: zodResolver(UpdateUserInfosSchema),
     defaultValues: {
       password: "",
@@ -49,7 +49,6 @@ const DeleteAccountDialog = ({ trigger }: DeleteAccountDialogProps) => {
         toast.success(data.message, {
           className: "!bg-green-600/80 !text-white",
         });
-        reset();
       },
       onError: (error: Error) => {
         toast.error(error.message, {
@@ -61,6 +60,8 @@ const DeleteAccountDialog = ({ trigger }: DeleteAccountDialogProps) => {
   const handleDeleteAccount = ({ password }: UpdateUserInfosFormType) => {
     deleteAccount({ password });
   };
+
+  const inputValue = watch("password");
 
   return (
     <Dialog
@@ -112,8 +113,8 @@ const DeleteAccountDialog = ({ trigger }: DeleteAccountDialogProps) => {
           <DialogFooter>
             <Button
               className="cursor-pointer bg-red-500 hover:bg-red-400 duration-300 text-white"
-              onClick={() => null}
-              disabled={pendingUpdateUserInfos}
+              type="submit"
+              disabled={pendingUpdateUserInfos || inputValue === ""}
             >
               <Show when={pendingUpdateUserInfos} fallback={<Trash2Icon />}>
                 <Loader2Icon className="animate-spin" />
