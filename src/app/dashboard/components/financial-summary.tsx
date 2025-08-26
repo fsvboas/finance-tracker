@@ -1,6 +1,6 @@
 import Flex from "@/src/components/utils/flex";
 import Show from "@/src/components/utils/show";
-import Card from "./financial-summary-card";
+import FinancialSummaryCard from "./financial-summary-card";
 import FinancialSummarySkeleton from "./skeleton/financial-summary-skeleton";
 
 interface FinancialSummaryProps {
@@ -21,10 +21,10 @@ const FinancialSummary = ({
   return (
     <Show when={!pending} fallback={<FinancialSummarySkeleton />}>
       <Flex className="sm:space-x-2 max-sm:space-y-2 flex-col sm:flex-row w-full justify-center items-center">
-        <Card title="Entradas" value={totalIncome} />
-        <Card title="Saídas" value={totalExpense} />
-        <Card title="Investimentos" value={totalInvestment} />
-        <Card title="Disponível" value={total} />
+        <FinancialSummaryCard title="Entradas" value={totalIncome} />
+        <FinancialSummaryCard title="Saídas" value={totalExpense} />
+        <FinancialSummaryCard title="Investimentos" value={totalInvestment} />
+        <FinancialSummaryCard title="Disponível" value={total} />
       </Flex>
     </Show>
   );

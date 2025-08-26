@@ -8,11 +8,11 @@ import {
   PiggyBank,
 } from "lucide-react";
 
-interface CardProps {
+interface FinancialSummaryCardProps {
   title: "Entradas" | "Saídas" | "Investimentos" | "Disponível";
   value: number;
 }
-const Card = ({ title, value }: CardProps) => {
+const FinancialSummaryCard = ({ title, value }: FinancialSummaryCardProps) => {
   const isNegativeValue = value < 0;
 
   const availableBalanceStyle =
@@ -31,7 +31,7 @@ const Card = ({ title, value }: CardProps) => {
   );
 };
 
-export default Card;
+export default FinancialSummaryCard;
 
 const cardIconMap = {
   Entradas: <BanknoteArrowUp className="text-green-600" />,
