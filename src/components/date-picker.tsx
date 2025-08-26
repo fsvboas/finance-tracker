@@ -38,6 +38,7 @@ function DatePicker({ value, onValueChange }: DatePickerProps) {
           locale={pt}
           mode="single"
           selected={value}
+          defaultMonth={value}
           onSelect={(date) => {
             onValueChange(date);
             setOpen(false);
