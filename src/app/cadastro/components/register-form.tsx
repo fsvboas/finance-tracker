@@ -38,7 +38,7 @@ type RegisterFormSchemaType = z.infer<typeof RegisterFormSchema>;
 const RegisterForm = () => {
   const router = useRouter();
 
-  const { handleSubmit, control } = useForm<RegisterFormSchemaType>({
+  const { handleSubmit, control, watch } = useForm<RegisterFormSchemaType>({
     resolver: zodResolver(RegisterFormSchema),
     defaultValues: {
       name: "",
@@ -69,6 +69,11 @@ const RegisterForm = () => {
   const handleSignUp = ({ name, email, password }: RegisterFormSchemaType) => {
     signUp({ name, email, password });
   };
+
+  const { name, email, password, confirmPassword } = watch();
+  const formInputFieldIsBlank = [name, email, password, confirmPassword].some(
+    (value) => value === ""
+  );
 
   return (
     <Column className="rounded-lg p-6 border shadow-sm w-full max-w-[500px]">
@@ -191,7 +196,7 @@ const RegisterForm = () => {
           <Button
             className="hover:cursor-pointer w-full"
             type="submit"
-            disabled={pendingSignUp}
+            disabled={pendingSignUp || formInputFieldIsBlank}
           >
             <Show when={pendingSignUp}>
               <Loader2Icon className="animate-spin" />

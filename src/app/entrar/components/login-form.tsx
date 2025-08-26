@@ -49,8 +49,8 @@ const LoginForm = () => {
     login({ email, password });
   };
 
-  const emailInputFieldIsBlank = watch("email") === "";
-  const passwordInputFieldIsBlank = watch("password") === "";
+  const { email, password } = watch();
+  const formInputFieldIsBlank = [email, password].some((value) => value === "");
 
   return (
     <Column className="rounded-lg p-6 border shadow-sm max-w-[500px] w-full">
@@ -129,11 +129,7 @@ const LoginForm = () => {
           <Button
             className="hover:cursor-pointer w-full"
             type="submit"
-            disabled={
-              pendingLogin ||
-              emailInputFieldIsBlank ||
-              passwordInputFieldIsBlank
-            }
+            disabled={pendingLogin || formInputFieldIsBlank}
           >
             <Show when={pendingLogin}>
               <Loader2Icon className="animate-spin" />
