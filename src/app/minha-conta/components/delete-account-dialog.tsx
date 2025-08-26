@@ -79,12 +79,12 @@ const DeleteAccountDialog = ({ trigger }: DeleteAccountDialogProps) => {
         <Column className="space-y-2">
           <p>
             Ao excluir sua conta na plataforma Finance Tracker, todos os seus
-            dados serão removidos do nosso banco de dados.
+            dados serão removidos do nosso sistema.
           </p>
-          <p>
-            Recomendamos que faça o backup de suas informações antes da
-            exclusão, utilizando o botão &quot;Baixar Planilha&quot;.
-          </p>
+          {/* <p>
+            Recomendamos que faça o backup de seus dados antes da exclusão,
+            utilizando o botão &quot;Baixar Planilha&quot;.
+          </p> */}
         </Column>
         <form
           id="delete-account-form"
@@ -92,7 +92,9 @@ const DeleteAccountDialog = ({ trigger }: DeleteAccountDialogProps) => {
           className="space-y-4"
         >
           <Column className="space-y-2">
-            <Label htmlFor="oldPassword">Senha</Label>
+            <Label htmlFor="oldPassword">
+              Senha<span className="text-red-500">*</span>
+            </Label>
             <Controller
               name="password"
               control={control}
