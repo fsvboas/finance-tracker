@@ -29,7 +29,7 @@ export default function RootLayout({
           <TopLoadingBar />
           <Header />
           <main className="min-h-screen w-full flex">{children}</main>
-          <Toaster visibleToasts={1} className="!mb-8" />
+          <Toaster visibleToasts={1} />
         </Providers>
       </body>
     </html>

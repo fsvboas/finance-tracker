@@ -7,6 +7,8 @@ import Column from "@/src/components/utils/column";
 import Row from "@/src/components/utils/row";
 import Show from "@/src/components/utils/show";
 import { useAuth } from "@/src/hooks/use-auth";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
 import {
   Database,
   Download,
@@ -16,14 +18,30 @@ import {
   UserRoundX,
 } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
+import { doUpdatePassword } from "../services/update-password";
 
-// type RegisterFormSchemaType = z.infer<typeof RegisterFormSchema>;
+const ChangePasswordSchema = z
+  .object({
+    oldPassword: z.string().min(1, "Senha atual é obrigatória"),
+    newPassword: z
+      .string()
+      .min(6, "A nova senha deve ter pelo menos 6 caracteres"),
+    confirmNewPassword: z.string().min(1, "Confirmação de senha é obrigatória"),
+  })
+  .refine((data) => data.newPassword === data.confirmNewPassword, {
+    message: "As senhas não coincidem",
+    path: ["confirmNewPassword"],
+  });
+
+type ChangePasswordFormType = z.infer<typeof ChangePasswordSchema>;
 
 const UpdateUserForm = () => {
   const { user } = useAuth();
 
-  const { handleSubmit, control } = useForm({
-    // resolver: zodResolver(RegisterFormSchema),
+  const { handleSubmit, control, reset } = useForm<ChangePasswordFormType>({
+    resolver: zodResolver(ChangePasswordSchema),
     defaultValues: {
       oldPassword: "",
       newPassword: "",
@@ -31,27 +49,28 @@ const UpdateUserForm = () => {
     },
   });
 
-  // const { mutate: signUp, isPending: pendingSignUp } = useMutation({
-  //   mutationFn: doSignUp,
-  //   onSuccess: () => {
-  //     toast.success("Cadastro realizado com sucesso!", {
-  //       className: "!bg-green-600/80 !text-white",
-  //     });
-  //     // TO-DO: Replace when create the e-mail validation
-  //     router.push("/dashboard");
-  //     // router.push("/entrar");
-  //   },
-  //   onError: (error) => {
-  //     const message = translateSupabaseErrorMessages(error.message);
-  //     toast.error(message, {
-  //       className: "!bg-red-600/80 !text-white",
-  //     });
-  //   },
-  // });
+  const { mutate: updatePassword, isPending: pendingChangePassword } =
+    useMutation({
+      mutationFn: doUpdatePassword,
+      onSuccess: () => {
+        toast.success("Senha alterada com sucesso!", {
+          className: "!bg-green-600/80 !text-white",
+        });
+        reset();
+      },
+      onError: (error: Error) => {
+        toast.error(error.message, {
+          className: "!bg-red-600/80 !text-white",
+        });
+      },
+    });
 
-  // const handleSignUp = ({ name, email, password }: RegisterFormSchemaType) => {
-  //   signUp({ name, email, password });
-  // };
+  const handleChangePassword = ({
+    oldPassword,
+    newPassword,
+  }: ChangePasswordFormType) => {
+    updatePassword({ oldPassword, newPassword });
+  };
 
   return (
     <Column className="items-center h-fit w-full space-y-2 sm:max-w-5xl mx-auto mt-16 lg:py-4">
@@ -66,7 +85,7 @@ const UpdateUserForm = () => {
             <Column>
               <Input
                 id="name"
-                value={user?.user_metadata?.display_name}
+                value={user?.user_metadata?.display_name ?? ""}
                 disabled
               />
               <div className="h-2 -mt-1" />
@@ -75,7 +94,7 @@ const UpdateUserForm = () => {
           <Column className="space-y-2">
             <Label htmlFor="email">E-mail</Label>
             <Column>
-              <Input id="email" value={user?.email} disabled />
+              <Input id="email" value={user?.email ?? ""} disabled />
               <div className="h-2 -mt-1" />
             </Column>
           </Column>
@@ -86,9 +105,13 @@ const UpdateUserForm = () => {
           <LockKeyhole size={20} />
           <h3 className="font-bold">Trocar Senha</h3>
         </Row>
-        <form id="user-credentials-form" className="space-y-4">
+        <form
+          id="user-credentials-form"
+          className="space-y-4"
+          onSubmit={handleSubmit(handleChangePassword)}
+        >
           <Column className="space-y-2">
-            <Label htmlFor="password">Senha Atual</Label>
+            <Label htmlFor="oldPassword">Senha Atual</Label>
             <Controller
               name="oldPassword"
               control={control}
@@ -117,7 +140,7 @@ const UpdateUserForm = () => {
             />
           </Column>
           <Column className="space-y-2">
-            <Label htmlFor="password">Nova Senha</Label>
+            <Label htmlFor="newPassword">Nova Senha</Label>
             <Controller
               name="newPassword"
               control={control}
@@ -178,11 +201,11 @@ const UpdateUserForm = () => {
             <Button
               className="hover:cursor-pointer self-end w-full sm:w-[150px]"
               type="submit"
-              // disabled={pendingSignUp}
+              disabled={pendingChangePassword}
             >
-              {/* <Show when={pendingSignUp}> */}
-              {/* <Loader2Icon className="animate-spin" /> */}
-              {/* </Show> */}
+              <Show when={pendingChangePassword}>
+                <Loader2Icon className="animate-spin" />
+              </Show>
               Trocar Senha
             </Button>
           </Column>
