@@ -7,7 +7,6 @@ import { useEffect, useState } from "react";
 export function useAuth() {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
-  const [initialized, setInitialized] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
@@ -18,13 +17,8 @@ export function useAuth() {
         if (isMounted) {
           setSession(data.session);
         }
-      } catch (error) {
-        console.error("Error fetching session:", error);
       } finally {
-        if (isMounted) {
-          setLoading(false);
-          setInitialized(true);
-        }
+        if (isMounted) setLoading(false);
       }
     }
 
@@ -34,10 +28,7 @@ export function useAuth() {
       (_event, newSession) => {
         if (isMounted) {
           setSession(newSession);
-          if (!initialized) {
-            setLoading(false);
-            setInitialized(true);
-          }
+          setLoading(false);
         }
       }
     );
@@ -46,7 +37,7 @@ export function useAuth() {
       isMounted = false;
       authListener.subscription.unsubscribe();
     };
-  }, [initialized]);
+  }, []);
 
   return {
     session,
