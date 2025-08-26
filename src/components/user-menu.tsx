@@ -1,17 +1,17 @@
 "use client";
 
 import { useMutation } from "@tanstack/react-query";
-import { Loader2Icon, LogOut } from "lucide-react";
+import { Loader2Icon, LogOut, Settings, Wallet } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { doLogout } from "../app/entrar/services";
 import { useAuth } from "../hooks/use-auth";
 import { useUserSecrets } from "../providers/user-secrets-provider";
 
+import { DropdownMenuGroup } from "@radix-ui/react-dropdown-menu";
 import { useTheme } from "next-themes";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
@@ -49,11 +49,25 @@ const UserMenu = () => {
         <UserAvatar />
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="end">
-        <DropdownMenuLabel>
-          Olá, {user?.user_metadata?.display_name}!
+        <DropdownMenuLabel className="flex flex-col">
+          <span className="text-base">{user?.user_metadata?.display_name}</span>
+          <span className="text-sm text-gray-500">{user?.email}</span>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
+          <DropdownMenuItem onClick={() => route.push("/dashboard")}>
+            Minhas Transações
+            <DropdownMenuShortcut className="space-x-1">
+              <Wallet />
+            </DropdownMenuShortcut>
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => route.push("/minha-conta")}>
+            Minha Conta
+            <DropdownMenuShortcut className="space-x-1">
+              <Settings />
+            </DropdownMenuShortcut>
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
           <DropdownMenuItem className="hover:!bg-transparent">
             Tema (Beta)
             <DropdownMenuShortcut className="space-x-1">
