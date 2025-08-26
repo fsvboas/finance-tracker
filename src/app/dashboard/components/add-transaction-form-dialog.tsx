@@ -49,7 +49,7 @@ export const transactionFormSchema = z.object({
   created_at: z.date(),
   payment_method: z.string().optional(),
   card: z.string().optional(),
-  repeat_months: z.string(),
+  repeat_months: z.string().optional(),
 });
 
 export type TransactionFormSchemaType = z.infer<typeof transactionFormSchema>;
