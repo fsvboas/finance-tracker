@@ -1,16 +1,21 @@
 import * as React from "react";
 
 import { cn } from "@/src/libs/shadcn-ui/utils";
+import { useMediaQuery } from "../hooks/use-media-query";
 
 function Input({ className, type, ...props }: React.ComponentProps<"input">) {
   const inputRef = React.useRef<HTMLInputElement>(null);
 
+  const isMobile = useMediaQuery("(max-width: 768px)");
+
   const handleFocus = () => {
     const input = inputRef.current;
     if (!input) return;
-    setTimeout(() => {
-      input.scrollIntoView({ behavior: "smooth", block: "center" });
-    }, 200);
+
+    if (isMobile)
+      return setTimeout(() => {
+        input.scrollIntoView({ behavior: "smooth", block: "center" });
+      }, 200);
   };
 
   return (
