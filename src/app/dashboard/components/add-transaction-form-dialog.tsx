@@ -342,7 +342,7 @@ const AddTransactionFormDialog = ({
                   render={({ field: { value, onChange } }) => (
                     <Column className="w-full">
                       <RepeatTransactionSelectInput
-                        value={value}
+                        value={value ?? ""}
                         onChange={onChange}
                       />
                       <div className="h-2 -mt-1" />
