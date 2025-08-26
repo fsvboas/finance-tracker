@@ -75,7 +75,7 @@ const DeleteAccountDialog = ({ trigger }: DeleteAccountDialogProps) => {
       }}
     >
       <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent>
+      <DialogContent onOpenAutoFocus={(e) => e.preventDefault()}>
         <DialogHeader className="overflow-hidden border-b-1 border-black/10">
           <DialogTitle className="overflow-hidden text-ellipsis pb-2">
             Excluir Conta
