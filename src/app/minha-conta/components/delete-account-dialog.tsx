@@ -13,6 +13,7 @@ import { Input } from "@/src/components/input";
 import { Label } from "@/src/components/label";
 import Column from "@/src/components/utils/column";
 import Show from "@/src/components/utils/show";
+import { useUserSecrets } from "@/src/providers/user-secrets-provider";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { Loader2Icon, Trash2Icon } from "lucide-react";
@@ -33,6 +34,8 @@ const UpdateUserInfosSchema = z.object({
 type UpdateUserInfosFormType = z.infer<typeof UpdateUserInfosSchema>;
 
 const DeleteAccountDialog = ({ trigger }: DeleteAccountDialogProps) => {
+  const { clearCredentials } = useUserSecrets();
+
   const [open, setOpen] = useState<boolean>(false);
 
   const { handleSubmit, control, watch } = useForm<UpdateUserInfosFormType>({
@@ -46,6 +49,7 @@ const DeleteAccountDialog = ({ trigger }: DeleteAccountDialogProps) => {
     useMutation({
       mutationFn: doDeleteAccount,
       onSuccess: (data) => {
+        clearCredentials();
         toast.success(data.message, {
           className: "!bg-green-600/80 !text-white",
         });
