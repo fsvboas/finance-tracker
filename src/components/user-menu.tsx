@@ -44,7 +44,7 @@ const UserMenu = () => {
   };
 
   return (
-    <DropdownMenu>
+    <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild className="cursor-pointer">
         <UserAvatar />
       </DropdownMenuTrigger>
