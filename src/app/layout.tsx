@@ -1,7 +1,6 @@
 import "@/src/styles/nprogress.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import Footer from "../components/footer";
 import Header from "../components/header";
 import { Toaster } from "../components/sonner";
 import TopLoadingBar from "../components/top-loading-bar";
@@ -30,7 +29,6 @@ export default function RootLayout({
           <TopLoadingBar />
           <Header />
           <main className="min-h-screen w-full flex">{children}</main>
-          <Footer />
           <Toaster visibleToasts={1} className="!mb-8" />
         </Providers>
       </body>
