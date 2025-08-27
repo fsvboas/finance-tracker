@@ -51,7 +51,7 @@ const UserPinFormDialogDrawer = ({
   }
 
   return (
-    <Drawer open={isOpen} onOpenChange={handleOpenChange}>
+    <Drawer open={isOpen} onOpenChange={handleOpenChange} dismissible={false}>
       <DrawerContent className="p-4">
         <DrawerHeader className="space-y-2 py-4">
           <UserPinFormDialogDrawerContent
