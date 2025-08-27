@@ -1,7 +1,7 @@
 "use client";
 
 import { checkPinExists, getTransactions } from "@/src/app/dashboard/services";
-import UserPinFormDialog from "@/src/components/user-pin-form-dialog";
+import UserPinFormDialogDrawer from "@/src/components/user-pin-form-dialog-drawer";
 import Column from "@/src/components/utils/column";
 import Show from "@/src/components/utils/show";
 import { useAuth } from "@/src/hooks/use-auth";
@@ -92,7 +92,10 @@ export default function FinancialDashboard() {
     <Column className="items-center h-fit w-full max-w-5xl mx-auto mt-16">
       <Show when={!pendingCheckPinExists}>
         <Show when={user}>
-          <UserPinFormDialog userId={user.id} mode={userPinFormDialogMode} />
+          <UserPinFormDialogDrawer
+            userId={user.id}
+            mode={userPinFormDialogMode}
+          />
         </Show>
       </Show>
       <TimePeriodSelector
