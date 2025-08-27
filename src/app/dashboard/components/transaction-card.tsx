@@ -35,16 +35,16 @@ export default function TransactionCard({
           className={`p-4 h-20 rounded bg-neutral-100 dark:bg-[#202020] hover:bg-neutral-200 dark:hover:bg-[#101010] duration-300 justify-between items-center`}
         >
           <Column>
-            <p className="font-semibold text-lg overflow-hidden whitespace-nowrap overflow-ellipsis max-[400px]:max-w-[165px] max-[500px]:max-w-[250px]">
+            <p className="font-semibold text-base sm:text-lg overflow-hidden whitespace-nowrap overflow-ellipsis max-[400px]:max-w-[165px] max-[500px]:max-w-[250px]">
               {transaction?.description}
             </p>
-            <span className="text-sm text-gray-500">
+            <span className="text-xs sm:text-sm text-gray-500">
               <DateFormatter>{transactionDate}</DateFormatter>
             </span>
           </Column>
           <Column>
             <p
-              className={`text-xl text-end ${
+              className={`text-lg sm:text-xl text-end ${
                 isIncomeValue
                   ? "text-green-600"
                   : isExpenseValue
@@ -55,7 +55,7 @@ export default function TransactionCard({
               <CurrencyFormatter>{transaction.value}</CurrencyFormatter>
             </p>
             <Show when={transaction?.payment_method}>
-              <span className="text-xs text-end text-gray-500">
+              <span className="text-xs sm:text-sm text-end text-gray-500">
                 {paymentMethod}{" "}
                 <Show when={card}>
                   - <strong>{card}</strong>
