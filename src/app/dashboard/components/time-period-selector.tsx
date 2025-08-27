@@ -72,7 +72,7 @@ const TimePeriodSelector = ({
           }
         });
       }
-    }, 100);
+    }, 500);
 
     return () => clearTimeout(timeoutId);
   }, [selectedMonth]);
