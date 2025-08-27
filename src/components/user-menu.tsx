@@ -51,7 +51,9 @@ const UserMenu = () => {
       <DropdownMenuContent className="w-56" align="end">
         <DropdownMenuLabel className="flex flex-col">
           <span className="text-base">{user?.user_metadata?.display_name}</span>
-          <span className="text-sm text-gray-500">{user?.email}</span>
+          <span className="text-xs sm:text-sm text-gray-500">
+            {user?.email}
+          </span>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
