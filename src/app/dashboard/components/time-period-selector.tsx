@@ -86,7 +86,7 @@ const TimePeriodSelector = ({
   };
 
   return (
-    <Column className="w-full space-y-2 py-2">
+    <Column className={`w-full space-y-2 mt-2 ${isDesktop && "mb-2"}`}>
       <Row className="items-center justify-between md:justify-end space-x-2 max-[780px]:px-2">
         <Button
           size="icon"
@@ -109,7 +109,7 @@ const TimePeriodSelector = ({
         </Button>
       </Row>
       <ScrollArea
-        className={`w-full ${isDesktop ? "" : "pb-2.5"}`}
+        className={`w-full ${!isDesktop && "pb-2.5"}`}
         ref={scrollAreaRef}
       >
         <Row className="rounded overflow-hidden">
