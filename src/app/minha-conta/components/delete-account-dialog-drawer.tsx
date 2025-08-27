@@ -4,6 +4,7 @@ import { Button } from "@/src/components/button";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -18,7 +19,6 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/src/components/drawer";
-import Column from "@/src/components/utils/column";
 import { useMediaQuery } from "@/src/hooks/use-media-query";
 import { useState } from "react";
 import DeleteAccountForm from "./delete-account-form";
@@ -49,17 +49,14 @@ const DeleteAccountDialogDrawer = ({
               Excluir Conta
             </DialogTitle>
           </DialogHeader>
-          <Column className="space-y-4">
-            <p>
-              Ao excluir sua conta na plataforma Finance Tracker, todos os seus
-              dados serão removidos do nosso sistema.
-            </p>
-            {/* <p>
-            Recomendamos que faça o backup de seus dados antes da exclusão,
-            utilizando o botão &quot;Baixar Planilha&quot;.
-          </p> */}
-            <DeleteAccountForm />
-          </Column>
+          <DialogDescription>
+            Ao excluir sua conta na plataforma Finance Tracker, todos os seus
+            dados serão removidos do nosso sistema.
+            {/* Recomendamos que faça o
+            backup de seus dados antes da exclusão, utilizando o botão
+            &quot;Baixar Planilha&quot;. */}
+          </DialogDescription>
+          <DeleteAccountForm />
         </DialogContent>
       </Dialog>
     );
