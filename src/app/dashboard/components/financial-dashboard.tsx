@@ -100,6 +100,7 @@ export default function FinancialDashboard() {
         setSelectedYear={setYear}
         selectedMonth={month}
         setSelectedMonth={setMonth}
+        pending={pendingGetTransactions}
       />
       <FinancialSummary
         totalIncome={financialSummary.totalIncome}
@@ -110,11 +111,11 @@ export default function FinancialDashboard() {
       />
       <TransactionSection
         transactions={filteredTransactions}
-        pendingTransactions={pendingGetTransactions}
         totalIncome={financialSummary.totalIncome}
         selectedMonth={month}
         filter={filter}
         setFilter={setFilter}
+        pending={pendingGetTransactions}
       />
     </Column>
   );

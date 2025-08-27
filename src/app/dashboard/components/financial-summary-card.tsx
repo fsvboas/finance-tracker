@@ -19,7 +19,7 @@ const FinancialSummaryCard = ({ title, value }: FinancialSummaryCardProps) => {
     title === "Disponível" && isNegativeValue ? "text-red-600" : "text-primary";
 
   return (
-    <Column className="p-4 bg-neutral-100 dark:bg-[#202020] w-full justify-between rounded h-[84px]">
+    <Column className="p-4 bg-neutral-100 dark:bg-[#202020] w-full justify-between rounded h-22">
       <Row className="justify-between">
         <p className="text-gray-500 text-sm sm:text-base">{title}</p>
         <span>{cardIconMap[title]}</span>

@@ -1,7 +1,9 @@
 import { Button } from "@/src/components/button";
 import { ScrollArea, ScrollBar } from "@/src/components/scroll-area";
+import { Skeleton } from "@/src/components/skeleton";
 import Column from "@/src/components/utils/column";
 import Row from "@/src/components/utils/row";
+import Show from "@/src/components/utils/show";
 import { useMediaQuery } from "@/src/hooks/use-media-query";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Dispatch, SetStateAction, useEffect, useRef } from "react";
@@ -11,6 +13,7 @@ interface TimePeriodSelectorProps {
   setSelectedYear: Dispatch<SetStateAction<number>>;
   selectedMonth: number;
   setSelectedMonth: Dispatch<SetStateAction<number>>;
+  pending: boolean;
 }
 
 const TimePeriodSelector = ({
@@ -18,6 +21,7 @@ const TimePeriodSelector = ({
   setSelectedYear,
   selectedMonth,
   setSelectedMonth,
+  pending,
 }: TimePeriodSelectorProps) => {
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const buttonRefs = useRef<(HTMLButtonElement | null)[]>([]);
@@ -88,41 +92,56 @@ const TimePeriodSelector = ({
   return (
     <Column className={`w-full space-y-2 mt-2 ${isDesktop && "mb-2"}`}>
       <Row className="items-center justify-between md:justify-end space-x-2 max-[780px]:px-2">
-        <Button
-          size="icon"
-          variant="outline"
-          className="cursor-pointer bg-neutral-100 hover:bg-neutral-200"
-          onClick={handlePreviousYear}
-          disabled={selectedYear <= minYear}
+        <Show
+          when={!pending}
+          fallback={
+            <>
+              <Skeleton className="w-9 h-9 rounded" />
+              <Skeleton className="w-13 h-9 rounded" />
+              <Skeleton className="w-9 h-9 rounded" />
+            </>
+          }
         >
-          <ArrowLeft />
-        </Button>
-        <span className="min-w-[50px] text-center">{selectedYear}</span>
-        <Button
-          size="icon"
-          variant="outline"
-          className="cursor-pointer bg-neutral-100 hover:bg-neutral-200"
-          onClick={handleNextYear}
-          disabled={selectedYear >= maxYear}
-        >
-          <ArrowRight />
-        </Button>
+          <Button
+            size="icon"
+            variant="outline"
+            className="cursor-pointer bg-neutral-100 hover:bg-neutral-200"
+            onClick={handlePreviousYear}
+            disabled={selectedYear <= minYear}
+          >
+            <ArrowLeft />
+          </Button>
+          <span className="min-w-[50px] text-center">{selectedYear}</span>
+          <Button
+            size="icon"
+            variant="outline"
+            className="cursor-pointer bg-neutral-100 hover:bg-neutral-200"
+            onClick={handleNextYear}
+            disabled={selectedYear >= maxYear}
+          >
+            <ArrowRight />
+          </Button>
+        </Show>
       </Row>
       <ScrollArea
         className={`w-full ${!isDesktop && "pb-2.5"}`}
         ref={scrollAreaRef}
       >
-        <Row className="rounded overflow-hidden">
-          {monthNamesMap.map((month, index) => {
-            const shortMonthName = month.name.slice(0, 3);
-            return (
-              <Button
-                key={month.number}
-                ref={(el) => {
-                  buttonRefs.current[index] = el;
-                }}
-                onClick={() => setSelectedMonth(month.number)}
-                className={`cursor-pointer
+        <Show
+          when={!pending}
+          fallback={<Skeleton className="w-full h-9 rounded" />}
+        >
+          <Row className="rounded overflow-hidden">
+            {monthNamesMap.map((month, index) => {
+              const shortMonthName = month.name.slice(0, 3);
+              return (
+                <Button
+                  key={month.number}
+                  ref={(el) => {
+                    buttonRefs.current[index] = el;
+                  }}
+                  onClick={() => setSelectedMonth(month.number)}
+                  className={`cursor-pointer
                 flex-1 text-sm font-medium transition-all duration-200 rounded-none border-r last:border-0
                 ${
                   selectedMonth === month.number
@@ -130,14 +149,15 @@ const TimePeriodSelector = ({
                     : "bg-neutral-100 dark:bg-[#202020] text-black dark:text-white hover:bg-neutral-200 dark:hover:bg-[#101010]"
                 }
               `}
-                aria-pressed={selectedMonth === month.number}
-                title={month.name}
-              >
-                {shortMonthName}
-              </Button>
-            );
-          })}
-        </Row>
+                  aria-pressed={selectedMonth === month.number}
+                  title={month.name}
+                >
+                  {shortMonthName}
+                </Button>
+              );
+            })}
+          </Row>
+        </Show>
         <ScrollBar orientation="horizontal" />
       </ScrollArea>
     </Column>

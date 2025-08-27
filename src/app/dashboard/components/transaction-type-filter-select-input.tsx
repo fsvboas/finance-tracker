@@ -33,7 +33,7 @@ const TransactionTypeFilterSelectInput = ({
 
   return (
     <Select value={value} onValueChange={onChange}>
-      <SelectTrigger className="w-[160px]">
+      <SelectTrigger className="w-37">
         <SelectValue />
       </SelectTrigger>
       <SelectContent>

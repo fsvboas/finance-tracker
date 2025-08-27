@@ -17,7 +17,7 @@ import TransactionTypeFilterSelectInput from "./transaction-type-filter-select-i
 
 interface TransactionSectionProps {
   transactions: TransactionType[];
-  pendingTransactions: boolean;
+  pending: boolean;
   totalIncome: number;
   selectedMonth: number;
   filter: TransactionFiltersType;
@@ -26,7 +26,7 @@ interface TransactionSectionProps {
 
 const TransactionSection = ({
   transactions,
-  pendingTransactions,
+  pending,
   totalIncome,
   selectedMonth,
   filter,
@@ -39,25 +39,37 @@ const TransactionSection = ({
   return (
     <Column className="w-full h-full mb-2 items-center">
       <Row className="justify-between w-full h-10 my-2 items-center max-[1020px]:px-2">
-        <AddTransactionFormDialog
-          selectedMonth={selectedMonth}
-          trigger={
-            <Button variant="link" className="cursor-pointer px-0 h-full">
-              <Row className="items-center space-x-1.5 h-full">
-                <ListPlus className="!w-5 !h-5" />
-                <span>Nova Transação</span>
-              </Row>
-            </Button>
+        <Show
+          when={!pending}
+          fallback={
+            <Row className="w-full justify-between space-x-2">
+              <Skeleton className="w-1/2 sm:max-w-34 h-9 rounded" />
+              <Skeleton className="w-1/2 sm:max-w-37 h-9 rounded" />
+            </Row>
           }
-        />
-        <TransactionTypeFilterSelectInput
-          value={filter}
-          onChange={(newValue) => setFilter(newValue as TransactionFiltersType)}
-        />
+        >
+          <AddTransactionFormDialog
+            selectedMonth={selectedMonth}
+            trigger={
+              <Button variant="link" className="cursor-pointer px-0 h-full">
+                <Row className="items-center space-x-1.5 h-full">
+                  <ListPlus className="!w-5 !h-5" />
+                  <span>Nova Transação</span>
+                </Row>
+              </Button>
+            }
+          />
+          <TransactionTypeFilterSelectInput
+            value={filter}
+            onChange={(newValue) =>
+              setFilter(newValue as TransactionFiltersType)
+            }
+          />
+        </Show>
       </Row>
       <ScrollArea className="w-full mb-4">
         <Column className="space-y-2 h-full md:max-h-109">
-          <Show when={!pendingTransactions} fallback={pendingData}>
+          <Show when={!pending} fallback={pendingData}>
             <Show
               when={transactions.length > 0}
               fallback={
