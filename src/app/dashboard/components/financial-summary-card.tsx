@@ -24,7 +24,7 @@ const FinancialSummaryCard = ({ title, value }: FinancialSummaryCardProps) => {
         <p className="text-gray-500 text-sm sm:text-base">{title}</p>
         <span>{cardIconMap[title]}</span>
       </Row>
-      <p className={`text-lg sm:text-2xl font-medium ${availableBalanceStyle}`}>
+      <p className={`text-xl sm:text-2xl font-medium ${availableBalanceStyle}`}>
         <CurrencyFormatter>{value}</CurrencyFormatter>
       </p>
     </Column>
