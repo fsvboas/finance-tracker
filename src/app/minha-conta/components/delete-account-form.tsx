@@ -7,7 +7,7 @@ import { useMediaQuery } from "@/src/hooks/use-media-query";
 import { useUserSecrets } from "@/src/providers/user-secrets-provider";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
-import { Loader2Icon, Trash2Icon } from "lucide-react";
+import { Loader2Icon, UserRoundX } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
@@ -83,7 +83,7 @@ const DeleteAccountForm = () => {
         type="submit"
         disabled={pendingUpdateUserInfos || inputValue === ""}
       >
-        <Show when={pendingUpdateUserInfos} fallback={<Trash2Icon />}>
+        <Show when={pendingUpdateUserInfos} fallback={<UserRoundX />}>
           <Loader2Icon className="animate-spin" />
         </Show>
         Excluir Conta
