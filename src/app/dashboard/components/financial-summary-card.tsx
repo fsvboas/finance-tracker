@@ -21,10 +21,10 @@ const FinancialSummaryCard = ({ title, value }: FinancialSummaryCardProps) => {
   return (
     <Column className="p-4 bg-neutral-100 dark:bg-[#202020] w-full justify-between rounded">
       <Row className="justify-between">
-        <p className="text-gray-500">{title}</p>
+        <p className="text-gray-500 text-sm sm:text-base">{title}</p>
         <span>{cardIconMap[title]}</span>
       </Row>
-      <p className={`text-2xl font-medium ${availableBalanceStyle}`}>
+      <p className={`text-lg sm:text-2xl font-medium ${availableBalanceStyle}`}>
         <CurrencyFormatter>{value}</CurrencyFormatter>
       </p>
     </Column>

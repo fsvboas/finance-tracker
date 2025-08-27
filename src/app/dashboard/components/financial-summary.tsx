@@ -20,7 +20,7 @@ const FinancialSummary = ({
 }: FinancialSummaryProps) => {
   return (
     <Show when={!pending} fallback={<FinancialSummarySkeleton />}>
-      <Flex className="sm:space-x-2 max-sm:space-y-2 flex-col sm:flex-row w-full justify-center items-center">
+      <Flex className="gap-2 w-full justify-center items-center grid grid-cols-2 md:grid-cols-4">
         <FinancialSummaryCard title="Entradas" value={totalIncome} />
         <FinancialSummaryCard title="Saídas" value={totalExpense} />
         <FinancialSummaryCard title="Investimentos" value={totalInvestment} />
