@@ -4,7 +4,7 @@ import { Button } from "@/src/components/button";
 import Column from "@/src/components/utils/column";
 import Row from "@/src/components/utils/row";
 import Show from "@/src/components/utils/show";
-import { Database, Download, Loader2Icon, UserRoundX } from "lucide-react";
+import { Database, Loader2Icon, UserRoundX } from "lucide-react";
 import DeleteAccountDialog from "./delete-account-dialog";
 
 const UserDataSection = () => {
@@ -15,7 +15,7 @@ const UserDataSection = () => {
         <h3 className="font-bold">Meus Dados</h3>
       </Row>
       <dl className="space-y-2">
-        <Row className="space-x-2 items-center justify-between">
+        {/* <Row className="space-x-2 items-center justify-between">
           <dt className="text-sm hidden sm:block">Exportar Dados</dt>
           <dd className="w-full sm:w-[150px]">
             <Button
@@ -28,7 +28,7 @@ const UserDataSection = () => {
               Baixar Planilha
             </Button>
           </dd>
-        </Row>
+        </Row> */}
         <Row className="space-x-2 items-center justify-between">
           <dt className="text-sm hidden sm:block">
             Não quer mais utilizar o Finance Tracker?
