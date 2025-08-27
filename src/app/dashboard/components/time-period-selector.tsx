@@ -6,7 +6,13 @@ import Row from "@/src/components/utils/row";
 import Show from "@/src/components/utils/show";
 import { useMediaQuery } from "@/src/hooks/use-media-query";
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import { Dispatch, SetStateAction, useEffect, useRef } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useRef,
+} from "react";
 
 interface TimePeriodSelectorProps {
   selectedYear: number;
@@ -32,50 +38,49 @@ const TimePeriodSelector = ({
   const minYear = currentYear - 2;
   const maxYear = currentYear + 2;
 
+  const performScroll = useCallback(() => {
+    if (pending) return;
+
+    const selectedButtonRef = buttonRefs.current[selectedMonth - 1];
+    if (!selectedButtonRef || !scrollAreaRef.current) return;
+
+    const scrollAreaElement = scrollAreaRef.current;
+    const viewport = scrollAreaElement.querySelector(
+      "[data-radix-scroll-area-viewport]"
+    ) as HTMLElement;
+    const scrollElement = viewport || scrollAreaElement;
+
+    if (scrollElement && scrollElement.clientWidth > 0) {
+      requestAnimationFrame(() => {
+        const buttonRect = selectedButtonRef.getBoundingClientRect();
+        const scrollRect = scrollElement.getBoundingClientRect();
+
+        const isButtonVisible =
+          buttonRect.left >= scrollRect.left &&
+          buttonRect.right <= scrollRect.right;
+
+        if (!isButtonVisible) {
+          const buttonCenter =
+            selectedButtonRef.offsetLeft + selectedButtonRef.offsetWidth / 2;
+          const scrollPosition = buttonCenter - scrollElement.clientWidth / 2;
+          const finalScrollPosition = Math.max(0, scrollPosition);
+
+          scrollElement.scrollTo({
+            left: finalScrollPosition,
+            behavior: "smooth",
+          });
+        }
+      });
+    }
+  }, [selectedMonth, pending]);
+
   useEffect(() => {
     const timeoutId = setTimeout(() => {
-      const selectedButtonRef = buttonRefs.current[selectedMonth - 1];
-
-      const findScrollAreaElement = (): HTMLElement | null => {
-        if (!scrollAreaRef.current) return null;
-
-        return (scrollAreaRef.current.querySelector(
-          "[data-radix-scroll-area-viewport]"
-        ) ||
-          scrollAreaRef.current.querySelector(".scroll-area-viewport") ||
-          scrollAreaRef.current) as HTMLElement;
-      };
-
-      const scrollAreaElement = findScrollAreaElement();
-
-      if (selectedButtonRef && scrollAreaElement) {
-        requestAnimationFrame(() => {
-          const buttonRect = selectedButtonRef.getBoundingClientRect();
-          const scrollRect = scrollAreaElement.getBoundingClientRect();
-          const isButtonVisible =
-            buttonRect.left >= scrollRect.left &&
-            buttonRect.right <= scrollRect.right;
-
-          if (!isButtonVisible) {
-            const buttonCenter =
-              selectedButtonRef.offsetLeft + selectedButtonRef.offsetWidth / 2;
-            const scrollPosition =
-              buttonCenter - scrollAreaElement.clientWidth / 2;
-            const finalScrollPosition = Math.max(0, scrollPosition);
-
-            scrollAreaElement.scrollTo({
-              left: finalScrollPosition,
-              behavior: "smooth",
-            });
-
-            scrollAreaElement.scrollLeft = finalScrollPosition;
-          }
-        });
-      }
-    }, 500);
+      performScroll();
+    }, 300);
 
     return () => clearTimeout(timeoutId);
-  }, [selectedMonth]);
+  }, [performScroll]);
 
   const handlePreviousYear = () => {
     if (selectedYear > minYear) {
