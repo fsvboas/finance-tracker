@@ -94,6 +94,7 @@ const RegisterForm = () => {
                 <Input
                   id="name"
                   placeholder="Seu nome"
+                  autoComplete="name"
                   value={value}
                   onChange={onChange}
                   className={`${error && "border-red-600"}`}
@@ -121,6 +122,7 @@ const RegisterForm = () => {
                 <Input
                   id="email"
                   placeholder="seuemail@exemplo.com"
+                  autoComplete="email"
                   value={value}
                   onChange={onChange}
                   className={`${error && "border-red-600"}`}
@@ -149,6 +151,7 @@ const RegisterForm = () => {
                   id="password"
                   type="password"
                   placeholder="••••••••"
+                  autoComplete="new-password"
                   value={value}
                   onChange={onChange}
                   className={`${error && "border-red-600"}`}
@@ -177,6 +180,7 @@ const RegisterForm = () => {
                   id="confirmPassword"
                   type="password"
                   placeholder="••••••••"
+                  autoComplete="new-password"
                   value={value}
                   onChange={onChange}
                   className={`${error && "border-red-600"}`}

@@ -92,7 +92,7 @@ const UpdatePasswordForm = () => {
                   id="oldPassword"
                   type="password"
                   placeholder="••••••••"
-                  autoComplete="oldPassword"
+                  autoComplete="current-password"
                   value={value}
                   onChange={onChange}
                   className={`${error && "border-red-600"}`}
@@ -119,7 +119,7 @@ const UpdatePasswordForm = () => {
                   id="newPassword"
                   type="password"
                   placeholder="••••••••"
-                  autoComplete="newPassword"
+                  autoComplete="new-password"
                   value={value}
                   onChange={onChange}
                   className={`${error && "border-red-600"}`}
@@ -146,7 +146,7 @@ const UpdatePasswordForm = () => {
                   id="confirmNewPassword"
                   type="password"
                   placeholder="••••••••"
-                  autoComplete="newPassword"
+                  autoComplete="new-password"
                   value={value}
                   onChange={onChange}
                   className={`${error && "border-red-600"}`}
