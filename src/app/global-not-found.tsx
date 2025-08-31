@@ -23,7 +23,7 @@ export default function GlobalNotFound() {
               <span className="text-xl">Página não encontrada</span>
             </Column>
           </h1>
-          <p className="text-sm">
+          <p className="text-sm text-center">
             A página que você está tentando acessar não existe
           </p>
         </Column>
