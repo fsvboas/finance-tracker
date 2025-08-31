@@ -133,7 +133,7 @@ const UserPinForm = ({ userId, mode, setIsOpen }: UserPinFormProps) => {
                     <Button
                       key={index}
                       type="button"
-                      className="cursor-pointer bg-neutral-200 dark:bg-[#202020] text-black dark:text-white hover:bg-neutral-300 dark:hover:bg-[#101010]"
+                      className="cursor-pointer bg-neutral-200 dark:bg-[#202020] text-black dark:text-white hover:bg-neutral-300 dark:hover:bg-[#101010] h-10"
                       onClick={() => handleButtonClick(button, value, onChange)}
                       disabled={
                         (button === "Apagar" || button === "Limpar") &&
