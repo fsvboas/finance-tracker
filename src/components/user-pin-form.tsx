@@ -2,6 +2,7 @@ import { queryClient } from "@/src/libs/tanstack-query/query-client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { BrushCleaning, Delete, Loader2Icon, LogIn } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import * as z from "zod";
@@ -9,10 +10,12 @@ import {
   createUserPin,
   validateUserPin,
 } from "../app/dashboard/services/user-pin";
+import { doLogout } from "../app/entrar/services";
 import { useUserSecrets } from "../providers/user-secrets-provider";
 import { Button } from "./button";
 import { Input } from "./input";
 import Column from "./utils/column";
+import Row from "./utils/row";
 import Show from "./utils/show";
 
 const PinFormSchema = z.object({
@@ -28,7 +31,8 @@ interface UserPinFormProps {
 }
 
 const UserPinForm = ({ userId, mode, setIsOpen }: UserPinFormProps) => {
-  const { setCredentials } = useUserSecrets();
+  const { setCredentials, clearCredentials } = useUserSecrets();
+  const route = useRouter();
 
   const { handleSubmit, control } = useForm<PinFormSchemaType>({
     resolver: zodResolver(PinFormSchema),
@@ -58,6 +62,19 @@ const UserPinForm = ({ userId, mode, setIsOpen }: UserPinFormProps) => {
       setCredentials({ pin: variables.pin, salt: salt });
       queryClient?.invalidateQueries({ queryKey: ["transactions"] });
       setIsOpen(false);
+    },
+    onError: (error) => {
+      toast.error(error.message, {
+        className: "!bg-red-600/80 !text-white",
+      });
+    },
+  });
+
+  const { mutate: logout, isPending: pendingLogout } = useMutation({
+    mutationFn: doLogout,
+    onSuccess: () => {
+      clearCredentials();
+      route.push("/entrar");
     },
     onError: (error) => {
       toast.error(error.message, {
@@ -147,7 +164,7 @@ const UserPinForm = ({ userId, mode, setIsOpen }: UserPinFormProps) => {
               </div>
               <Button
                 type="submit"
-                className="cursor-pointer bg-green-500 hover:bg-green-400 w-full text-white"
+                className="cursor-pointer bg-green-500 hover:bg-green-400 w-full text-white p-6"
                 disabled={value.length !== 4 || pending}
               >
                 <Show when={pending} fallback={<LogIn />}>
@@ -155,6 +172,17 @@ const UserPinForm = ({ userId, mode, setIsOpen }: UserPinFormProps) => {
                 </Show>
                 Entrar
               </Button>
+              <Row className="w-full items-center justify-center">
+                <Button
+                  type="button"
+                  variant="link"
+                  className="text-red-500"
+                  onClick={() => logout()}
+                  disabled={pendingLogout}
+                >
+                  Sair
+                </Button>
+              </Row>
             </>
           )}
         />
