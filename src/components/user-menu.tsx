@@ -9,6 +9,7 @@ import { useUserSecrets } from "../providers/user-secrets-provider";
 
 import { DropdownMenuGroup } from "@radix-ui/react-dropdown-menu";
 import { useTheme } from "next-themes";
+import { toast } from "sonner";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -35,7 +36,9 @@ const UserMenu = () => {
       route.push("/entrar");
     },
     onError: (error) => {
-      console.log(error);
+      toast.error(error.message, {
+        className: "!bg-red-600/80 !text-white",
+      });
     },
   });
 
