@@ -71,6 +71,7 @@ const LoginForm = () => {
                 <Input
                   id="email"
                   placeholder="seuemail@exemplo.com"
+                  autoComplete="email"
                   value={value}
                   onChange={onChange}
                   className={`${error && "border-red-600"}`}
@@ -110,6 +111,7 @@ const LoginForm = () => {
                   id="password"
                   type="password"
                   placeholder="••••••••"
+                  autoComplete="current-password"
                   value={value}
                   onChange={onChange}
                   className={`${error && "border-red-600"}`}
