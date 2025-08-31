@@ -89,7 +89,7 @@ export default function FinancialDashboard() {
   if (authLoading || !user) return null;
 
   return (
-    <Column className="items-center h-fit w-full max-w-5xl mx-auto mt-16">
+    <Column className="items-center h-fit w-full max-w-5xl mx-auto my-16">
       <Show when={!pendingCheckPinExists}>
         <Show when={user}>
           <UserPinFormDialogDrawer

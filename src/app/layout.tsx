@@ -2,6 +2,7 @@ import "@/src/styles/nprogress.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Header from "../components/header";
+import NavigationMenu from "../components/navigation-menu";
 import { Toaster } from "../components/sonner";
 import TopLoadingBar from "../components/top-loading-bar";
 import Providers from "../providers";
@@ -29,6 +30,7 @@ export default function RootLayout({
           <TopLoadingBar />
           <Header />
           <main className="min-h-screen w-full flex">{children}</main>
+          <NavigationMenu />
           <Toaster visibleToasts={1} />
         </Providers>
       </body>
