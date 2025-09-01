@@ -47,7 +47,7 @@ const UserPinFormDialogDrawer = ({
 
   return (
     <Drawer open={isOpen} onOpenChange={handleOpenChange} dismissible={false}>
-      <DrawerContent className="p-4">
+      <DrawerContent className="px-4">
         <DrawerHeader className="flex flex-row items-center justify-center space-x-2 py-4">
           <DrawerTitle>{dialogDrawerTitle}</DrawerTitle>
           <UserPinFormDialogDrawerTooltip />
