@@ -1,7 +1,13 @@
 "use client";
 
 import { useMutation } from "@tanstack/react-query";
-import { Loader2Icon, LogOut, Settings, Wallet } from "lucide-react";
+import {
+  CreditCard,
+  Loader2Icon,
+  LogOut,
+  Settings,
+  Wallet,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
 import { doLogout } from "../app/entrar/services";
 import { useAuth } from "../hooks/use-auth";
@@ -64,6 +70,12 @@ const UserMenu = () => {
             Minhas Transações
             <DropdownMenuShortcut className="space-x-1">
               <Wallet />
+            </DropdownMenuShortcut>
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => route.push("/cartoes")}>
+            Meus Cartões
+            <DropdownMenuShortcut className="space-x-1">
+              <CreditCard />
             </DropdownMenuShortcut>
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => route.push("/minha-conta")}>
