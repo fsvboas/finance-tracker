@@ -19,8 +19,7 @@ const PaymentMethodSelectInput = ({
   const paymentMethods = [
     "Dinheiro",
     "Pix",
-    "Débito",
-    "Crédito",
+    "Cartão",
     "Boleto",
     "Vale Refeição",
     "Vale Alimentação",

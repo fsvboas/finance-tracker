@@ -88,9 +88,7 @@ const AddTransactionFormDialog = ({
     });
 
   const paymentMethodFieldValue = watch("payment_method");
-  const isNotCreditOrDebitCard =
-    paymentMethodFieldValue !== "Crédito" &&
-    paymentMethodFieldValue !== "Débito";
+  const isNotCreditOrDebitCard = paymentMethodFieldValue !== "Cartão";
 
   const transactionType = watch("type");
   const isExpenseTransaction = transactionType === "expense";
