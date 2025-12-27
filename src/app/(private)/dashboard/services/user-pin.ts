@@ -1,6 +1,6 @@
 import { supabaseClient } from "@/src/libs/supabase/supabase-client";
+import { hashPin } from "@/src/utils/crypto";
 import CryptoJS from "crypto-js";
-import { hashPin } from "../../../utils/crypto";
 
 interface UserPinProps {
   userId: string;

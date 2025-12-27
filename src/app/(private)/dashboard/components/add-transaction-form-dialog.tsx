@@ -1,6 +1,6 @@
 "use client";
 
-import { postTransaction } from "@/src/app/dashboard/services";
+import { postTransaction } from "@/src/app/(private)/dashboard/services";
 import { Button } from "@/src/components/button";
 import DatePicker from "@/src/components/date-picker";
 import {

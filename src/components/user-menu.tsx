@@ -9,7 +9,7 @@ import {
   Wallet,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { doLogout } from "../app/entrar/services";
+import { doLogout } from "../app/(public)/entrar/services";
 import { useAuth } from "../hooks/use-auth";
 import { useUserSecrets } from "../providers/user-secrets-provider";
 

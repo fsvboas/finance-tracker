@@ -1,6 +1,6 @@
 "use client";
 
-import { deleteTransaction } from "@/src/app/dashboard/services";
+import { deleteTransaction } from "@/src/app/(private)/dashboard/services";
 import { Button } from "@/src/components/button";
 import {
   Dialog,

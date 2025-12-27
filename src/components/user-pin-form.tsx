@@ -6,11 +6,12 @@ import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import * as z from "zod";
+import { doLogout } from "../app/(public)/entrar/services";
+
 import {
   createUserPin,
   validateUserPin,
-} from "../app/dashboard/services/user-pin";
-import { doLogout } from "../app/entrar/services";
+} from "@/src/app/(private)/dashboard/services";
 import { useUserSecrets } from "../providers/user-secrets-provider";
 import { Button } from "./button";
 import { Input } from "./input";
