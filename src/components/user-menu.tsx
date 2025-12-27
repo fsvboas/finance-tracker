@@ -1,7 +1,13 @@
 "use client";
 
 import { useMutation } from "@tanstack/react-query";
-import { Loader2Icon, LogOut, Settings, Wallet } from "lucide-react";
+import {
+  Loader2Icon,
+  LogOut,
+  Settings,
+  StepForward,
+  Wallet,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
 import { doLogout } from "../app/entrar/services";
 import { useAuth } from "../hooks/use-auth";
@@ -84,6 +90,12 @@ const UserMenu = () => {
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
+        <DropdownMenuItem onClick={() => route.push("/proximos-passos")}>
+          Próximos Passos
+          <DropdownMenuShortcut className="space-x-1">
+            <StepForward />
+          </DropdownMenuShortcut>
+        </DropdownMenuItem>
         <DropdownMenuItem
           className="!text-red-600  cursor-pointer"
           onClick={() => logout()}
