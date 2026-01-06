@@ -5,7 +5,7 @@ import Column from "@/src/components/utils/column";
 
 export default function RegisterScreen() {
   return (
-    <AuthGuard requireAuth={false} redirectTo="/dashboard">
+    <AuthGuard requireAuth={false} redirectTo="/transacoes">
       <Column className="space-y-4 items-center justify-center w-full mx-2">
         <AppTitle />
         <RegisterForm />

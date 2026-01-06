@@ -11,7 +11,7 @@ import { doLogout } from "../app/(public)/entrar/services";
 import {
   createUserPin,
   validateUserPin,
-} from "@/src/app/(private)/dashboard/services";
+} from "@/src/app/(private)/transacoes/services";
 import { useUserSecrets } from "../providers/user-secrets-provider";
 import { Button } from "./button";
 import { Input } from "./input";

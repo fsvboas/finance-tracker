@@ -55,7 +55,7 @@ const RegisterForm = () => {
         className: "!bg-green-600/80 !text-white",
       });
       // TO-DO: Replace when create the e-mail validation
-      router.push("/dashboard");
+      router.push("/transacoes");
       // router.push("/entrar");
     },
     onError: (error) => {

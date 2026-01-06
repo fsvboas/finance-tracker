@@ -3,7 +3,7 @@
 import {
   checkPinExists,
   getTransactions,
-} from "@/src/app/(private)/dashboard/services";
+} from "@/src/app/(private)/transacoes/services";
 import UserPinFormDialogDrawer from "@/src/components/user-pin-form-dialog-drawer";
 import Column from "@/src/components/utils/column";
 import Show from "@/src/components/utils/show";

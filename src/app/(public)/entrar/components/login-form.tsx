@@ -36,7 +36,7 @@ const LoginForm = () => {
 
   const { mutate: login, isPending: pendingLogin } = useMutation({
     mutationFn: doLogin,
-    onSuccess: () => router.push("/dashboard"),
+    onSuccess: () => router.push("/transacoes"),
     onError: (error) => {
       const message = translateSupabaseErrorMessages(error.message);
       toast.error(message, {
