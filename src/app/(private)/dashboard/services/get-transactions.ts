@@ -1,15 +1,12 @@
 import { supabaseClient } from "@/src/libs/supabase/supabase-client";
 import { UserCredentials } from "@/src/types/user-credentials";
 import { decryptData, deriveKey } from "@/src/utils/crypto";
-import NProgress from "nprogress";
 
 interface GetTransactionsProps {
   userSecrets: UserCredentials;
 }
 
 export async function getTransactions({ userSecrets }: GetTransactionsProps) {
-  NProgress.start();
-
   const result = (async () => {
     const {
       data: { session },
@@ -37,7 +34,5 @@ export async function getTransactions({ userSecrets }: GetTransactionsProps) {
     }));
   })();
 
-  return result.finally(() => {
-    NProgress.done();
-  });
+  return result;
 }
