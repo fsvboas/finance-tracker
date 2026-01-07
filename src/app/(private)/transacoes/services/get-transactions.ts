@@ -8,11 +8,6 @@ interface GetTransactionsProps {
 
 export async function getTransactions({ userSecrets }: GetTransactionsProps) {
   const result = (async () => {
-    const {
-      data: { session },
-    } = await supabaseClient.auth.getSession();
-    if (!session) throw new Error("Usuário não autenticado");
-
     const keyHex = deriveKey(userSecrets.pin, userSecrets.salt!);
 
     const { data, error } = await supabaseClient

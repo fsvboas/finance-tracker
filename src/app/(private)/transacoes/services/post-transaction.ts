@@ -14,13 +14,6 @@ export async function postTransaction({
   userSecrets,
   repeatMonths = 1,
 }: PostTransactionProps) {
-  const {
-    data: { session },
-    error: authError,
-  } = await supabaseClient.auth.getSession();
-
-  if (authError || !session) throw new Error("Usuário não autenticado");
-
   const keyHex = deriveKey(userSecrets.pin, userSecrets.salt!);
 
   const transactionsToCreate = Array.from(
@@ -30,7 +23,6 @@ export async function postTransaction({
       transactionDate.setMonth(transactionDate.getMonth() + index);
 
       return {
-        user_id: session.user.id,
         description: encryptData(transaction.description, keyHex),
         value: encryptData(transaction.value, keyHex),
         type: encryptData(transaction.type, keyHex) as

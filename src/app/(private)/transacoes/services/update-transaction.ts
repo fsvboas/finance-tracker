@@ -4,32 +4,22 @@ import { UserCredentials } from "@/src/types/user-credentials";
 import { deriveKey, encryptData } from "@/src/utils/crypto";
 
 interface UpdateTransactionProps {
-  transactionId: TransactionType["id"];
-  transaction: Omit<TransactionType, "id" | "user_id">;
+  transaction: TransactionType;
   userSecrets: UserCredentials;
 }
 
 export async function updateTransaction({
-  transactionId,
   transaction,
   userSecrets,
 }: UpdateTransactionProps) {
-  const {
-    data: { session },
-    error: authError,
-  } = await supabaseClient.auth.getSession();
-
-  if (authError || !session) throw new Error("Usuário não autenticado");
-
-  const { data: existingTransaction, error: fetchError } = await supabaseClient
+  const { data, error: fetchError } = await supabaseClient
     .from("transactions")
-    .select("id, user_id")
-    .eq("id", transactionId)
-    .eq("user_id", session.user.id)
+    .select("id")
+    .eq("id", transaction.id)
     .single();
 
-  if (fetchError || !existingTransaction) {
-    throw new Error("Transação não encontrada.");
+  if (!data || fetchError) {
+    throw new Error("Transação não encontrada. Tente novamente mais tarde.");
   }
 
   const keyHex = deriveKey(userSecrets.pin, userSecrets.salt!);
@@ -47,23 +37,14 @@ export async function updateTransaction({
       : undefined,
   };
 
-  const { data, error } = await supabaseClient
+  const { error } = await supabaseClient
     .from("transactions")
     .update(encryptedTransaction)
-    .eq("id", transactionId)
-    .eq("user_id", session.user.id)
+    .eq("id", transaction.id)
     .select()
     .single();
 
   if (error) throw error;
 
-  return {
-    id: data.id,
-    user_id: data.user_id,
-    description: transaction.description,
-    value: transaction.value,
-    type: transaction.type,
-    created_at: transaction.created_at,
-    payment_method: transaction.payment_method,
-  };
+  return;
 }
