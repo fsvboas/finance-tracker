@@ -30,13 +30,13 @@ interface CreateCardFormDialogProps {
 }
 
 export const cardFormSchema = z.object({
-  cardName: z.string().min(1, "O nome do cartão é obrigatório"),
-  cardType: z.enum(["credit", "debit"]),
-  cardLimit: z
+  name: z.string().min(1, "O nome do cartão é obrigatório"),
+  type: z.enum(["credit", "debit"]),
+  creditLimit: z
     .number()
     .min(0, "O limite do cartão deve ser maior ou igual a 0"),
-  cardDueDate: z.date(),
-  cardColor: z.string().optional(),
+  dueDate: z.date(),
+  color: z.string().optional(),
 });
 
 export type CardFormSchemaType = z.infer<typeof cardFormSchema>;
@@ -47,11 +47,11 @@ const CreateCardFormDialog = ({ trigger }: CreateCardFormDialogProps) => {
   const { control, handleSubmit, reset } = useForm<CardFormSchemaType>({
     resolver: zodResolver(cardFormSchema),
     defaultValues: {
-      cardName: "",
-      cardType: "debit",
-      cardLimit: 0,
-      cardDueDate: new Date(),
-      cardColor: "",
+      name: "",
+      type: "debit",
+      creditLimit: 0,
+      dueDate: new Date(),
+      color: "",
     },
   });
 
@@ -91,11 +91,11 @@ const CreateCardFormDialog = ({ trigger }: CreateCardFormDialogProps) => {
           </DialogHeader>
           <Column className="grid grid-cols-8 gap-4">
             <Column className="space-y-2 w-full col-span-4">
-              <Label htmlFor="cardName">
+              <Label htmlFor="name">
                 Nome do cartão<span className="text-red-500">*</span>
               </Label>
               <Controller
-                name="cardName"
+                name="name"
                 control={control}
                 render={({
                   field: { onChange, value },
@@ -103,7 +103,7 @@ const CreateCardFormDialog = ({ trigger }: CreateCardFormDialogProps) => {
                 }) => (
                   <Column>
                     <Input
-                      id="cardName"
+                      id="name"
                       placeholder="Nubank"
                       value={value}
                       onChange={onChange}
@@ -121,11 +121,11 @@ const CreateCardFormDialog = ({ trigger }: CreateCardFormDialogProps) => {
               />
             </Column>
             <Column className="space-y-2 w-full col-span-4">
-              <Label htmlFor="cardType">
+              <Label htmlFor="type">
                 Tipo de cartão<span className="text-red-500">*</span>
               </Label>
               <Controller
-                name="cardType"
+                name="type"
                 control={control}
                 render={({ field: { value, onChange } }) => (
                   <Column className="w-full">
@@ -139,11 +139,11 @@ const CreateCardFormDialog = ({ trigger }: CreateCardFormDialogProps) => {
               />
             </Column>
             <Column className="space-y-2 w-full col-span-3">
-              <Label htmlFor="cardLimit">
+              <Label htmlFor="creditLimit">
                 Limite do cartão<span className="text-red-500">*</span>
               </Label>
               <Controller
-                name="cardLimit"
+                name="creditLimit"
                 control={control}
                 render={({
                   field: { onChange, value },
@@ -151,7 +151,7 @@ const CreateCardFormDialog = ({ trigger }: CreateCardFormDialogProps) => {
                 }) => (
                   <Column>
                     <Input
-                      id="cardLimit"
+                      id="creditLimit"
                       inputMode="numeric"
                       placeholder="R$ 2.000,00"
                       value={currencyFormatter(Number(value))}
@@ -173,11 +173,11 @@ const CreateCardFormDialog = ({ trigger }: CreateCardFormDialogProps) => {
               />
             </Column>
             <Column className="space-y-2 w-full col-span-3">
-              <Label htmlFor="cardDueDate">
+              <Label htmlFor="dueDate">
                 Vencimento<span className="text-red-500">*</span>
               </Label>
               <Controller
-                name="cardDueDate"
+                name="dueDate"
                 control={control}
                 render={({ field: { value, onChange } }) => (
                   <Column className="w-full">

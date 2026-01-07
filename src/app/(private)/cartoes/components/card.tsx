@@ -19,12 +19,9 @@ const Card = ({ card }: CardProps) => {
     mutationFn: deleteCard,
     onSuccess: async (_, variables) => {
       await queryClient?.invalidateQueries({ queryKey: ["cards"] });
-      toast.success(
-        `Cartão "${variables.card.card_name}" removido com sucesso!`,
-        {
-          className: "!bg-green-600/80 !text-white",
-        }
-      );
+      toast.success(`Cartão "${variables.card.name}" removido com sucesso!`, {
+        className: "!bg-green-600/80 !text-white",
+      });
     },
     onError: (error) => {
       toast.error(error.message, {
@@ -38,11 +35,11 @@ const Card = ({ card }: CardProps) => {
   };
 
   const cardTypeLabel =
-    card.card_type === "credit"
+    card.type === "credit"
       ? "crédito"
-      : card.card_type === "debit"
+      : card.type === "debit"
       ? "débito"
-      : card.card_type;
+      : card.type;
 
   return (
     <Column
@@ -53,7 +50,7 @@ const Card = ({ card }: CardProps) => {
     >
       <Column className="items-center">
         <p className="text-lg font-semibold capitalize truncate ellipsis text-white">
-          {card.card_name}
+          {card.name}
         </p>
         <p className="capitalize text-sm">{cardTypeLabel}</p>
       </Column>
