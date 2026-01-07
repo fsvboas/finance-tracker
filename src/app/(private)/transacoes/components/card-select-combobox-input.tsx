@@ -40,8 +40,6 @@ const CardSelectInput = ({
 
   const cards = data || [];
 
-  console.log("@@@@", cards);
-
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
