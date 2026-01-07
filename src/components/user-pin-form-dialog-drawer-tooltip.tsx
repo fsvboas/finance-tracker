@@ -1,7 +1,7 @@
 import { Info } from "lucide-react";
 import { useState } from "react";
-import { Button } from "./button";
-import { Tooltip, TooltipContent, TooltipTrigger } from "./tooltip";
+import { Button } from "./core/button";
+import { Tooltip, TooltipContent, TooltipTrigger } from "./core/tooltip";
 
 const UserPinFormDialogDrawerTooltip = () => {
   const [openTooltip, setOpenTooltip] = useState<boolean>(false);

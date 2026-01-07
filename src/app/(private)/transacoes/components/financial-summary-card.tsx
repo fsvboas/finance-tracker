@@ -1,5 +1,5 @@
-import Column from "@/src/components/utils/column";
-import Row from "@/src/components/utils/row";
+import Column from "@/src/components/core/column";
+import Row from "@/src/components/core/row";
 import CurrencyFormatter from "@/src/helpers/currency-formatter";
 import {
   Banknote,

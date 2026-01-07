@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useAuth } from "../hooks/use-auth";
-import UserMenu from "./user-menu";
-import Row from "./utils/row";
+import { useAuth } from "../../hooks/use-auth";
+import UserMenu from "../user-menu";
+import Row from "./row";
 
 const Header = () => {
   const { user } = useAuth();

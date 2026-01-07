@@ -1,9 +1,9 @@
 "use client";
 
 import { TransactionType } from "@/src/app/(private)/transacoes/types/transaction-type";
-import Column from "@/src/components/utils/column";
-import Row from "@/src/components/utils/row";
-import Show from "@/src/components/utils/show";
+import Column from "@/src/components/core/column";
+import Row from "@/src/components/core/row";
+import Show from "@/src/components/core/show";
 import CurrencyFormatter from "@/src/helpers/currency-formatter";
 import DateFormatter from "@/src/helpers/date-formatter";
 import TransactionDetailsDialog from "./transaction-details-dialog";

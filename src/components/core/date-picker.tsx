@@ -7,7 +7,7 @@ import { Button } from "./button";
 import { Calendar } from "./calendar";
 
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
-import Show from "./utils/show";
+import Show from "./show";
 
 interface DatePickerProps {
   value?: Date;

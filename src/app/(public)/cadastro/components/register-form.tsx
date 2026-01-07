@@ -1,10 +1,10 @@
 "use client";
 
-import { Button } from "@/src/components/button";
-import { Input } from "@/src/components/input";
-import { Label } from "@/src/components/label";
-import Column from "@/src/components/utils/column";
-import Show from "@/src/components/utils/show";
+import { Button } from "@/src/components/core/button";
+import Column from "@/src/components/core/column";
+import { Input } from "@/src/components/core/input";
+import { Label } from "@/src/components/core/label";
+import Show from "@/src/components/core/show";
 import { translateSupabaseErrorMessages } from "@/src/utils/translate-supabase-errors";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";

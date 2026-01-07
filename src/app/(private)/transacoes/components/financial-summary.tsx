@@ -1,5 +1,5 @@
-import Flex from "@/src/components/utils/flex";
-import Show from "@/src/components/utils/show";
+import Flex from "@/src/components/core/flex";
+import Show from "@/src/components/core/show";
 import FinancialSummaryCard from "./financial-summary-card";
 import FinancialSummarySkeleton from "./skeleton/financial-summary-skeleton";
 

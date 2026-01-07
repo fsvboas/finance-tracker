@@ -25,10 +25,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuShortcut,
   DropdownMenuTrigger,
-} from "./dropdown-menu";
-import { Switch } from "./switch";
+} from "./core/dropdown-menu";
+import Show from "./core/show";
+import { Switch } from "./core/switch";
 import UserAvatar from "./user-avatar";
-import Show from "./utils/show";
 
 const UserMenu = () => {
   const { user } = useAuth();

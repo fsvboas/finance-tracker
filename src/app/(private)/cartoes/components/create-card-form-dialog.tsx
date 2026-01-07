@@ -2,20 +2,20 @@
 
 import CardTypeSelectInput from "@/src/app/(private)/cartoes/components/card-type-select-input";
 import { postCard } from "@/src/app/(private)/cartoes/services";
-import { Button } from "@/src/components/button";
-import DatePicker from "@/src/components/date-picker";
+import { Button } from "@/src/components/core/button";
+import Column from "@/src/components/core/column";
+import DatePicker from "@/src/components/core/date-picker";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/src/components/dialog";
-import { Input } from "@/src/components/input";
-import { Label } from "@/src/components/label";
-import Column from "@/src/components/utils/column";
-import Flex from "@/src/components/utils/flex";
-import Show from "@/src/components/utils/show";
+} from "@/src/components/core/dialog";
+import Flex from "@/src/components/core/flex";
+import { Input } from "@/src/components/core/input";
+import { Label } from "@/src/components/core/label";
+import Show from "@/src/components/core/show";
 import { currencyFormatter } from "@/src/helpers/currency-formatter";
 import { queryClient } from "@/src/libs/tanstack-query/query-client";
 import { zodResolver } from "@hookform/resolvers/zod";

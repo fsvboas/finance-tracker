@@ -1,5 +1,5 @@
-import { Skeleton } from "@/src/components/skeleton";
-import Flex from "@/src/components/utils/flex";
+import Flex from "@/src/components/core/flex";
+import { Skeleton } from "@/src/components/core/skeleton";
 
 export default function FinancialSummarySkeleton() {
   return (

@@ -1,5 +1,5 @@
-import { Button } from "@/src/components/button";
-import Column from "@/src/components/utils/column";
+import { Button } from "@/src/components/core/button";
+import Column from "@/src/components/core/column";
 import { ListPlus, ListX } from "lucide-react";
 import AddTransactionFormDialog from "./add-transaction-form-dialog";
 

@@ -1,9 +1,9 @@
 "use client";
 
-import { Button } from "@/src/components/button";
-import Column from "@/src/components/utils/column";
-import Row from "@/src/components/utils/row";
-import Show from "@/src/components/utils/show";
+import { Button } from "@/src/components/core/button";
+import Column from "@/src/components/core/column";
+import Row from "@/src/components/core/row";
+import Show from "@/src/components/core/show";
 import { Database, Loader2Icon, UserRoundX } from "lucide-react";
 import DeleteAccountDialogDrawer from "./delete-account-dialog-drawer";
 

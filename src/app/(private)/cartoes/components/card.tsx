@@ -2,9 +2,9 @@
 
 import { deleteCard } from "@/src/app/(private)/cartoes/services";
 import { CardType } from "@/src/app/(private)/cartoes/types/card-type";
-import { Button } from "@/src/components/button";
-import Column from "@/src/components/utils/column";
-import Row from "@/src/components/utils/row";
+import { Button } from "@/src/components/core/button";
+import Column from "@/src/components/core/column";
+import Row from "@/src/components/core/row";
 import { queryClient } from "@/src/libs/tanstack-query/query-client";
 import { useMutation } from "@tanstack/react-query";
 import { Eye, Pencil, Trash2 } from "lucide-react";

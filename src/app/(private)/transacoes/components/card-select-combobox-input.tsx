@@ -1,5 +1,5 @@
 import { getCards } from "@/src/app/(private)/cartoes/services";
-import { Button } from "@/src/components/button";
+import { Button } from "@/src/components/core/button";
 import {
   Command,
   CommandEmpty,
@@ -7,12 +7,12 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@/src/components/command";
+} from "@/src/components/core/command";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/src/components/popover";
+} from "@/src/components/core/popover";
 import { cn } from "@/src/libs/shadcn-ui/utils";
 import { useQuery } from "@tanstack/react-query";
 import { Check, ChevronsUpDown } from "lucide-react";

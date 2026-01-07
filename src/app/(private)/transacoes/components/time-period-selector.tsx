@@ -1,9 +1,9 @@
-import { Button } from "@/src/components/button";
-import { ScrollArea, ScrollBar } from "@/src/components/scroll-area";
-import { Skeleton } from "@/src/components/skeleton";
-import Column from "@/src/components/utils/column";
-import Row from "@/src/components/utils/row";
-import Show from "@/src/components/utils/show";
+import { Button } from "@/src/components/core/button";
+import Column from "@/src/components/core/column";
+import Row from "@/src/components/core/row";
+import { ScrollArea, ScrollBar } from "@/src/components/core/scroll-area";
+import Show from "@/src/components/core/show";
+import { Skeleton } from "@/src/components/core/skeleton";
 import { useMediaQuery } from "@/src/hooks/use-media-query";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import {

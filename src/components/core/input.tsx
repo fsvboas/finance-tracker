@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import { cn } from "@/src/libs/shadcn-ui/utils";
-import { useMediaQuery } from "../hooks/use-media-query";
+import { useMediaQuery } from "../../hooks/use-media-query";
 
 function Input({ className, type, ...props }: React.ComponentProps<"input">) {
   const inputRef = React.useRef<HTMLInputElement>(null);

@@ -2,8 +2,9 @@
 
 import { postTransaction } from "@/src/app/(private)/transacoes/services";
 import { TransactionType } from "@/src/app/(private)/transacoes/types/transaction-type";
-import { Button } from "@/src/components/button";
-import DatePicker from "@/src/components/date-picker";
+import { Button } from "@/src/components/core/button";
+import Column from "@/src/components/core/column";
+import DatePicker from "@/src/components/core/date-picker";
 import {
   Dialog,
   DialogClose,
@@ -12,13 +13,12 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/src/components/dialog";
-import { Input } from "@/src/components/input";
-import { Label } from "@/src/components/label";
-import { Tabs, TabsList, TabsTrigger } from "@/src/components/tabs";
-import Column from "@/src/components/utils/column";
-import Flex from "@/src/components/utils/flex";
-import Show from "@/src/components/utils/show";
+} from "@/src/components/core/dialog";
+import Flex from "@/src/components/core/flex";
+import { Input } from "@/src/components/core/input";
+import { Label } from "@/src/components/core/label";
+import Show from "@/src/components/core/show";
+import { Tabs, TabsList, TabsTrigger } from "@/src/components/core/tabs";
 import { currencyFormatter } from "@/src/helpers/currency-formatter";
 import { useAuth } from "@/src/hooks/use-auth";
 import { queryClient } from "@/src/libs/tanstack-query/query-client";

@@ -3,8 +3,8 @@
 import Card from "@/src/app/(private)/cartoes/components/card";
 import CardsScreenHeader from "@/src/app/(private)/cartoes/components/cards-screen-header";
 import { getCards } from "@/src/app/(private)/cartoes/services";
-import AuthGuard from "@/src/components/utils/auth-guard";
-import { Container } from "@/src/components/utils/container";
+import AuthGuard from "@/src/components/core/auth-guard";
+import { Container } from "@/src/components/core/container";
 import { useQuery } from "@tanstack/react-query";
 
 export default function CardsScreen() {

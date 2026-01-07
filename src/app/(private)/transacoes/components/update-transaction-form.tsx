@@ -1,12 +1,14 @@
 import { TransactionType } from "@/src/app/(private)/transacoes/types/transaction-type";
-import { Button } from "@/src/components/button";
-import DatePicker from "@/src/components/date-picker";
+import { Button } from "@/src/components/core/button";
+import Column from "@/src/components/core/column";
+import DatePicker from "@/src/components/core/date-picker";
 import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/src/components/dialog";
-import { Input } from "@/src/components/input";
+} from "@/src/components/core/dialog";
+import { Input } from "@/src/components/core/input";
+import Row from "@/src/components/core/row";
 import {
   Select,
   SelectContent,
@@ -14,10 +16,8 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/src/components/select";
-import Column from "@/src/components/utils/column";
-import Row from "@/src/components/utils/row";
-import Show from "@/src/components/utils/show";
+} from "@/src/components/core/select";
+import Show from "@/src/components/core/show";
 import { currencyFormatter } from "@/src/helpers/currency-formatter";
 import { queryClient } from "@/src/libs/tanstack-query/query-client";
 import { useUserSecrets } from "@/src/providers/user-secrets-provider";

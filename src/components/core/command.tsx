@@ -10,8 +10,8 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/src/components/dialog";
-import { cn } from "../libs/shadcn-ui/utils";
+} from "@/src/components/core/dialog";
+import { cn } from "../../libs/shadcn-ui/utils";
 
 function Command({
   className,

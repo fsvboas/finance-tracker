@@ -5,7 +5,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/src/components/select";
+} from "@/src/components/core/select";
 
 interface RepeatTransactionSelectInputProps {
   value: string;

@@ -1,8 +1,8 @@
-import { Button } from "@/src/components/button";
-import { Input } from "@/src/components/input";
-import { Label } from "@/src/components/label";
-import Column from "@/src/components/utils/column";
-import Show from "@/src/components/utils/show";
+import { Button } from "@/src/components/core/button";
+import Column from "@/src/components/core/column";
+import { Input } from "@/src/components/core/input";
+import { Label } from "@/src/components/core/label";
+import Show from "@/src/components/core/show";
 import { useMediaQuery } from "@/src/hooks/use-media-query";
 import { useUserSecrets } from "@/src/providers/user-secrets-provider";
 import { zodResolver } from "@hookform/resolvers/zod";

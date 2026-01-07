@@ -1,6 +1,6 @@
 import CreateCardFormDialog from "@/src/app/(private)/cartoes/components/create-card-form-dialog";
-import { Button } from "@/src/components/button";
-import Flex from "@/src/components/utils/flex";
+import { Button } from "@/src/components/core/button";
+import Flex from "@/src/components/core/flex";
 import { ListPlus } from "lucide-react";
 
 const CardsScreenHeader = () => {

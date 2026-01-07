@@ -13,11 +13,11 @@ import {
   validateUserPin,
 } from "@/src/app/(private)/transacoes/services";
 import { useUserSecrets } from "../providers/user-secrets-provider";
-import { Button } from "./button";
-import { Input } from "./input";
-import Column from "./utils/column";
-import Row from "./utils/row";
-import Show from "./utils/show";
+import { Button } from "./core/button";
+import Column from "./core/column";
+import { Input } from "./core/input";
+import Row from "./core/row";
+import Show from "./core/show";
 
 const PinFormSchema = z.object({
   pin: z.string().length(4, "PIN deve ter exatamente 4 caracteres"),

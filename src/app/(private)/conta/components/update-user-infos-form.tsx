@@ -1,11 +1,11 @@
 "use client";
 
-import { Button } from "@/src/components/button";
-import { Input } from "@/src/components/input";
-import { Label } from "@/src/components/label";
-import Column from "@/src/components/utils/column";
-import Row from "@/src/components/utils/row";
-import Show from "@/src/components/utils/show";
+import { Button } from "@/src/components/core/button";
+import Column from "@/src/components/core/column";
+import { Input } from "@/src/components/core/input";
+import { Label } from "@/src/components/core/label";
+import Row from "@/src/components/core/row";
+import Show from "@/src/components/core/show";
 import { useAuth } from "@/src/hooks/use-auth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";

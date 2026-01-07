@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/src/components/button";
+import { Button } from "@/src/components/core/button";
 import {
   Dialog,
   DialogContent,
@@ -8,7 +8,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/src/components/dialog";
+} from "@/src/components/core/dialog";
 import {
   Drawer,
   DrawerClose,
@@ -18,7 +18,7 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from "@/src/components/drawer";
+} from "@/src/components/core/drawer";
 import { useMediaQuery } from "@/src/hooks/use-media-query";
 import { useState } from "react";
 import DeleteAccountForm from "./delete-account-form";

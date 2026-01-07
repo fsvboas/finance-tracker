@@ -1,5 +1,5 @@
-import AuthGuard from "@/src/components/utils/auth-guard";
-import Column from "@/src/components/utils/column";
+import AuthGuard from "@/src/components/core/auth-guard";
+import Column from "@/src/components/core/column";
 
 export default function NextStepsScreen() {
   return (

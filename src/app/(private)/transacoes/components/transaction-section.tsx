@@ -2,12 +2,12 @@
 
 import { TransactionFiltersType } from "@/src/app/(private)/transacoes/types/transaction-filters-type";
 import { TransactionType } from "@/src/app/(private)/transacoes/types/transaction-type";
-import { Button } from "@/src/components/button";
-import { ScrollArea } from "@/src/components/scroll-area";
-import { Skeleton } from "@/src/components/skeleton";
-import Column from "@/src/components/utils/column";
-import Row from "@/src/components/utils/row";
-import Show from "@/src/components/utils/show";
+import { Button } from "@/src/components/core/button";
+import Column from "@/src/components/core/column";
+import Row from "@/src/components/core/row";
+import { ScrollArea } from "@/src/components/core/scroll-area";
+import Show from "@/src/components/core/show";
+import { Skeleton } from "@/src/components/core/skeleton";
 import { ListPlus } from "lucide-react";
 import { Dispatch, SetStateAction } from "react";
 import AddTransactionFormDialog from "./add-transaction-form-dialog";
