@@ -19,7 +19,7 @@ export default function CardsScreen() {
     <AuthGuard requireAuth>
       <Container variant="page">
         <CardsScreenHeader />
-        <div className="w-full grid gap-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
+        <div className="w-full grid gap-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 mt-2">
           {cards.map((card, index) => (
             <Card key={index} card={card} />
           ))}
