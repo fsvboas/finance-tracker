@@ -1,10 +1,10 @@
 export type CardType = {
   id: string;
-  cardName: string;
-  cardType: "credit" | "debit";
-  cardLimit: number;
-  cardDueDate: Date;
-  cardColor?: string;
+  name: string;
+  type: "credit" | "debit";
+  creditLimit?: number;
+  dueDate: Date;
+  color?: string;
 };
 
 export type CardRequestType = Omit<CardType, "id">;

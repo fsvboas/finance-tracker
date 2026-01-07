@@ -6,28 +6,20 @@ interface PostCardProps {
 }
 
 export async function postCard({ card }: PostCardProps) {
-  const {
-    data: { session },
-    error: authError,
-  } = await supabaseClient.auth.getSession();
-
-  if (authError || !session) throw new Error("Usuário não autenticado");
-
-  const { data, error } = await supabaseClient
+  const { error } = await supabaseClient
     .from("cards")
     .insert([
       {
-        user_id: session.user.id,
-        card_name: card.cardName,
-        card_type: card.cardType,
-        card_limit: card.cardLimit,
-        card_due_date: card.cardDueDate,
-        card_color: card.cardColor,
+        name: card.name,
+        type: card.type,
+        limit: card.creditLimit,
+        due_date: card.dueDate,
+        color: card.color,
       },
     ])
     .select();
 
   if (error) throw new Error(error.message);
 
-  return data;
+  return;
 }
