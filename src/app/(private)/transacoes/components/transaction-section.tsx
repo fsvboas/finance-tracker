@@ -1,13 +1,13 @@
 "use client";
 
+import { TransactionFiltersType } from "@/src/app/(private)/transacoes/types/transaction-filters-type";
+import { TransactionType } from "@/src/app/(private)/transacoes/types/transaction-type";
 import { Button } from "@/src/components/button";
 import { ScrollArea } from "@/src/components/scroll-area";
 import { Skeleton } from "@/src/components/skeleton";
 import Column from "@/src/components/utils/column";
 import Row from "@/src/components/utils/row";
 import Show from "@/src/components/utils/show";
-import { TransactionFiltersType } from "@/src/types/transaction-filters-type";
-import { TransactionType } from "@/src/types/transaction-type";
 import { ListPlus } from "lucide-react";
 import { Dispatch, SetStateAction } from "react";
 import AddTransactionFormDialog from "./add-transaction-form-dialog";

@@ -4,12 +4,12 @@ import {
   checkPinExists,
   getTransactions,
 } from "@/src/app/(private)/transacoes/services";
+import { TransactionFiltersType } from "@/src/app/(private)/transacoes/types/transaction-filters-type";
 import UserPinFormDialogDrawer from "@/src/components/user-pin-form-dialog-drawer";
 import Column from "@/src/components/utils/column";
 import Show from "@/src/components/utils/show";
 import { useAuth } from "@/src/hooks/use-auth";
 import { useUserSecrets } from "@/src/providers/user-secrets-provider";
-import { TransactionFiltersType } from "@/src/types/transaction-filters-type";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import FinancialSummary from "./financial-summary";

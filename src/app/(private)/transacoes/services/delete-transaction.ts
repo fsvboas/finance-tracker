@@ -1,5 +1,5 @@
+import { TransactionType } from "@/src/app/(private)/transacoes/types/transaction-type";
 import { supabaseClient } from "@/src/libs/supabase/supabase-client";
-import { TransactionType } from "@/src/types/transaction-type";
 import { UserCredentials } from "@/src/types/user-credentials";
 import { decryptData, deriveKey } from "@/src/utils/crypto";
 

@@ -1,3 +1,4 @@
+import { TransactionType } from "@/src/app/(private)/transacoes/types/transaction-type";
 import { Button } from "@/src/components/button";
 import DatePicker from "@/src/components/date-picker";
 import {
@@ -20,7 +21,6 @@ import Show from "@/src/components/utils/show";
 import { currencyFormatter } from "@/src/helpers/currency-formatter";
 import { queryClient } from "@/src/libs/tanstack-query/query-client";
 import { useUserSecrets } from "@/src/providers/user-secrets-provider";
-import { TransactionType } from "@/src/types/transaction-type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { CheckIcon, Loader2Icon, XIcon } from "lucide-react";

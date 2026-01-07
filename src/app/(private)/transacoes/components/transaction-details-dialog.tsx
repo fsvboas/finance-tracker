@@ -1,6 +1,7 @@
 "use client";
 
 import { deleteTransaction } from "@/src/app/(private)/transacoes/services";
+import { TransactionType } from "@/src/app/(private)/transacoes/types/transaction-type";
 import { Button } from "@/src/components/button";
 import {
   Dialog,
@@ -17,7 +18,6 @@ import CurrencyFormatter from "@/src/helpers/currency-formatter";
 import DateFormatter from "@/src/helpers/date-formatter";
 import { queryClient } from "@/src/libs/tanstack-query/query-client";
 import { useUserSecrets } from "@/src/providers/user-secrets-provider";
-import { TransactionType } from "@/src/types/transaction-type";
 import { useMutation } from "@tanstack/react-query";
 import { Edit2Icon, Loader2Icon, Trash2Icon } from "lucide-react";
 import { useState } from "react";

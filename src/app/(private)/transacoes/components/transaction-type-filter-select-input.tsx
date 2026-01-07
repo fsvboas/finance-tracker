@@ -1,3 +1,4 @@
+import { TransactionFiltersType } from "@/src/app/(private)/transacoes/types/transaction-filters-type";
 import {
   Select,
   SelectContent,
@@ -6,7 +7,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/src/components/select";
-import { TransactionFiltersType } from "@/src/types/transaction-filters-type";
 
 interface TransactionTypeFilterSelectInputProps {
   value: string;
