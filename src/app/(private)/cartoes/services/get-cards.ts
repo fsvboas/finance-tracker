@@ -1,6 +1,7 @@
+import { CardType } from "@/src/app/(private)/cartoes/types/card-type";
 import { supabaseClient } from "@/src/libs/supabase/supabase-client";
 
-export async function getCards() {
+export async function getCards(): Promise<CardType[]> {
   const {
     data: { session },
   } = await supabaseClient.auth.getSession();

@@ -1,3 +1,4 @@
+import { getCards } from "@/src/app/(private)/cartoes/services";
 import { Button } from "@/src/components/button";
 import {
   Command,
@@ -13,6 +14,7 @@ import {
   PopoverTrigger,
 } from "@/src/components/popover";
 import { cn } from "@/src/libs/shadcn-ui/utils";
+import { useQuery } from "@tanstack/react-query";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { useState } from "react";
 
@@ -31,36 +33,14 @@ const CardSelectInput = ({
 }: CardSelectInputProps) => {
   const [open, setOpen] = useState(false);
 
-  // TO-DO: Permitir cliente adicionar o cartão que quiser, sem depender desse array de opções (criar)
-  const cards = [
-    "Nubank",
-    "PicPay",
-    "Banco do Brasil",
-    "Caixa",
-    "Bradesco",
-    "Itaú",
-    "Santander",
-    "Banco Inter",
-    "C6 Bank",
-    "Mercado Pago",
-    "PagBank",
-    "Next",
-    "Original",
-    "BTG Pactual",
-    "Sicoob",
-    "Sicredi",
-    "Banco Pan",
-    "BMG",
-    "Neon",
-    "Banrisul",
-    "Banco Safra",
-    "Stone",
-    "ModalMais",
-    "LATAM",
-    "Renner",
-    "C&A",
-    "Passaí",
-  ];
+  const { data, isPending: pendingGetCards } = useQuery({
+    queryFn: getCards,
+    queryKey: ["cards"],
+  });
+
+  const cards = data || [];
+
+  console.log("@@@@", cards);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -84,20 +64,20 @@ const CardSelectInput = ({
           <CommandList>
             <CommandEmpty>Cartão não encontrado.</CommandEmpty>
             <CommandGroup>
-              {cards.map((card) => (
+              {cards?.map((card) => (
                 <CommandItem
-                  key={card}
-                  value={card}
+                  key={card?.id}
+                  value={card?.card_name}
                   onSelect={(currentValue) => {
                     onChange(currentValue);
                     setOpen(false);
                   }}
                 >
-                  {card}
+                  {card?.card_name}
                   <Check
                     className={cn(
                       "ml-auto",
-                      value === card ? "opacity-100" : "opacity-0"
+                      value === card?.card_name ? "opacity-100" : "opacity-0"
                     )}
                   />
                 </CommandItem>
