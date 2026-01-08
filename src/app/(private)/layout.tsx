@@ -1,6 +1,6 @@
 import Header from "@/src/components/core/header";
 
-export default async function PrivateLayout({
+export default function PrivateLayout({
   children,
 }: {
   children: React.ReactNode;

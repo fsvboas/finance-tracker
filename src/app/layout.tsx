@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     "O Finance Tracker foi criado para que você possa controlar receitas, despesas e acompanhar seu orçamento pessoal de forma rápida e prática. Sem complicações.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
