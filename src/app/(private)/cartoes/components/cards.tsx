@@ -13,7 +13,7 @@ const Cards = () => {
   const cards = data || [];
 
   return (
-    <div className="w-full grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 mt-2">
+    <div className="w-full grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 mt-4">
       {cards.map((card, index) => (
         <Card key={index} card={card} />
       ))}

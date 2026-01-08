@@ -1,5 +1,3 @@
-"use client";
-
 import Link from "next/link";
 import UserMenu from "../user-menu";
 import Row from "./row";
