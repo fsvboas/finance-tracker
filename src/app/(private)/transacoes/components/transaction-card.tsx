@@ -51,26 +51,26 @@ export default function TransactionCard({ transaction }: TransactionCardProps) {
   };
 
   return (
-    <Row className="p-4 gap-4 h-22 rounded bg-neutral-100 dark:bg-[#202020] justify-between items-center">
+    <Row className="p-4 gap-4 h-28 rounded bg-neutral-100 dark:bg-[#202020] justify-between items-center">
       <Flex className="w-full flex-col md:flex-row md:justify-between md:items-center">
         <Column>
-          <p className="font-semibold text-base sm:text-lg overflow-hidden whitespace-nowrap overflow-ellipsis max-[400px]:max-w-[165px] max-[500px]:max-w-[250px]">
+          <p className="font-semibold text-base sm:text-lg overflow-hidden whitespace-nowrap overflow-ellipsis max-[400px]:max-w-[160px] max-[500px]:max-w-[250px]">
             {transaction?.description}
           </p>
           <span className="text-xs sm:text-sm text-gray-500">
             <DateFormatter>{transactionDate}</DateFormatter>
           </span>
         </Column>
-        <Row className="gap-4 items-center">
+        <Row className="gap-4">
           <Column>
             <p
-              className={`text-lg sm:text-xl text-end ${
+              className={`font-medium text-start sm:text-end text-lg sm:text-xl ${
                 isIncomeValue
                   ? "text-green-600"
                   : isExpenseValue
                   ? "text-red-600"
                   : "text-yellow-600"
-              }  font-medium`}
+              }`}
             >
               <CurrencyFormatter>{transaction.value}</CurrencyFormatter>
             </p>

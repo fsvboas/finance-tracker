@@ -358,8 +358,10 @@ const TransactionFormDialog = ({
               </Flex>
             </Show>
             <Flex className="flex-col sm:flex-row max-sm:space-y-4 sm:space-x-2">
-              <Column className="space-y-2 sm:w-[150px]">
-                <Label htmlFor="created_at">Data</Label>
+              <Column className="space-y-2 sm:w-38">
+                <Label htmlFor="created_at">
+                  Data<span className="text-red-500">*</span>
+                </Label>
                 <Controller
                   name="created_at"
                   control={control}
