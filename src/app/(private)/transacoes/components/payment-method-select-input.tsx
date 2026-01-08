@@ -17,13 +17,30 @@ const PaymentMethodSelectInput = ({
   onChange,
 }: PaymentMethodSelectInputProps) => {
   const paymentMethods = [
-    "Dinheiro",
-    "Pix",
-    "Débito",
-    "Crédito",
-    "Boleto",
-    "Vale Refeição",
-    "Vale Alimentação",
+    {
+      label: "Dinheiro",
+      value: "cash",
+    },
+    {
+      label: "Pix",
+      value: "pix",
+    },
+    {
+      label: "Cartão",
+      value: "card",
+    },
+    {
+      label: "Boleto",
+      value: "bank-slip",
+    },
+    {
+      label: "Vale Refeição",
+      value: "meal voucher",
+    },
+    {
+      label: "Vale Alimentação",
+      value: "food-voucher",
+    },
   ];
 
   return (
@@ -34,8 +51,8 @@ const PaymentMethodSelectInput = ({
       <SelectContent>
         <SelectGroup>
           {paymentMethods.map((paymentMethod, index) => (
-            <SelectItem key={index} value={paymentMethod}>
-              {paymentMethod}
+            <SelectItem key={index} value={paymentMethod?.value}>
+              {paymentMethod?.label}
             </SelectItem>
           ))}
         </SelectGroup>

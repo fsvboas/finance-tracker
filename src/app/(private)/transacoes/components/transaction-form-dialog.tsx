@@ -113,9 +113,7 @@ const TransactionFormDialog = ({
     });
 
   const paymentMethodFieldValue = watch("payment_method");
-  const isNotCreditOrDebitCard =
-    paymentMethodFieldValue !== "Crédito" &&
-    paymentMethodFieldValue !== "Débito";
+  const isNotACard = paymentMethodFieldValue !== "card";
 
   const transactionType = watch("type");
   const isExpenseTransaction = transactionType === "expense";
@@ -158,15 +156,11 @@ const TransactionFormDialog = ({
   });
 
   const handleSubmitForm = (formData: TransactionFormSchemaType) => {
-    const paymentMethod = isNotCreditOrDebitCard
-      ? formData.payment_method
-      : `${formData.payment_method}/${formData.card}`;
-
     const payload: TransactionType = {
       id: transaction?.id || crypto.randomUUID(),
       ...formData,
       created_at: formData.created_at.toISOString(),
-      payment_method: paymentMethod,
+      payment_method: formData.payment_method,
     };
 
     if (isUpdateMode) {
@@ -183,10 +177,10 @@ const TransactionFormDialog = ({
   };
 
   useEffect(() => {
-    if (isNotCreditOrDebitCard) {
+    if (isNotACard) {
       setValue("card", "", { shouldValidate: false });
     }
-  }, [isNotCreditOrDebitCard, setValue]);
+  }, [isNotACard, setValue]);
 
   useEffect(() => {
     if (isOpen) {
@@ -347,7 +341,7 @@ const TransactionFormDialog = ({
                         <CardSelectInput
                           value={value ?? ""}
                           onChange={onChange}
-                          disabled={isNotCreditOrDebitCard}
+                          disabled={isNotACard}
                           error={Boolean(error)}
                         />
                         <div className="h-2 -mt-1">
