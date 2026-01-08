@@ -17,7 +17,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/src/components/core/dialog";
-import Flex from "@/src/components/core/flex";
 import { Input } from "@/src/components/core/input";
 import { Label } from "@/src/components/core/label";
 import Show from "@/src/components/core/show";
@@ -32,7 +31,7 @@ import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import * as z from "zod";
-import CardSelectInput from "./card-select-combobox-input";
+import CardSelectInput from "./card-select-input";
 import PaymentMethodSelectInput from "./payment-method-select-input";
 import RepeatTransactionSelectInput from "./repeat-transaction-select-input";
 
@@ -112,12 +111,6 @@ const TransactionFormDialog = ({
       defaultValues: getDefaultFormValues(selectedMonth, transaction),
     });
 
-  const paymentMethodFieldValue = watch("payment_method");
-  const isNotACard = paymentMethodFieldValue !== "card";
-
-  const transactionType = watch("type");
-  const isExpenseTransaction = transactionType === "expense";
-
   const { mutate: post, isPending: pendingPostTransaction } = useMutation({
     mutationFn: postTransaction,
     onSuccess: async (_, variables) => {
@@ -176,21 +169,33 @@ const TransactionFormDialog = ({
     });
   };
 
+  const paymentMethodFieldValue = watch("payment_method");
+  const paymentMethodIsCard = paymentMethodFieldValue === "card";
+
+  const transactionType = watch("type");
+  const isExpenseTransaction = transactionType === "expense";
+  const isInvestmentTransaction = transactionType === "investment";
+
+  const dialogTitle = isUpdateMode ? "Editar Transação" : "Nova Transação";
+  const transactionDescriptionPlaceholder = isExpenseTransaction
+    ? "Calça Jeans"
+    : isInvestmentTransaction
+    ? "Viagem"
+    : "Salário";
+
+  const isPending = pendingPostTransaction || pendingUpdateTransaction;
+
   useEffect(() => {
-    if (isNotACard) {
+    if (!paymentMethodIsCard) {
       setValue("card", "", { shouldValidate: false });
     }
-  }, [isNotACard, setValue]);
+  }, [paymentMethodIsCard, setValue]);
 
   useEffect(() => {
     if (isOpen) {
       reset(getDefaultFormValues(selectedMonth, transaction));
     }
   }, [isOpen, reset, selectedMonth, transaction]);
-
-  const isPending = pendingPostTransaction || pendingUpdateTransaction;
-
-  const dialogTitle = isUpdateMode ? "Editar Transação" : "Nova Transação";
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -204,131 +209,136 @@ const TransactionFormDialog = ({
           <DialogHeader className="mb-4">
             <DialogTitle>{dialogTitle}</DialogTitle>
           </DialogHeader>
-          <Column className="gap-4">
-            <Controller
-              name="type"
-              control={control}
-              render={({ field }) => (
-                <Tabs
-                  value={field.value}
-                  onValueChange={field.onChange}
-                  className="items-center"
-                >
-                  <TabsList className="w-full">
-                    <TabsTrigger
-                      className="!text-green-600 hover:cursor-pointer"
-                      value="income"
-                    >
-                      Entrada
-                    </TabsTrigger>
-                    <TabsTrigger
-                      className="!text-red-600 hover:cursor-pointer"
-                      value="expense"
-                    >
-                      Saída
-                    </TabsTrigger>
-                    <TabsTrigger
-                      className="!text-yellow-600 hover:cursor-pointer"
-                      value="investment"
-                    >
-                      Investimento
-                    </TabsTrigger>
-                  </TabsList>
-                </Tabs>
-              )}
-            />
-            <Flex className="flex-col sm:flex-row max-sm:space-y-4 sm:space-x-2">
-              <Column className="space-y-2 w-full">
-                <Label htmlFor="description">
-                  Transação<span className="text-red-500">*</span>
-                </Label>
-                <Controller
-                  name="description"
-                  control={control}
-                  render={({
-                    field: { onChange, value },
-                    fieldState: { error },
-                  }) => (
-                    <Column>
-                      <Input
-                        id="description"
-                        placeholder="Salário"
-                        value={value}
-                        onChange={onChange}
-                        className={`min-w-[180px] w-full ${
-                          error && "border-red-600"
-                        }`}
-                      />
-                      <div className="h-2 -mt-1">
-                        <Show when={error}>
-                          <span className="text-xs text-red-600">
-                            {error?.message}
-                          </span>
-                        </Show>
-                      </div>
-                    </Column>
-                  )}
-                />
-              </Column>
-              <Column className="space-y-2">
-                <Label htmlFor="value">
-                  Valor<span className="text-red-500">*</span>
-                </Label>
-                <Controller
-                  name="value"
-                  control={control}
-                  render={({
-                    field: { onChange, value },
-                    fieldState: { error },
-                  }) => (
-                    <Column>
-                      <Input
-                        id="value"
-                        inputMode="numeric"
-                        placeholder="R$ 2.000,00"
-                        value={currencyFormatter(Number(value))}
-                        onChange={(event) => {
-                          const rawValue = event.target.value.replace(
-                            /\D/g,
-                            ""
-                          );
-                          onChange(rawValue);
-                        }}
-                        className={`w-full sm:w-[150px] ${
-                          error ? "border-red-600" : ""
-                        }`}
-                      />
-                      <div className="h-2 -mt-1">
-                        <Show when={error}>
-                          <span className="text-xs text-red-600">
-                            {error?.message}
-                          </span>
-                        </Show>
-                      </div>
-                    </Column>
-                  )}
-                />
-              </Column>
-            </Flex>
+          <Column className="gap-4 grid grid-cols-6">
+            <div className="col-span-6">
+              <Controller
+                name="type"
+                control={control}
+                render={({ field }) => (
+                  <Tabs
+                    value={field.value}
+                    onValueChange={field.onChange}
+                    className="items-center"
+                  >
+                    <TabsList className="w-full">
+                      <TabsTrigger
+                        className="!text-green-600 hover:cursor-pointer"
+                        value="income"
+                      >
+                        Entrada
+                      </TabsTrigger>
+                      <TabsTrigger
+                        className="!text-red-600 hover:cursor-pointer"
+                        value="expense"
+                      >
+                        Saída
+                      </TabsTrigger>
+                      <TabsTrigger
+                        className="!text-yellow-600 hover:cursor-pointer"
+                        value="investment"
+                      >
+                        Investimento
+                      </TabsTrigger>
+                    </TabsList>
+                  </Tabs>
+                )}
+              />
+            </div>
+            <Column className="space-y-2 col-span-6">
+              <Label htmlFor="description">
+                Transação<span className="text-red-500">*</span>
+              </Label>
+              <Controller
+                name="description"
+                control={control}
+                render={({
+                  field: { onChange, value },
+                  fieldState: { error },
+                }) => (
+                  <Column>
+                    <Input
+                      id="description"
+                      placeholder={transactionDescriptionPlaceholder}
+                      value={value}
+                      onChange={onChange}
+                      className={`${error && "border-red-600"}`}
+                    />
+                    <div className="h-2 -mt-1">
+                      <Show when={error}>
+                        <span className="text-xs text-red-600">
+                          {error?.message}
+                        </span>
+                      </Show>
+                    </div>
+                  </Column>
+                )}
+              />
+            </Column>
+            <Column
+              className={`space-y-2 ${
+                !isExpenseTransaction
+                  ? "col-span-2"
+                  : paymentMethodIsCard
+                  ? "col-span-2"
+                  : "col-span-3"
+              }`}
+            >
+              <Label htmlFor="value">
+                Valor<span className="text-red-500">*</span>
+              </Label>
+              <Controller
+                name="value"
+                control={control}
+                render={({
+                  field: { onChange, value },
+                  fieldState: { error },
+                }) => (
+                  <Column>
+                    <Input
+                      id="value"
+                      inputMode="numeric"
+                      placeholder="R$ 2.000,00"
+                      value={currencyFormatter(Number(value))}
+                      onChange={(event) => {
+                        const rawValue = event.target.value.replace(/\D/g, "");
+                        onChange(rawValue);
+                      }}
+                      className={`${error ? "border-red-600" : ""}`}
+                    />
+                    <div className="h-2 -mt-1">
+                      <Show when={error}>
+                        <span className="text-xs text-red-600">
+                          {error?.message}
+                        </span>
+                      </Show>
+                    </div>
+                  </Column>
+                )}
+              />
+            </Column>
             <Show when={isExpenseTransaction}>
-              <Flex className="flex-col sm:flex-row max-sm:space-y-4 sm:space-x-2">
-                <Column className="space-y-2 w-full">
-                  <Label htmlFor="payment_method">Método de pagamento</Label>
-                  <Controller
-                    name="payment_method"
-                    control={control}
-                    render={({ field: { value, onChange } }) => (
-                      <Column className="w-full">
-                        <PaymentMethodSelectInput
-                          value={value ?? ""}
-                          onChange={onChange}
-                        />
-                        <div className="h-2 -mt-1" />
-                      </Column>
-                    )}
-                  />
-                </Column>
-                <Column className="space-y-2 w-full">
+              <Column
+                className={`space-y-2 ${
+                  paymentMethodIsCard ? "col-span-2" : "col-span-3"
+                } `}
+              >
+                <Label htmlFor="payment_method">Método de pagamento</Label>
+                <Controller
+                  name="payment_method"
+                  control={control}
+                  render={({ field: { value, onChange } }) => (
+                    <Column>
+                      <PaymentMethodSelectInput
+                        value={value ?? ""}
+                        onChange={onChange}
+                      />
+                      <div className="h-2 -mt-1" />
+                    </Column>
+                  )}
+                />
+              </Column>
+              <Show when={paymentMethodIsCard}>
+                <Column className="space-y-2 col-span-2">
                   <Label htmlFor="card">Cartão</Label>
                   <Controller
                     name="card"
@@ -341,8 +351,6 @@ const TransactionFormDialog = ({
                         <CardSelectInput
                           value={value ?? ""}
                           onChange={onChange}
-                          disabled={isNotACard}
-                          error={Boolean(error)}
                         />
                         <div className="h-2 -mt-1">
                           <Show when={error}>
@@ -355,46 +363,52 @@ const TransactionFormDialog = ({
                     )}
                   />
                 </Column>
-              </Flex>
+              </Show>
             </Show>
-            <Flex className="flex-col sm:flex-row max-sm:space-y-4 sm:space-x-2">
-              <Column className="space-y-2 sm:w-38">
-                <Label htmlFor="created_at">
-                  Data<span className="text-red-500">*</span>
-                </Label>
+            <Column
+              className={`space-y-2 ${
+                !isExpenseTransaction ? "col-span-2" : "col-span-3"
+              } `}
+            >
+              <Label htmlFor="created_at">
+                Data<span className="text-red-500">*</span>
+              </Label>
+              <Controller
+                name="created_at"
+                control={control}
+                render={({ field: { value, onChange } }) => (
+                  <Column>
+                    <DatePicker
+                      value={value}
+                      onValueChange={(date) => onChange(date)}
+                    />
+                    <div className="h-2 -mt-1" />
+                  </Column>
+                )}
+              />
+            </Column>
+            <Show when={!isUpdateMode}>
+              <Column
+                className={`space-y-2 ${
+                  !isExpenseTransaction ? "col-span-2" : "col-span-3"
+                } `}
+              >
+                <Label htmlFor="repeat_months">Repetir por</Label>
                 <Controller
-                  name="created_at"
+                  name="repeat_months"
                   control={control}
                   render={({ field: { value, onChange } }) => (
-                    <Column className="w-full">
-                      <DatePicker
-                        value={value}
-                        onValueChange={(date) => onChange(date)}
+                    <Column>
+                      <RepeatTransactionSelectInput
+                        value={value ?? ""}
+                        onChange={onChange}
                       />
                       <div className="h-2 -mt-1" />
                     </Column>
                   )}
                 />
               </Column>
-              <Show when={!isUpdateMode}>
-                <Column className="space-y-2 w-full sm:max-w-[146px]">
-                  <Label htmlFor="repeat_months">Repetir por</Label>
-                  <Controller
-                    name="repeat_months"
-                    control={control}
-                    render={({ field: { value, onChange } }) => (
-                      <Column className="w-full">
-                        <RepeatTransactionSelectInput
-                          value={value ?? ""}
-                          onChange={onChange}
-                        />
-                        <div className="h-2 -mt-1" />
-                      </Column>
-                    )}
-                  />
-                </Column>
-              </Show>
-            </Flex>
+            </Show>
           </Column>
           <DialogFooter className="mt-4">
             <DialogClose asChild>
