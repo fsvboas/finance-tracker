@@ -46,7 +46,7 @@ export default function RootLayout({
       <body className={`${inter.className} antialiased `}>
         <Providers>
           <NextTopLoader
-            color="##00c951"
+            color="#00c951"
             height={3}
             showSpinner={true}
             speed={300}
