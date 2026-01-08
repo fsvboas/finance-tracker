@@ -275,7 +275,7 @@ const TransactionFormDialog = ({
               />
             </Column>
             <Column
-              className={`space-y-2 ${
+              className={`space-y-2 max-[560px]:col-span-6 ${
                 !isExpenseTransaction
                   ? "col-span-2"
                   : paymentMethodIsCard
@@ -318,7 +318,7 @@ const TransactionFormDialog = ({
             </Column>
             <Show when={isExpenseTransaction}>
               <Column
-                className={`space-y-2 ${
+                className={`space-y-2 max-[560px]:col-span-6 ${
                   paymentMethodIsCard ? "col-span-2" : "col-span-3"
                 } `}
               >
@@ -338,7 +338,7 @@ const TransactionFormDialog = ({
                 />
               </Column>
               <Show when={paymentMethodIsCard}>
-                <Column className="space-y-2 col-span-2">
+                <Column className="space-y-2 col-span-2 max-[560px]:col-span-6">
                   <Label htmlFor="card">Cartão</Label>
                   <Controller
                     name="card"
@@ -366,7 +366,7 @@ const TransactionFormDialog = ({
               </Show>
             </Show>
             <Column
-              className={`space-y-2 ${
+              className={`space-y-2 max-[560px]:col-span-6 ${
                 !isExpenseTransaction ? "col-span-2" : "col-span-3"
               } `}
             >
@@ -389,7 +389,7 @@ const TransactionFormDialog = ({
             </Column>
             <Show when={!isUpdateMode}>
               <Column
-                className={`space-y-2 ${
+                className={`space-y-2 max-[560px]:col-span-6 ${
                   !isExpenseTransaction ? "col-span-2" : "col-span-3"
                 } `}
               >
