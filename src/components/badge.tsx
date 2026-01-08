@@ -6,7 +6,7 @@ interface BadgeProps {
 
 const Badge = ({ text = "Em breve" }: BadgeProps) => {
   return (
-    <Row className="rounded-full bg-primary p-2.5 h-2 w-fit items-center">
+    <Row className="rounded-full bg-primary p-2.5 h-2 w-fit items-center shrink-0">
       <span className="text-secondary text-xs">{text}</span>
     </Row>
   );
