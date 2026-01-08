@@ -36,7 +36,10 @@ interface CardFormDialogProps {
 }
 
 export const cardFormSchema = z.object({
-  name: z.string().min(1, "O nome do cartão é obrigatório"),
+  name: z
+    .string()
+    .min(1, "O nome do cartão é obrigatório")
+    .max(16, "O nome do cartão é muito extenso."),
   type: z.enum(["credit", "debit"]),
   creditLimit: z
     .string()
@@ -57,7 +60,7 @@ const CardFormDialog = ({
 
   const isUpdateMode = mode === "update";
 
-  const { control, handleSubmit, reset } = useForm<CardFormSchemaType>({
+  const { control, handleSubmit, reset, watch } = useForm<CardFormSchemaType>({
     resolver: zodResolver(cardFormSchema),
     defaultValues: {
       name: card?.name || "",
@@ -124,6 +127,9 @@ const CardFormDialog = ({
 
   const dialogTitle = isUpdateMode ? "Editar Cartão" : "Criar novo cartão";
 
+  const cardType = watch("type");
+  const isACreditCard = cardType === "credit";
+
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen} modal>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
@@ -133,11 +139,11 @@ const CardFormDialog = ({
           onSubmit={handleSubmit(handleSubmitForm)}
           className="my-4"
         >
-          <DialogHeader className="mb-4">
-            <DialogTitle>{dialogTitle}</DialogTitle>
+          <DialogHeader className=" mb-4">
+            <DialogTitle className="">{dialogTitle}</DialogTitle>
           </DialogHeader>
-          <Column className="grid grid-cols-8 gap-4">
-            <Column className="space-y-2 w-full col-span-4">
+          <Column className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <Column className="space-y-2 col-span-2 w-full">
               <Label htmlFor="name">
                 Nome do cartão<span className="text-red-500">*</span>
               </Label>
@@ -167,7 +173,7 @@ const CardFormDialog = ({
                 )}
               />
             </Column>
-            <Column className="space-y-2 w-full col-span-4">
+            <Column className="space-y-2 col-span-2 sm:col-span-1 w-full">
               <Label htmlFor="type">
                 Tipo de cartão<span className="text-red-500">*</span>
               </Label>
@@ -185,41 +191,43 @@ const CardFormDialog = ({
                 )}
               />
             </Column>
-            <Column className="space-y-2 w-full col-span-3">
-              <Label htmlFor="creditLimit">
-                Limite do cartão<span className="text-red-500">*</span>
-              </Label>
-              <Controller
-                name="creditLimit"
-                control={control}
-                render={({
-                  field: { onChange, value },
-                  fieldState: { error },
-                }) => (
-                  <Column>
-                    <Input
-                      id="creditLimit"
-                      inputMode="numeric"
-                      placeholder="R$ 2.000,00"
-                      value={currencyFormatter(Number(value))}
-                      onChange={(e) => {
-                        const rawValue = e.target.value.replace(/\D/g, "");
-                        onChange(rawValue);
-                      }}
-                      className={`${error ? "border-red-600" : ""}`}
-                    />
-                    <div className="h-2 -mt-1">
-                      <Show when={error}>
-                        <span className="text-xs text-red-600">
-                          {error?.message}
-                        </span>
-                      </Show>
-                    </div>
-                  </Column>
-                )}
-              />
-            </Column>
-            <Column className="space-y-2 w-full col-span-3">
+            <Show when={isACreditCard}>
+              <Column className="space-y-2  col-span-2 sm:col-span-1 w-full">
+                <Label htmlFor="creditLimit">
+                  Limite de crédito<span className="text-red-500">*</span>
+                </Label>
+                <Controller
+                  name="creditLimit"
+                  control={control}
+                  render={({
+                    field: { onChange, value },
+                    fieldState: { error },
+                  }) => (
+                    <Column className="bg-blackl">
+                      <Input
+                        id="creditLimit"
+                        inputMode="numeric"
+                        placeholder="R$ 2.000,00"
+                        value={currencyFormatter(Number(value))}
+                        onChange={(e) => {
+                          const rawValue = e.target.value.replace(/\D/g, "");
+                          onChange(rawValue);
+                        }}
+                        className={`${error ? "border-red-600" : ""}`}
+                      />
+                      <div className="h-2 -mt-1">
+                        <Show when={error}>
+                          <span className="text-xs text-red-600">
+                            {error?.message}
+                          </span>
+                        </Show>
+                      </div>
+                    </Column>
+                  )}
+                />
+              </Column>
+            </Show>
+            <Column className="space-y-2 col-span-2 sm:col-span-1 w-full">
               <Label htmlFor="dueDate">
                 Vencimento<span className="text-red-500">*</span>
               </Label>
