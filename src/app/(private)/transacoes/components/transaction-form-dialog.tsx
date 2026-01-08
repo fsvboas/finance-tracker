@@ -1,6 +1,9 @@
 "use client";
 
-import { postTransaction } from "@/src/app/(private)/transacoes/services";
+import {
+  postTransaction,
+  updateTransaction,
+} from "@/src/app/(private)/transacoes/services";
 import { TransactionType } from "@/src/app/(private)/transacoes/types/transaction-type";
 import { Button } from "@/src/components/core/button";
 import Column from "@/src/components/core/column";
@@ -20,12 +23,11 @@ import { Label } from "@/src/components/core/label";
 import Show from "@/src/components/core/show";
 import { Tabs, TabsList, TabsTrigger } from "@/src/components/core/tabs";
 import { currencyFormatter } from "@/src/helpers/currency-formatter";
-import { useAuth } from "@/src/hooks/use-auth";
 import { queryClient } from "@/src/libs/tanstack-query/query-client";
 import { useUserSecrets } from "@/src/providers/user-secrets-provider";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
-import { Loader2Icon, PlusIcon, XIcon } from "lucide-react";
+import { Loader2Icon, PlusIcon, SaveIcon, XIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -34,12 +36,14 @@ import CardSelectInput from "./card-select-combobox-input";
 import PaymentMethodSelectInput from "./payment-method-select-input";
 import RepeatTransactionSelectInput from "./repeat-transaction-select-input";
 
-interface AddTransactionFormDialogProps {
+interface TransactionFormDialogProps {
   trigger: React.ReactNode;
   selectedMonth: number;
+  mode?: "create" | "update";
+  transaction?: TransactionType;
 }
 
-export const transactionFormSchema = z.object({
+const transactionFormSchema = z.object({
   type: z.enum(["income", "expense", "investment"]),
   description: z.string().min(1, { message: "Campo obrigatório." }),
   value: z
@@ -52,21 +56,42 @@ export const transactionFormSchema = z.object({
   repeat_months: z.string().optional(),
 });
 
-export type TransactionFormSchemaType = z.infer<typeof transactionFormSchema>;
+type TransactionFormSchemaType = z.infer<typeof transactionFormSchema>;
 
-const AddTransactionFormDialog = ({
+const TransactionFormDialog = ({
   trigger,
   selectedMonth,
-}: AddTransactionFormDialogProps) => {
+  mode = "create",
+  transaction,
+}: TransactionFormDialogProps) => {
   const { credentials } = useUserSecrets();
-  const { user } = useAuth();
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
-  const defaultDateValue = new Date();
-  defaultDateValue.setMonth(selectedMonth);
+  const isUpdateMode = mode === "update";
 
-  const getDefaultFormValues = (month: number) => {
+  const getDefaultFormValues = (
+    month: number,
+    existingTransaction?: TransactionType
+  ) => {
+    if (existingTransaction) {
+      const [paymentMethod, card] = (
+        existingTransaction.payment_method || ""
+      ).split("/");
+
+      return {
+        description: existingTransaction.description,
+        value: String(
+          Number(existingTransaction.value.replace(/\D/g, "")) || 0
+        ),
+        type: existingTransaction.type,
+        created_at: new Date(existingTransaction.created_at),
+        payment_method: paymentMethod || "",
+        card: card || "",
+        repeat_months: "1",
+      };
+    }
+
     const date = new Date();
     date.setMonth(month - 1);
 
@@ -84,7 +109,7 @@ const AddTransactionFormDialog = ({
   const { control, handleSubmit, reset, watch, setValue } =
     useForm<TransactionFormSchemaType>({
       resolver: zodResolver(transactionFormSchema),
-      defaultValues: getDefaultFormValues(selectedMonth),
+      defaultValues: getDefaultFormValues(selectedMonth, transaction),
     });
 
   const paymentMethodFieldValue = watch("payment_method");
@@ -118,19 +143,37 @@ const AddTransactionFormDialog = ({
     },
   });
 
-  const handleAddTransaction = (transaction: TransactionFormSchemaType) => {
+  const { mutate: update, isPending: pendingUpdateTransaction } = useMutation({
+    mutationFn: updateTransaction,
+    onSuccess: async (_, variables) => {
+      await queryClient?.invalidateQueries({ queryKey: ["transactions"] });
+      toast.success(
+        `Transação "${variables.transaction.description}" editada com sucesso!`,
+        { className: "!bg-green-600/80 !text-white" }
+      );
+    },
+    onError: (error) => {
+      toast.error(error.message, { className: "!bg-red-600/80 !text-white" });
+    },
+  });
+
+  const handleSubmitForm = (formData: TransactionFormSchemaType) => {
     const paymentMethod = isNotCreditOrDebitCard
-      ? transaction.payment_method
-      : `${transaction.payment_method}/${transaction.card}`;
+      ? formData.payment_method
+      : `${formData.payment_method}/${formData.card}`;
 
     const payload: TransactionType = {
-      id: crypto.randomUUID(),
-      ...transaction,
-      created_at: transaction.created_at.toISOString(),
+      id: transaction?.id || crypto.randomUUID(),
+      ...formData,
+      created_at: formData.created_at.toISOString(),
       payment_method: paymentMethod,
     };
 
-    const repeatMonths = Number(transaction.repeat_months || 1);
+    if (isUpdateMode) {
+      return update({ transaction: payload, userSecrets: credentials! });
+    }
+
+    const repeatMonths = Number(formData.repeat_months || 1);
 
     post({
       transaction: payload,
@@ -147,9 +190,11 @@ const AddTransactionFormDialog = ({
 
   useEffect(() => {
     if (isOpen) {
-      reset(getDefaultFormValues(selectedMonth));
+      reset(getDefaultFormValues(selectedMonth, transaction));
     }
-  }, [isOpen, reset, selectedMonth]);
+  }, [isOpen, reset, selectedMonth, transaction]);
+
+  const isPending = pendingPostTransaction || pendingUpdateTransaction;
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -157,11 +202,13 @@ const AddTransactionFormDialog = ({
       <DialogContent>
         <form
           id="transaction-form"
-          onSubmit={handleSubmit(handleAddTransaction)}
+          onSubmit={handleSubmit(handleSubmitForm)}
           className="space-y-4 my-4"
         >
           <DialogHeader>
-            <DialogTitle />
+            <DialogTitle>
+              {isUpdateMode ? "Editar Transação" : "Nova Transação"}
+            </DialogTitle>
             <Controller
               name="type"
               control={control}
@@ -333,22 +380,24 @@ const AddTransactionFormDialog = ({
                   )}
                 />
               </Column>
-              <Column className="space-y-2 w-full sm:max-w-[146px]">
-                <Label htmlFor="repeat_months">Repetir por</Label>
-                <Controller
-                  name="repeat_months"
-                  control={control}
-                  render={({ field: { value, onChange } }) => (
-                    <Column className="w-full">
-                      <RepeatTransactionSelectInput
-                        value={value ?? ""}
-                        onChange={onChange}
-                      />
-                      <div className="h-2 -mt-1" />
-                    </Column>
-                  )}
-                />
-              </Column>
+              <Show when={!isUpdateMode}>
+                <Column className="space-y-2 w-full sm:max-w-[146px]">
+                  <Label htmlFor="repeat_months">Repetir por</Label>
+                  <Controller
+                    name="repeat_months"
+                    control={control}
+                    render={({ field: { value, onChange } }) => (
+                      <Column className="w-full">
+                        <RepeatTransactionSelectInput
+                          value={value ?? ""}
+                          onChange={onChange}
+                        />
+                        <div className="h-2 -mt-1" />
+                      </Column>
+                    )}
+                  />
+                </Column>
+              </Show>
             </Flex>
           </Column>
           <DialogFooter>
@@ -356,7 +405,7 @@ const AddTransactionFormDialog = ({
               <Button
                 className="hover:cursor-pointer"
                 variant="secondary"
-                disabled={pendingPostTransaction}
+                disabled={isPending}
               >
                 <XIcon />
                 Cancelar
@@ -365,12 +414,15 @@ const AddTransactionFormDialog = ({
             <Button
               className="hover:cursor-pointer"
               type="submit"
-              disabled={pendingPostTransaction}
+              disabled={isPending}
             >
-              <Show when={pendingPostTransaction} fallback={<PlusIcon />}>
+              <Show
+                when={isPending}
+                fallback={isUpdateMode ? <SaveIcon /> : <PlusIcon />}
+              >
                 <Loader2Icon className="animate-spin" />
               </Show>
-              Adicionar
+              {isUpdateMode ? "Salvar" : "Adicionar"}
             </Button>
           </DialogFooter>
         </form>
@@ -379,4 +431,4 @@ const AddTransactionFormDialog = ({
   );
 };
 
-export default AddTransactionFormDialog;
+export default TransactionFormDialog;

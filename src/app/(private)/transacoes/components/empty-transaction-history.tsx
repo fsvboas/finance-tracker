@@ -1,7 +1,7 @@
 import { Button } from "@/src/components/core/button";
 import Column from "@/src/components/core/column";
 import { ListPlus, ListX } from "lucide-react";
-import AddTransactionFormDialog from "./add-transaction-form-dialog";
+import TransactionFormDialog from "./transaction-form-dialog";
 
 interface EmptyTransactionHistoryProps {
   selectedMonth: number;
@@ -18,11 +18,11 @@ const EmptyTransactionHistory = ({
           Nenhuma transação encontrada
         </p>
       </Column>
-      <AddTransactionFormDialog
+      <TransactionFormDialog
         selectedMonth={selectedMonth}
         trigger={
           <Button className="cursor-pointer">
-            <ListPlus className="!w-5 !h-5" />
+            <ListPlus className="w-5! h-5!" />
             Nova Transação
           </Button>
         }

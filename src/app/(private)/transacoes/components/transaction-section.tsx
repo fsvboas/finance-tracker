@@ -10,9 +10,9 @@ import Show from "@/src/components/core/show";
 import { Skeleton } from "@/src/components/core/skeleton";
 import { ListPlus } from "lucide-react";
 import { Dispatch, SetStateAction } from "react";
-import AddTransactionFormDialog from "./add-transaction-form-dialog";
 import EmptyTransactionHistory from "./empty-transaction-history";
 import TransactionCard from "./transaction-card";
+import TransactionFormDialog from "./transaction-form-dialog";
 import TransactionTypeFilterSelectInput from "./transaction-type-filter-select-input";
 
 interface TransactionSectionProps {
@@ -48,7 +48,7 @@ const TransactionSection = ({
             </Row>
           }
         >
-          <AddTransactionFormDialog
+          <TransactionFormDialog
             selectedMonth={selectedMonth}
             trigger={
               <Button variant="link" className="cursor-pointer px-0 h-full">
@@ -77,18 +77,14 @@ const TransactionSection = ({
               }
             >
               {transactions.map((transaction, index) => (
-                <TransactionCard
-                  key={index}
-                  transaction={transaction}
-                  totalIncome={totalIncome}
-                />
+                <TransactionCard key={index} transaction={transaction} />
               ))}
             </Show>
           </Show>
         </Column>
       </ScrollArea>
       <Show when={transactions.length > 0}>
-        <AddTransactionFormDialog
+        <TransactionFormDialog
           selectedMonth={selectedMonth}
           trigger={
             <Button className="cursor-pointer w-fit max-md:hidden">

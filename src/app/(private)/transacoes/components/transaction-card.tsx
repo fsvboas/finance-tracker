@@ -1,23 +1,20 @@
 "use client";
 
+import TransactionFormDialog from "@/src/app/(private)/transacoes/components/transaction-form-dialog";
 import { TransactionType } from "@/src/app/(private)/transacoes/types/transaction-type";
 import Column from "@/src/components/core/column";
 import Row from "@/src/components/core/row";
 import Show from "@/src/components/core/show";
 import CurrencyFormatter from "@/src/helpers/currency-formatter";
 import DateFormatter from "@/src/helpers/date-formatter";
-import TransactionDetailsDialog from "./transaction-details-dialog";
 
 interface TransactionCardProps {
   transaction: TransactionType;
-  totalIncome: number;
 }
 
-export default function TransactionCard({
-  transaction,
-  totalIncome,
-}: TransactionCardProps) {
+export default function TransactionCard({ transaction }: TransactionCardProps) {
   const transactionDate = new Date(transaction?.created_at).toISOString();
+  const transactionMonth = new Date(transaction.created_at).getMonth() + 1;
 
   const isIncomeValue = transaction?.type === "income";
   const isExpenseValue = transaction?.type === "expense";
@@ -27,9 +24,7 @@ export default function TransactionCard({
   const card = splitCardFromPaymentMethod?.[1];
 
   return (
-    <TransactionDetailsDialog
-      transaction={transaction}
-      totalIncome={totalIncome}
+    <TransactionFormDialog
       trigger={
         <Row
           className={`p-4 h-20 rounded bg-neutral-100 dark:bg-[#202020] hover:bg-neutral-200 dark:hover:bg-[#101010] duration-300 justify-between items-center`}
@@ -65,6 +60,9 @@ export default function TransactionCard({
           </Column>
         </Row>
       }
+      mode="update"
+      selectedMonth={transactionMonth}
+      transaction={transaction}
     />
   );
 }
