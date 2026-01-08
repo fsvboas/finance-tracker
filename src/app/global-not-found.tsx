@@ -1,6 +1,8 @@
+import { ThemeProvider } from "@/src/providers/theme-provider";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Link from "next/link";
+import NextTopLoader from "nextjs-toploader";
 import { Button } from "../components/core/button";
 import Column from "../components/core/column";
 import "./globals.css";
@@ -16,22 +18,38 @@ export default function GlobalNotFound() {
   return (
     <html lang="pt-BR" className={inter.className}>
       <body className="flex flex-col items-center justify-center min-h-screen space-y-4">
-        <Column>
-          <h1 className="text-9xl">
-            <Column className="items-center">
-              <strong>404</strong>
-              <span className="text-xl">Página não encontrada</span>
-            </Column>
-          </h1>
-          <p className="text-sm text-center">
-            A página que você está tentando acessar não existe
-          </p>
-        </Column>
-        <Link href="/transacoes">
-          <Button className="cursor-pointer" type="button">
-            Voltar para o Finance Tracker
-          </Button>
-        </Link>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="light"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <NextTopLoader
+            color="#00c951"
+            height={3}
+            showSpinner={true}
+            speed={300}
+            crawl={false}
+            easing="ease"
+            showAtBottom={false}
+          />
+          <Column>
+            <h1 className="text-9xl">
+              <Column className="items-center">
+                <strong>404</strong>
+                <span className="text-xl">Página não encontrada</span>
+              </Column>
+            </h1>
+            <p className="text-sm text-center">
+              A página que você está tentando acessar não existe
+            </p>
+          </Column>
+          <Link href="/transacoes">
+            <Button className="cursor-pointer" type="button">
+              Voltar para o Finance Tracker
+            </Button>
+          </Link>
+        </ThemeProvider>
       </body>
     </html>
   );
