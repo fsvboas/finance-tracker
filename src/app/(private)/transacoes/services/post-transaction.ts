@@ -39,27 +39,10 @@ export async function postTransaction({
     }
   );
 
-  const { data, error } = await supabase
+  const { error } = await supabase
     .from("transactions")
     .insert(transactionsToCreate)
     .select();
 
   if (error) throw error;
-
-  const decryptedTransactions = data.map((item, index) => {
-    const transactionDate = new Date(transaction.created_at);
-    transactionDate.setMonth(transactionDate.getMonth() + index);
-
-    return {
-      id: item.id,
-      user_id: item.user_id,
-      description: transaction.description,
-      value: transaction.value,
-      type: transaction.type,
-      created_at: transactionDate.toISOString(),
-      payment_method: transaction.payment_method,
-    };
-  });
-
-  return decryptedTransactions;
 }
