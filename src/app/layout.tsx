@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import Header from "../components/core/header";
+import NextTopLoader from "nextjs-toploader";
 import { Toaster } from "../components/core/sonner";
 import Providers from "../providers";
 import "./globals.css";
@@ -42,8 +42,16 @@ export default function RootLayout({
       </head>
       <body className={`${inter.className} antialiased `}>
         <Providers>
-          <Header />
-          <main className="min-h-screen w-full flex">{children}</main>
+          <NextTopLoader
+            color="##00c951"
+            height={3}
+            showSpinner={true}
+            speed={300}
+            crawl={false}
+            easing="ease"
+            showAtBottom={false}
+          />
+          <main className="flex min-h-screen w-full">{children}</main>
           <Toaster visibleToasts={1} />
         </Providers>
       </body>
