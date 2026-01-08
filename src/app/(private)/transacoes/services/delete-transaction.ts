@@ -1,5 +1,5 @@
 import { TransactionType } from "@/src/app/(private)/transacoes/types/transaction-type";
-import { supabaseClient } from "@/src/libs/supabase/supabase-client";
+import { createClient } from "@/src/libs/supabase/client";
 import { UserCredentials } from "@/src/types/user-credentials";
 import { decryptData, deriveKey } from "@/src/utils/crypto";
 
@@ -12,7 +12,9 @@ export async function deleteTransaction({
   transaction,
   userSecrets,
 }: DeleteTransactionProps) {
-  const { data, error } = await supabaseClient
+  const supabase = createClient();
+
+  const { data, error } = await supabase
     .from("transactions")
     .delete()
     .eq("id", transaction.id)

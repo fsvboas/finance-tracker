@@ -1,9 +1,11 @@
 import { CardType } from "@/src/app/(private)/cartoes/types/card-type";
-import { supabaseClient } from "@/src/libs/supabase/supabase-client";
+import { createClient } from "@/src/libs/supabase/client";
 import camelcaseKeys from "camelcase-keys";
 
 export async function getCards(): Promise<CardType[]> {
-  const { data, error } = await supabaseClient.from("cards").select("*");
+  const supabase = createClient();
+
+  const { data, error } = await supabase.from("cards").select("*");
 
   if (error) throw error;
 

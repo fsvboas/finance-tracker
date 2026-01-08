@@ -1,5 +1,5 @@
 import { TransactionType } from "@/src/app/(private)/transacoes/types/transaction-type";
-import { supabaseClient } from "@/src/libs/supabase/supabase-client";
+import { createClient } from "@/src/libs/supabase/client";
 import { UserCredentials } from "@/src/types/user-credentials";
 import { deriveKey, encryptData } from "@/src/utils/crypto";
 
@@ -12,7 +12,9 @@ export async function updateTransaction({
   transaction,
   userSecrets,
 }: UpdateTransactionProps) {
-  const { data, error: fetchError } = await supabaseClient
+  const supabase = createClient();
+
+  const { data, error: fetchError } = await supabase
     .from("transactions")
     .select("id")
     .eq("id", transaction.id)
@@ -37,7 +39,7 @@ export async function updateTransaction({
       : undefined,
   };
 
-  const { error } = await supabaseClient
+  const { error } = await supabase
     .from("transactions")
     .update(encryptedTransaction)
     .eq("id", transaction.id)

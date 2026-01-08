@@ -1,4 +1,4 @@
-import { supabaseClient } from "@/src/libs/supabase/supabase-client";
+import { createClient } from "@/src/libs/supabase/client";
 import { hashPin } from "@/src/utils/crypto";
 import CryptoJS from "crypto-js";
 
@@ -7,11 +7,13 @@ interface UserPinProps {
   pin: string;
 }
 
+const supabase = createClient();
+
 export async function createUserPin({ userId, pin }: UserPinProps) {
   const salt = CryptoJS.lib.WordArray.random(16).toString();
   const pinHash = hashPin(pin, salt);
 
-  const { error } = await supabaseClient
+  const { error } = await supabase
     .from("user_secrets")
     .upsert({ user_id: userId, pin_hash: pinHash, salt })
     .eq("user_id", userId);
@@ -22,7 +24,7 @@ export async function createUserPin({ userId, pin }: UserPinProps) {
 }
 
 export async function validateUserPin({ userId, pin }: UserPinProps) {
-  const { data: userSecret, error } = await supabaseClient
+  const { data: userSecret, error } = await supabase
     .from("user_secrets")
     .select("pin_hash, salt")
     .eq("user_id", userId)
@@ -37,7 +39,7 @@ export async function validateUserPin({ userId, pin }: UserPinProps) {
 }
 
 export async function checkPinExists({ userId }: Partial<UserPinProps>) {
-  const { data, error } = await supabaseClient
+  const { data, error } = await supabase
     .from("user_secrets")
     .select("pin_hash")
     .eq("user_id", userId)

@@ -1,4 +1,4 @@
-import { supabaseClient } from "@/src/libs/supabase/supabase-client";
+import { createClient } from "@/src/libs/supabase/client";
 
 interface DoUpdateUserInfosProps {
   name: string;
@@ -9,7 +9,9 @@ export async function doUpdateUserInfos({
   name,
   email,
 }: DoUpdateUserInfosProps) {
-  const { error: updateError } = await supabaseClient.auth.updateUser({
+  const supabase = createClient();
+
+  const { error: updateError } = await supabase.auth.updateUser({
     data: {
       display_name: name,
     },

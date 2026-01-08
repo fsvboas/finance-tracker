@@ -1,4 +1,4 @@
-import { supabaseClient } from "@/src/libs/supabase/supabase-client";
+import { createClient } from "@/src/libs/supabase/client";
 import { UserCredentials } from "@/src/types/user-credentials";
 import { decryptData, deriveKey } from "@/src/utils/crypto";
 
@@ -7,10 +7,12 @@ interface GetTransactionsProps {
 }
 
 export async function getTransactions({ userSecrets }: GetTransactionsProps) {
+  const supabase = createClient();
+
   const result = (async () => {
     const keyHex = deriveKey(userSecrets.pin, userSecrets.salt!);
 
-    const { data, error } = await supabaseClient
+    const { data, error } = await supabase
       .from("transactions")
       .select("*")
       .order("created_at", { ascending: false });

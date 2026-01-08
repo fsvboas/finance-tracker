@@ -125,7 +125,6 @@ const AddTransactionFormDialog = ({
 
     const payload: TransactionType = {
       id: crypto.randomUUID(),
-      user_id: user!.id,
       ...transaction,
       created_at: transaction.created_at.toISOString(),
       payment_method: paymentMethod,

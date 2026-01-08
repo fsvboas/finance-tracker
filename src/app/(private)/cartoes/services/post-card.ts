@@ -1,12 +1,14 @@
 import { CardRequestType } from "@/src/app/(private)/cartoes/types/card-type";
-import { supabaseClient } from "@/src/libs/supabase/supabase-client";
+import { createClient } from "@/src/libs/supabase/client";
 
 interface PostCardProps {
   card: CardRequestType;
 }
 
 export async function postCard({ card }: PostCardProps) {
-  const { error } = await supabaseClient
+  const supabase = createClient();
+
+  const { error } = await supabase
     .from("cards")
     .insert([
       {

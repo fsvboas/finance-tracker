@@ -1,4 +1,6 @@
-import { supabaseClient } from "@/src/libs/supabase/supabase-client";
+"use server";
+
+import { createServer } from "@/src/libs/supabase/server";
 
 interface DoSignUpProps {
   name: string;
@@ -7,7 +9,9 @@ interface DoSignUpProps {
 }
 
 export async function doSignUp({ name, email, password }: DoSignUpProps) {
-  const { error } = await supabaseClient.auth.signUp({
+  const supabase = await createServer();
+
+  const { error } = await supabase.auth.signUp({
     email,
     password,
     options: {
@@ -21,5 +25,5 @@ export async function doSignUp({ name, email, password }: DoSignUpProps) {
     throw error;
   }
 
-  return;
+  return { success: true };
 }

@@ -1,12 +1,14 @@
 import { CardType } from "@/src/app/(private)/cartoes/types/card-type";
-import { supabaseClient } from "@/src/libs/supabase/supabase-client";
+import { createClient } from "@/src/libs/supabase/client";
 
 interface DeleteCardProps {
   card: CardType;
 }
 
 export async function deleteCard({ card }: DeleteCardProps) {
-  const { error } = await supabaseClient
+  const supabase = createClient();
+
+  const { error } = await supabase
     .from("cards")
     .delete()
     .eq("id", card.id)

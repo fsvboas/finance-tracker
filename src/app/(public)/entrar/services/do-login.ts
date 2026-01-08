@@ -1,4 +1,6 @@
-import { supabaseClient } from "@/src/libs/supabase/supabase-client";
+"use server";
+
+import { createServer } from "@/src/libs/supabase/server";
 
 interface DoLoginProps {
   email: string;
@@ -6,7 +8,9 @@ interface DoLoginProps {
 }
 
 export async function doLogin({ email, password }: DoLoginProps) {
-  const { data, error } = await supabaseClient.auth.signInWithPassword({
+  const supabase = await createServer();
+
+  const { error } = await supabase.auth.signInWithPassword({
     email,
     password,
   });
@@ -15,5 +19,5 @@ export async function doLogin({ email, password }: DoLoginProps) {
     throw error;
   }
 
-  return data;
+  return { success: true };
 }

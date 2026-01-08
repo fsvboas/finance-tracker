@@ -112,14 +112,14 @@ const UpdateTransactionForm = ({
       ? `${data.payment_method}/${data.card}`
       : data.payment_method;
 
-    const payload: Omit<TransactionType, "id" | "user_id"> = {
+    const payload: TransactionType = {
       ...data,
+      id: transaction.id,
       created_at: data.created_at.toISOString(),
       payment_method: formattedPaymentMethod,
     };
 
     update({
-      transactionId: transaction.id,
       transaction: payload,
       userSecrets: credentials!,
     });

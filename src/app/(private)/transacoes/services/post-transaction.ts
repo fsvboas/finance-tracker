@@ -1,5 +1,5 @@
 import { TransactionType } from "@/src/app/(private)/transacoes/types/transaction-type";
-import { supabaseClient } from "@/src/libs/supabase/supabase-client";
+import { createClient } from "@/src/libs/supabase/client";
 import { UserCredentials } from "@/src/types/user-credentials";
 import { deriveKey, encryptData } from "@/src/utils/crypto";
 
@@ -14,6 +14,8 @@ export async function postTransaction({
   userSecrets,
   repeatMonths = 1,
 }: PostTransactionProps) {
+  const supabase = createClient();
+
   const keyHex = deriveKey(userSecrets.pin, userSecrets.salt!);
 
   const transactionsToCreate = Array.from(
@@ -37,7 +39,7 @@ export async function postTransaction({
     }
   );
 
-  const { data, error } = await supabaseClient
+  const { data, error } = await supabase
     .from("transactions")
     .insert(transactionsToCreate)
     .select();

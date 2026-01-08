@@ -65,17 +65,17 @@ const CardSelectInput = ({
               {cards?.map((card) => (
                 <CommandItem
                   key={card?.id}
-                  value={card?.card_name}
+                  value={card?.name}
                   onSelect={(currentValue) => {
                     onChange(currentValue);
                     setOpen(false);
                   }}
                 >
-                  {card?.card_name}
+                  {card?.name}
                   <Check
                     className={cn(
                       "ml-auto",
-                      value === card?.card_name ? "opacity-100" : "opacity-0"
+                      value === card?.name ? "opacity-100" : "opacity-0"
                     )}
                   />
                 </CommandItem>

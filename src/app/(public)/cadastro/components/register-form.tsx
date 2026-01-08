@@ -5,12 +5,13 @@ import Column from "@/src/components/core/column";
 import { Input } from "@/src/components/core/input";
 import { Label } from "@/src/components/core/label";
 import Show from "@/src/components/core/show";
-import { translateSupabaseErrorMessages } from "@/src/utils/translate-supabase-errors";
+import { supabaseErrorsTranslator } from "@/src/utils/translate-supabase-errors";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
+import { AuthError } from "@supabase/supabase-js";
 import { Loader2Icon } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useTransition } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -37,6 +38,7 @@ type RegisterFormSchemaType = z.infer<typeof RegisterFormSchema>;
 
 const RegisterForm = () => {
   const router = useRouter();
+  const [isPending, startTransition] = useTransition();
 
   const { handleSubmit, control, watch } = useForm<RegisterFormSchemaType>({
     resolver: zodResolver(RegisterFormSchema),
@@ -48,26 +50,24 @@ const RegisterForm = () => {
     },
   });
 
-  const { mutate: signUp, isPending: pendingSignUp } = useMutation({
-    mutationFn: doSignUp,
-    onSuccess: () => {
-      toast.success("Cadastro realizado com sucesso!", {
-        className: "!bg-green-600/80 !text-white",
-      });
-      // TO-DO: Replace when create the e-mail validation
-      router.push("/transacoes");
-      // router.push("/entrar");
-    },
-    onError: (error) => {
-      const message = translateSupabaseErrorMessages(error.message);
-      toast.error(message, {
-        className: "!bg-red-600/80 !text-white",
-      });
-    },
-  });
-
   const handleSignUp = ({ name, email, password }: RegisterFormSchemaType) => {
-    signUp({ name, email, password });
+    startTransition(async () => {
+      try {
+        await doSignUp({ name, email, password });
+        toast.success("Cadastro realizado com sucesso!", {
+          className: "!bg-green-600/80 !text-white",
+        });
+        router.push("/transacoes");
+      } catch (error) {
+        toast.error(
+          supabaseErrorsTranslator(error as AuthError) ||
+            "Erro ao realizar cadastro. Tente novamente mais tarde.",
+          {
+            className: "!bg-red-600 !text-white",
+          }
+        );
+      }
+    });
   };
 
   const { name, email, password, confirmPassword } = watch();
@@ -76,7 +76,7 @@ const RegisterForm = () => {
   );
 
   return (
-    <Column className="rounded-lg p-6 border shadow-sm w-full max-w-[500px]">
+    <Column className="rounded-lg p-6 border shadow-sm w-full max-w-125">
       <form
         id="login-form"
         onSubmit={handleSubmit(handleSignUp)}
@@ -200,9 +200,9 @@ const RegisterForm = () => {
           <Button
             className="hover:cursor-pointer w-full"
             type="submit"
-            disabled={pendingSignUp || formInputFieldIsBlank}
+            disabled={isPending || formInputFieldIsBlank}
           >
-            <Show when={pendingSignUp}>
+            <Show when={isPending}>
               <Loader2Icon className="animate-spin" />
             </Show>
             Criar conta

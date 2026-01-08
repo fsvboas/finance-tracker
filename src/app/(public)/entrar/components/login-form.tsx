@@ -5,12 +5,13 @@ import Column from "@/src/components/core/column";
 import { Input } from "@/src/components/core/input";
 import { Label } from "@/src/components/core/label";
 import Show from "@/src/components/core/show";
-import { translateSupabaseErrorMessages } from "@/src/utils/translate-supabase-errors";
+import { supabaseErrorsTranslator } from "@/src/utils/translate-supabase-errors";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
+import { AuthError } from "@supabase/supabase-js";
 import { Loader2Icon } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useTransition } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -25,6 +26,7 @@ type LoginFormSchemaType = z.infer<typeof LoginFormSchema>;
 
 const LoginForm = () => {
   const router = useRouter();
+  const [isPending, startTransition] = useTransition();
 
   const { handleSubmit, control, watch } = useForm<LoginFormSchemaType>({
     resolver: zodResolver(LoginFormSchema),
@@ -34,26 +36,29 @@ const LoginForm = () => {
     },
   });
 
-  const { mutate: login, isPending: pendingLogin } = useMutation({
-    mutationFn: doLogin,
-    onSuccess: () => router.push("/transacoes"),
-    onError: (error) => {
-      const message = translateSupabaseErrorMessages(error.message);
-      toast.error(message, {
-        className: "!bg-red-600/80 !text-white",
-      });
-    },
-  });
-
   const handleLogin = ({ email, password }: LoginFormSchemaType) => {
-    login({ email, password });
+    startTransition(async () => {
+      try {
+        await doLogin({ email, password });
+        router.push("/transacoes");
+        router.refresh();
+      } catch (error) {
+        toast.error(
+          supabaseErrorsTranslator(error as AuthError) ||
+            "Erro ao realizar login. Tente novamente mais tarde.",
+          {
+            className: "!bg-red-600 !text-white",
+          }
+        );
+      }
+    });
   };
 
   const { email, password } = watch();
   const formInputFieldIsBlank = [email, password].some((value) => value === "");
 
   return (
-    <Column className="rounded-lg p-6 border shadow-sm max-w-[500px] w-full">
+    <Column className="rounded-lg p-6 border shadow-sm max-w-125 w-full">
       <form
         id="login-form"
         onSubmit={handleSubmit(handleLogin)}
@@ -88,20 +93,9 @@ const LoginForm = () => {
           />
         </Column>
         <Column className="space-y-2">
-          {/* <Row className="justify-between"> */}
           <Label htmlFor="password">
             Senha<span className="text-red-500">*</span>
           </Label>
-          {/* <Button
-                type="button"
-                variant="link"
-                className="p-0 h-fit opacity-40"
-                disabled
-                onClick={() => null}
-              >
-                Esqueceu a senha?
-              </Button> */}
-          {/* </Row> */}
           <Controller
             name="password"
             control={control}
@@ -131,9 +125,9 @@ const LoginForm = () => {
           <Button
             className="hover:cursor-pointer w-full"
             type="submit"
-            disabled={pendingLogin || formInputFieldIsBlank}
+            disabled={isPending || formInputFieldIsBlank}
           >
-            <Show when={pendingLogin}>
+            <Show when={isPending}>
               <Loader2Icon className="animate-spin" />
             </Show>
             Entrar
