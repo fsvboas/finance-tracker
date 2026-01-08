@@ -38,7 +38,7 @@ const TransactionSection = ({
 
   return (
     <Column className="w-full h-full mb-2 items-center">
-      <Row className="justify-between w-full h-10 my-2 items-center max-[1020px]:px-2">
+      <Row className="justify-between w-full h-10 mb-2 gap-2 items-center ">
         <Show
           when={!pending}
           fallback={
