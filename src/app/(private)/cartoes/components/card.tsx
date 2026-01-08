@@ -2,6 +2,7 @@
 
 import { deleteCard } from "@/src/app/(private)/cartoes/services";
 import { CardType } from "@/src/app/(private)/cartoes/types/card-type";
+import ConfirmDeleteDialog from "@/src/components/confirm-delete-dialog";
 import { Button } from "@/src/components/core/button";
 import Column from "@/src/components/core/column";
 import Row from "@/src/components/core/row";
@@ -67,12 +68,18 @@ const Card = ({ card }: CardProps) => {
         >
           <Pencil className="text-zinc-800" />
         </Button>
-        <Button
-          className="z-10 bg-red-500 rounded-full p-0! hover:bg-red-600 cursor-pointer w-8 h-8"
-          onClick={() => handleDeleteCard(card)}
-        >
-          <Trash2 className="text-white" />
-        </Button>
+        <ConfirmDeleteDialog
+          title="Excluir Cartão"
+          itemName={card?.name}
+          description="Você tem certeza de que deseja excluir este cartão? Esta ação não poderá ser desfeita."
+          onConfirm={() => handleDeleteCard(card)}
+          isPending={pendingDeleteCard}
+          trigger={
+            <Button variant="destructive" className="rounded-full p-0! w-8 h-8">
+              <Trash2 className="text-white" />
+            </Button>
+          }
+        />
       </Row>
     </Column>
   );

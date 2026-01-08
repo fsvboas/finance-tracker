@@ -99,7 +99,7 @@ export default function TransactionCard({ transaction }: TransactionCardProps) {
         <ConfirmDeleteDialog
           title="Excluir Transação"
           itemName={transaction?.description}
-          description="Você tem certeza de que deseja excluir esta transação? Esta ação não pode ser desfeita."
+          description="Você tem certeza de que deseja excluir esta transação? Esta ação não poderá ser desfeita."
           onConfirm={() => handleDeleteTransaction(transaction)}
           isPending={pendingDeleteTransaction}
           trigger={

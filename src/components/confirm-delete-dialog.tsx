@@ -29,7 +29,7 @@ const ConfirmDeleteDialog = ({
   trigger,
   title = "Excluir Item",
   itemName,
-  description = "Você tem certeza que deseja excluir este item? Esta ação não pode ser desfeita.",
+  description = "Você tem certeza que deseja excluir este item? Esta ação não poderá ser desfeita.",
   isPending = false,
   onConfirm,
 }: ConfirmDeleteDialogProps) => {
