@@ -6,7 +6,7 @@ import { ListPlus } from "lucide-react";
 const CardsScreenHeader = () => {
   return (
     <Flex as="header" className="items-center justify-between w-full">
-      <h1 className="text-lg font-bold">Meus Cartões</h1>
+      <h1 className="text-xl font-bold">Cartões</h1>
       <CardFormDialog
         trigger={
           <Button className="cursor-pointer">

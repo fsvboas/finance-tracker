@@ -1,17 +1,17 @@
-import Column from "@/src/components/core/column";
+import { Container } from "@/src/components/core/container";
 
 export default function NextStepsScreen() {
   return (
-    <Column className="space-y-4 items-center w-full justify-center h-fit sm:max-w-5xl mx-auto mt-16 lg:py-4">
-      <h1 className="text-3xl font-bold w-full">Próximos Passos</h1>
-      <ol className="list-decimal list-inside my-4 w-full">
+    <Container variant="page">
+      <h1 className="text-xl font-bold self-start">Próximos Passos</h1>
+      <ol className="list-decimal list-inside w-full">
         {nextSteps.map((step, index) => (
           <li key={index} className="mb-4 text-muted-foreground">
             {step}
           </li>
         ))}
       </ol>
-    </Column>
+    </Container>
   );
 }
 

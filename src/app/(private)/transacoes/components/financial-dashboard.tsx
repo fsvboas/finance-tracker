@@ -5,7 +5,7 @@ import {
   getTransactions,
 } from "@/src/app/(private)/transacoes/services";
 import { TransactionFiltersType } from "@/src/app/(private)/transacoes/types/transaction-filters-type";
-import Column from "@/src/components/core/column";
+import { Container } from "@/src/components/core/container";
 import Show from "@/src/components/core/show";
 import UserPinFormDialogDrawer from "@/src/components/user-pin-form-dialog-drawer";
 import { useAuth } from "@/src/hooks/use-auth";
@@ -92,7 +92,7 @@ export default function FinancialDashboard() {
   if (authLoading || !user) return null;
 
   return (
-    <Column className="items-center h-fit w-full max-w-5xl mx-auto mt-16">
+    <Container variant="page">
       <Show when={!pendingCheckPinExists}>
         <Show when={user}>
           <UserPinFormDialogDrawer
@@ -123,6 +123,6 @@ export default function FinancialDashboard() {
         setFilter={setFilter}
         pending={pendingGetTransactions}
       />
-    </Column>
+    </Container>
   );
 }

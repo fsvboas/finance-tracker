@@ -1,14 +1,15 @@
-import Column from "@/src/components/core/column";
+import { Container } from "@/src/components/core/container";
 import UpdatePasswordForm from "./components/update-password-form";
 import UpdateUserInfosForm from "./components/update-user-infos-form";
 import UserDataSection from "./components/user-data-section";
 
 export default function AccountScreen() {
   return (
-    <Column className="space-y-4 items-center w-full justify-center h-fit sm:max-w-5xl mx-auto mt-16 lg:py-4">
+    <Container variant="page">
+      <h1 className="text-xl font-bold self-start">Conta</h1>
       <UpdateUserInfosForm />
       <UpdatePasswordForm />
       <UserDataSection />
-    </Column>
+    </Container>
   );
 }

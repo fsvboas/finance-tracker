@@ -68,19 +68,19 @@ const UserMenu = () => {
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem onClick={() => route.push("/transacoes")}>
-            Minhas Transações
+            Transações
             <DropdownMenuShortcut className="space-x-1">
               <Wallet />
             </DropdownMenuShortcut>
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => route.push("/cartoes")}>
-            Meus Cartões
+            Cartões
             <DropdownMenuShortcut className="space-x-1">
               <CreditCard />
             </DropdownMenuShortcut>
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => route.push("/conta")}>
-            Minha Conta
+            Conta
             <DropdownMenuShortcut className="space-x-1">
               <Settings />
             </DropdownMenuShortcut>

@@ -95,38 +95,41 @@ const TimePeriodSelector = ({
   };
 
   return (
-    <Column className={`w-full space-y-2 mt-2 ${isDesktop && "mb-2"}`}>
-      <Row className="items-center justify-between md:justify-end space-x-2 max-[780px]:px-2">
-        <Show
-          when={!pending}
-          fallback={
-            <>
-              <Skeleton className="w-9 h-9 rounded" />
-              <Skeleton className="w-13 h-9 rounded" />
-              <Skeleton className="w-9 h-9 rounded" />
-            </>
-          }
-        >
-          <Button
-            size="icon"
-            variant="outline"
-            className="cursor-pointer bg-neutral-100 hover:bg-neutral-200"
-            onClick={handlePreviousYear}
-            disabled={selectedYear <= minYear}
+    <Column className={`w-full space-y-2 ${isDesktop && "mb-2"}`}>
+      <Row className="items-center justify-between max-[780px]:px-2">
+        <h1 className="text-xl font-bold">Transações</h1>
+        <Row className="items-center justify-between">
+          <Show
+            when={!pending}
+            fallback={
+              <>
+                <Skeleton className="w-9 h-9 rounded" />
+                <Skeleton className="w-13 h-9 rounded" />
+                <Skeleton className="w-9 h-9 rounded" />
+              </>
+            }
           >
-            <ArrowLeft />
-          </Button>
-          <span className="min-w-[50px] text-center">{selectedYear}</span>
-          <Button
-            size="icon"
-            variant="outline"
-            className="cursor-pointer bg-neutral-100 hover:bg-neutral-200"
-            onClick={handleNextYear}
-            disabled={selectedYear >= maxYear}
-          >
-            <ArrowRight />
-          </Button>
-        </Show>
+            <Button
+              size="icon"
+              variant="outline"
+              className="cursor-pointer bg-neutral-100 hover:bg-neutral-200"
+              onClick={handlePreviousYear}
+              disabled={selectedYear <= minYear}
+            >
+              <ArrowLeft />
+            </Button>
+            <span className="min-w-[50px] text-center">{selectedYear}</span>
+            <Button
+              size="icon"
+              variant="outline"
+              className="cursor-pointer bg-neutral-100 hover:bg-neutral-200"
+              onClick={handleNextYear}
+              disabled={selectedYear >= maxYear}
+            >
+              <ArrowRight />
+            </Button>
+          </Show>
+        </Row>
       </Row>
       <ScrollArea
         className={`w-full ${!isDesktop && "pb-2.5"}`}
