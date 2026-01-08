@@ -64,7 +64,15 @@ export async function updateSession(request: NextRequest) {
   // }
 
   if (pathname === "/") {
-    return supabaseResponse;
+    const url = request.nextUrl.clone();
+    url.pathname = user ? "/transacoes" : "/entrar";
+    url.search = "";
+
+    const response = NextResponse.redirect(url);
+    supabaseResponse.cookies.getAll().forEach((cookie) => {
+      response.cookies.set(cookie.name, cookie.value);
+    });
+    return response;
   }
 
   if (user && (pathname === "/entrar" || pathname === "/redefinir-senha")) {

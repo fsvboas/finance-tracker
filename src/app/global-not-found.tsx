@@ -16,7 +16,11 @@ export const metadata: Metadata = {
 
 export default function GlobalNotFound() {
   return (
-    <html lang="pt-BR" className={inter.className}>
+    <html
+      lang="pt-BR"
+      className={`${inter.className} antialiased`}
+      suppressHydrationWarning
+    >
       <body className="flex flex-col items-center justify-center min-h-screen space-y-4">
         <ThemeProvider
           attribute="class"

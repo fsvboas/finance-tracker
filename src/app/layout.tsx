@@ -24,7 +24,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR" suppressHydrationWarning>
+    <html
+      lang="pt-BR"
+      className={`${inter.className} antialiased`}
+      suppressHydrationWarning
+    >
       <head>
         <meta
           name="viewport"
@@ -43,7 +47,7 @@ export default function RootLayout({
           crossOrigin="anonymous"
         />
       </head>
-      <body className={`${inter.className} antialiased `}>
+      <body>
         <Providers>
           <NextTopLoader
             color="#00c951"
