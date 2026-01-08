@@ -1,5 +1,6 @@
 "use client";
 
+import CardFormDialog from "@/src/app/(private)/cartoes/components/card-form-dialog";
 import { deleteCard } from "@/src/app/(private)/cartoes/services";
 import { CardType } from "@/src/app/(private)/cartoes/types/card-type";
 import ConfirmDeleteDialog from "@/src/components/confirm-delete-dialog";
@@ -8,7 +9,7 @@ import Column from "@/src/components/core/column";
 import Row from "@/src/components/core/row";
 import { queryClient } from "@/src/libs/tanstack-query/query-client";
 import { useMutation } from "@tanstack/react-query";
-import { Eye, Pencil, Trash2 } from "lucide-react";
+import { Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 interface CardProps {
@@ -56,18 +57,21 @@ const Card = ({ card }: CardProps) => {
         <p className="capitalize text-sm">{cardTypeLabel}</p>
       </Column>
       <Row className="items-center gap-1 absolute -top-4 -right-2">
-        <Button
+        {/* <Button
           className="z-10 bg-white hover:bg-zinc-200 rounded-full p-0! cursor-pointer w-8 h-8 border"
           onClick={() => null}
         >
           <Eye className="text-zinc-800" />
-        </Button>
-        <Button
-          className="z-10 bg-white hover:bg-zinc-200 rounded-full p-0! cursor-pointer w-8 h-8 border"
-          onClick={() => null}
-        >
-          <Pencil className="text-zinc-800" />
-        </Button>
+        </Button> */}
+        <CardFormDialog
+          trigger={
+            <Button className="z-10 bg-white hover:bg-zinc-200 rounded-full p-0! cursor-pointer w-8 h-8 border">
+              <Pencil className="text-zinc-800" />
+            </Button>
+          }
+          mode="update"
+          card={card}
+        />
         <ConfirmDeleteDialog
           title="Excluir Cartão"
           itemName={card?.name}

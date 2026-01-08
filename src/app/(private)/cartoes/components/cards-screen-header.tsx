@@ -1,4 +1,4 @@
-import CreateCardFormDialog from "@/src/app/(private)/cartoes/components/create-card-form-dialog";
+import CardFormDialog from "@/src/app/(private)/cartoes/components/card-form-dialog";
 import { Button } from "@/src/components/core/button";
 import Flex from "@/src/components/core/flex";
 import { ListPlus } from "lucide-react";
@@ -7,7 +7,7 @@ const CardsScreenHeader = () => {
   return (
     <Flex as="header" className="items-center justify-between w-full">
       <h1 className="text-lg font-bold">Meus Cartões</h1>
-      <CreateCardFormDialog
+      <CardFormDialog
         trigger={
           <Button className="cursor-pointer">
             <ListPlus className="w-5 h-5" />

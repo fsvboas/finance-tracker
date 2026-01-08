@@ -2,7 +2,7 @@ export type CardType = {
   id: string;
   name: string;
   type: "credit" | "debit";
-  creditLimit?: number;
+  creditLimit?: string;
   dueDate: Date;
   color?: string;
 };

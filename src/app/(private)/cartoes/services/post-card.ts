@@ -14,14 +14,14 @@ export async function postCard({ card }: PostCardProps) {
       {
         name: card.name,
         type: card.type,
-        limit: card.creditLimit,
+        credit_limit: card.creditLimit,
         due_date: card.dueDate,
         color: card.color,
       },
     ])
     .select();
 
-  if (error) throw new Error(error.message);
+  if (error) throw error;
 
   return;
 }
