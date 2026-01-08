@@ -1,7 +1,7 @@
 import CardFormDialog from "@/src/app/(private)/cartoes/components/card-form-dialog";
 import { Button } from "@/src/components/core/button";
 import Flex from "@/src/components/core/flex";
-import { ListPlus } from "lucide-react";
+import { Plus } from "lucide-react";
 
 const CardsScreenHeader = () => {
   return (
@@ -10,7 +10,7 @@ const CardsScreenHeader = () => {
       <CardFormDialog
         trigger={
           <Button className="cursor-pointer">
-            <ListPlus className="w-5 h-5" />
+            <Plus className="w-5 h-5" />
             Novo Cartão
           </Button>
         }
