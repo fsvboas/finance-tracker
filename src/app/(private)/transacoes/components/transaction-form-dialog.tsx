@@ -196,6 +196,8 @@ const TransactionFormDialog = ({
 
   const isPending = pendingPostTransaction || pendingUpdateTransaction;
 
+  const dialogTitle = isUpdateMode ? "Editar Transação" : "Nova Transação";
+
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
@@ -203,12 +205,12 @@ const TransactionFormDialog = ({
         <form
           id="transaction-form"
           onSubmit={handleSubmit(handleSubmitForm)}
-          className="space-y-4 my-4"
+          className="my-4"
         >
-          <DialogHeader>
-            <DialogTitle>
-              {isUpdateMode ? "Editar Transação" : "Nova Transação"}
-            </DialogTitle>
+          <DialogHeader className="mb-4">
+            <DialogTitle>{dialogTitle}</DialogTitle>
+          </DialogHeader>
+          <Column className="gap-4">
             <Controller
               name="type"
               control={control}
@@ -241,8 +243,6 @@ const TransactionFormDialog = ({
                 </Tabs>
               )}
             />
-          </DialogHeader>
-          <Column>
             <Flex className="flex-col sm:flex-row max-sm:space-y-4 sm:space-x-2">
               <Column className="space-y-2 w-full">
                 <Label htmlFor="description">
@@ -317,7 +317,7 @@ const TransactionFormDialog = ({
               </Column>
             </Flex>
             <Show when={isExpenseTransaction}>
-              <Flex className="flex-col sm:flex-row max-sm:space-y-4 sm:space-x-2 mt-4">
+              <Flex className="flex-col sm:flex-row max-sm:space-y-4 sm:space-x-2">
                 <Column className="space-y-2 w-full">
                   <Label htmlFor="payment_method">Método de pagamento</Label>
                   <Controller
@@ -363,7 +363,7 @@ const TransactionFormDialog = ({
                 </Column>
               </Flex>
             </Show>
-            <Flex className="flex-col sm:flex-row max-sm:space-y-4 sm:space-x-2 mt-4">
+            <Flex className="flex-col sm:flex-row max-sm:space-y-4 sm:space-x-2">
               <Column className="space-y-2 sm:w-[150px]">
                 <Label htmlFor="created_at">Data</Label>
                 <Controller
@@ -400,7 +400,7 @@ const TransactionFormDialog = ({
               </Show>
             </Flex>
           </Column>
-          <DialogFooter>
+          <DialogFooter className="mt-4">
             <DialogClose asChild>
               <Button
                 className="hover:cursor-pointer"
