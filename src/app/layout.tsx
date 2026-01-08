@@ -10,9 +10,12 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Finance Tracker",
+  title: {
+    default: "Finance Tracker",
+    template: "%s | Finance Tracker",
+  },
   description:
-    "O Finance Tracker foi criado para que você possa, facilmente, controlar receitas, despesas e acompanhar seu orçamento pessoal de forma rápida e prática. Sem complicações.",
+    "O Finance Tracker foi criado para que você possa controlar receitas, despesas e acompanhar seu orçamento pessoal de forma rápida e prática. Sem complicações.",
 };
 
 export default function RootLayout({

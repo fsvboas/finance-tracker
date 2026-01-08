@@ -1,7 +1,12 @@
 import { Container } from "@/src/components/core/container";
+import { Metadata } from "next";
 import UpdatePasswordForm from "./components/update-password-form";
 import UpdateUserInfosForm from "./components/update-user-infos-form";
 import UserDataSection from "./components/user-data-section";
+
+export const metadata: Metadata = {
+  title: "Conta",
+};
 
 export default function AccountScreen() {
   return (

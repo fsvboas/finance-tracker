@@ -1,4 +1,9 @@
 import { Container } from "@/src/components/core/container";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Próximos Passos",
+};
 
 export default function NextStepsScreen() {
   return (

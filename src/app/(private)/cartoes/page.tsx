@@ -5,6 +5,11 @@ import CardsScreenHeader from "@/src/app/(private)/cartoes/components/cards-scre
 import { getCards } from "@/src/app/(private)/cartoes/services";
 import { Container } from "@/src/components/core/container";
 import { useQuery } from "@tanstack/react-query";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Cartões",
+};
 
 export default function CardsScreen() {
   const { data, isPending: pendingGetCards } = useQuery({
