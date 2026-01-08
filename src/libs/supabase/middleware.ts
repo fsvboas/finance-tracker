@@ -82,6 +82,13 @@ export async function updateSession(request: NextRequest) {
     return response;
   }
 
+  if (user && pathname === "/entrar") {
+    const url = request.nextUrl.clone();
+    url.pathname = "/transacoes";
+    url.search = "";
+    return NextResponse.redirect(url);
+  }
+
   if (!user && isPrivateRoute) {
     const url = request.nextUrl.clone();
     url.pathname = "/entrar";
