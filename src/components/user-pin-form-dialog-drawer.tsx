@@ -4,8 +4,13 @@ import { useUserSecrets } from "@/src/providers/user-secrets-provider";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import { useState } from "react";
 import { useMediaQuery } from "../hooks/use-media-query";
-import { Dialog, DialogContent, DialogHeader } from "./dialog";
-import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "./drawer";
+import { Dialog, DialogContent, DialogHeader } from "./core/dialog";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+} from "./core/drawer";
 import UserPinForm from "./user-pin-form";
 import UserPinFormDialogDrawerTooltip from "./user-pin-form-dialog-drawer-tooltip";
 

@@ -1,10 +1,12 @@
 "use client";
 
-import { supabaseClient } from "@/src/libs/supabase/supabase-client";
+import { createClient } from "@/src/libs/supabase/client";
 import type { Session } from "@supabase/supabase-js";
 import { useEffect, useState } from "react";
 
 export function useAuth() {
+  const supabase = createClient();
+
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -13,7 +15,7 @@ export function useAuth() {
 
     async function fetchSession() {
       try {
-        const { data } = await supabaseClient.auth.getSession();
+        const { data } = await supabase.auth.getSession();
         if (isMounted) {
           setSession(data.session);
         }
@@ -24,7 +26,7 @@ export function useAuth() {
 
     fetchSession();
 
-    const { data: authListener } = supabaseClient.auth.onAuthStateChange(
+    const { data: authListener } = supabase.auth.onAuthStateChange(
       (_event, newSession) => {
         if (isMounted) {
           setSession(newSession);

@@ -1,9 +1,7 @@
-import "@/src/styles/nprogress.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import Header from "../components/header";
-import { Toaster } from "../components/sonner";
-import TopLoadingBar from "../components/top-loading-bar";
+import NextTopLoader from "nextjs-toploader";
+import { Toaster } from "../components/core/sonner";
 import Providers from "../providers";
 import "./globals.css";
 
@@ -24,11 +22,36 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR" suppressHydrationWarning>
+      <head>
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=5"
+        />
+        <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
+      </head>
       <body className={`${inter.className} antialiased `}>
         <Providers>
-          <TopLoadingBar />
-          <Header />
-          <main className="min-h-screen w-full flex">{children}</main>
+          <NextTopLoader
+            color="##00c951"
+            height={3}
+            showSpinner={true}
+            speed={300}
+            crawl={false}
+            easing="ease"
+            showAtBottom={false}
+          />
+          <main className="flex min-h-screen w-full">{children}</main>
           <Toaster visibleToasts={1} />
         </Providers>
       </body>

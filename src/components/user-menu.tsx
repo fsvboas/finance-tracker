@@ -2,6 +2,7 @@
 
 import { useMutation } from "@tanstack/react-query";
 import {
+  CreditCard,
   Loader2Icon,
   LogOut,
   Settings,
@@ -9,7 +10,7 @@ import {
   Wallet,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { doLogout } from "../app/entrar/services";
+import { doLogout } from "../app/(public)/entrar/services";
 import { useAuth } from "../hooks/use-auth";
 import { useUserSecrets } from "../providers/user-secrets-provider";
 
@@ -24,10 +25,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuShortcut,
   DropdownMenuTrigger,
-} from "./dropdown-menu";
-import { Switch } from "./switch";
+} from "./core/dropdown-menu";
+import Show from "./core/show";
+import { Switch } from "./core/switch";
 import UserAvatar from "./user-avatar";
-import Show from "./utils/show";
 
 const UserMenu = () => {
   const { user } = useAuth();
@@ -66,14 +67,20 @@ const UserMenu = () => {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem onClick={() => route.push("/dashboard")}>
-            Minhas Transações
+          <DropdownMenuItem onClick={() => route.push("/transacoes")}>
+            Transações
             <DropdownMenuShortcut className="space-x-1">
               <Wallet />
             </DropdownMenuShortcut>
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => route.push("/minha-conta")}>
-            Minha Conta
+          <DropdownMenuItem onClick={() => route.push("/cartoes")}>
+            Cartões
+            <DropdownMenuShortcut className="space-x-1">
+              <CreditCard />
+            </DropdownMenuShortcut>
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => route.push("/conta")}>
+            Conta
             <DropdownMenuShortcut className="space-x-1">
               <Settings />
             </DropdownMenuShortcut>

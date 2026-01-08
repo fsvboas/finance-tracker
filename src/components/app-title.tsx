@@ -1,4 +1,4 @@
-import Column from "./utils/column";
+import Column from "./core/column";
 
 const AppTitle = () => {
   return (

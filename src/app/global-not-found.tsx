@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Link from "next/link";
-import { Button } from "../components/button";
-import Column from "../components/utils/column";
+import { Button } from "../components/core/button";
+import Column from "../components/core/column";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -27,7 +27,7 @@ export default function GlobalNotFound() {
             A página que você está tentando acessar não existe
           </p>
         </Column>
-        <Link href="/dashboard">
+        <Link href="/transacoes">
           <Button className="cursor-pointer" type="button">
             Voltar para o Finance Tracker
           </Button>

@@ -1,0 +1,221 @@
+"use client";
+
+import { Button } from "@/src/components/core/button";
+import Column from "@/src/components/core/column";
+import { Input } from "@/src/components/core/input";
+import { Label } from "@/src/components/core/label";
+import Show from "@/src/components/core/show";
+import { supabaseErrorsTranslator } from "@/src/utils/translate-supabase-errors";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { AuthError } from "@supabase/supabase-js";
+import { Loader2Icon } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useTransition } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
+import { doSignUp } from "../services/do-signup";
+
+const RegisterFormSchema = z
+  .object({
+    name: z
+      .string()
+      .min(3, "Digite um nome válido.")
+      .refine((val) => !/^\d+$/.test(val), "O nome não pode ser um número."),
+    email: z
+      .email("Digite um e-mail válido.")
+      .min(1, "O campo e-mail é obrigatório."),
+    password: z.string().min(6, "A senha deve ter no mínimo 6 caracteres."),
+    confirmPassword: z.string().min(1, "Confirmação de senha é obrigatória."),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "As senhas não coincidem.",
+    path: ["confirmPassword"],
+  });
+
+type RegisterFormSchemaType = z.infer<typeof RegisterFormSchema>;
+
+const RegisterForm = () => {
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
+
+  const { handleSubmit, control, watch } = useForm<RegisterFormSchemaType>({
+    resolver: zodResolver(RegisterFormSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    },
+  });
+
+  const handleSignUp = ({ name, email, password }: RegisterFormSchemaType) => {
+    startTransition(async () => {
+      try {
+        await doSignUp({ name, email, password });
+        toast.success("Cadastro realizado com sucesso!", {
+          className: "!bg-green-600/80 !text-white",
+        });
+        router.push("/transacoes");
+      } catch (error) {
+        toast.error(
+          supabaseErrorsTranslator(error as AuthError) ||
+            "Erro ao realizar cadastro. Tente novamente mais tarde.",
+          {
+            className: "!bg-red-600 !text-white",
+          }
+        );
+      }
+    });
+  };
+
+  const { name, email, password, confirmPassword } = watch();
+  const formInputFieldIsBlank = [name, email, password, confirmPassword].some(
+    (value) => value === ""
+  );
+
+  return (
+    <Column className="rounded-lg p-6 border shadow-sm w-full max-w-125">
+      <form
+        id="login-form"
+        onSubmit={handleSubmit(handleSignUp)}
+        className="space-y-4"
+      >
+        <Column className="space-y-2">
+          <Label htmlFor="name">
+            Nome<span className="text-red-500">*</span>
+          </Label>
+          <Controller
+            name="name"
+            control={control}
+            render={({ field: { onChange, value }, fieldState: { error } }) => (
+              <Column>
+                <Input
+                  id="name"
+                  placeholder="Seu nome"
+                  autoComplete="name"
+                  value={value}
+                  onChange={onChange}
+                  className={`${error && "border-red-600"}`}
+                />
+                <div className="h-2 -mt-1">
+                  <Show when={error}>
+                    <span className="text-xs text-red-600">
+                      {error?.message}
+                    </span>
+                  </Show>
+                </div>
+              </Column>
+            )}
+          />
+        </Column>
+        <Column className="space-y-2">
+          <Label htmlFor="email">
+            E-mail<span className="text-red-500">*</span>
+          </Label>
+          <Controller
+            name="email"
+            control={control}
+            render={({ field: { onChange, value }, fieldState: { error } }) => (
+              <Column>
+                <Input
+                  id="email"
+                  placeholder="seuemail@exemplo.com"
+                  autoComplete="email"
+                  value={value}
+                  onChange={onChange}
+                  className={`${error && "border-red-600"}`}
+                />
+                <div className="h-2 -mt-1">
+                  <Show when={error}>
+                    <span className="text-xs text-red-600">
+                      {error?.message}
+                    </span>
+                  </Show>
+                </div>
+              </Column>
+            )}
+          />
+        </Column>
+        <Column className="space-y-2">
+          <Label htmlFor="password">
+            Senha<span className="text-red-500">*</span>
+          </Label>
+          <Controller
+            name="password"
+            control={control}
+            render={({ field: { onChange, value }, fieldState: { error } }) => (
+              <Column>
+                <Input
+                  id="password"
+                  type="password"
+                  placeholder="••••••••"
+                  autoComplete="new-password"
+                  value={value}
+                  onChange={onChange}
+                  className={`${error && "border-red-600"}`}
+                />
+                <div className="h-2 -mt-1">
+                  <Show when={error}>
+                    <span className="text-xs text-red-600">
+                      {error?.message}
+                    </span>
+                  </Show>
+                </div>
+              </Column>
+            )}
+          />
+        </Column>
+        <Column className="space-y-2">
+          <Label htmlFor="confirmPassword">
+            Confirmar Senha<span className="text-red-500">*</span>
+          </Label>
+          <Controller
+            name="confirmPassword"
+            control={control}
+            render={({ field: { onChange, value }, fieldState: { error } }) => (
+              <Column>
+                <Input
+                  id="confirmPassword"
+                  type="password"
+                  placeholder="••••••••"
+                  autoComplete="new-password"
+                  value={value}
+                  onChange={onChange}
+                  className={`${error && "border-red-600"}`}
+                />
+                <div className="h-2 -mt-1">
+                  <Show when={error}>
+                    <span className="text-xs text-red-600">
+                      {error?.message}
+                    </span>
+                  </Show>
+                </div>
+              </Column>
+            )}
+          />
+        </Column>
+        <Column className="mt-5">
+          <Button
+            className="hover:cursor-pointer w-full"
+            type="submit"
+            disabled={isPending || formInputFieldIsBlank}
+          >
+            <Show when={isPending}>
+              <Loader2Icon className="animate-spin" />
+            </Show>
+            Criar conta
+          </Button>
+          <Link href="/entrar" className="flex self-center w-fit" passHref>
+            <Button type="button" variant="link">
+              Já tenho uma conta
+            </Button>
+          </Link>
+        </Column>
+      </form>
+    </Column>
+  );
+};
+
+export default RegisterForm;
