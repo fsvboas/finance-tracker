@@ -1,3 +1,5 @@
+"use client";
+
 import Card from "@/src/app/(private)/cartoes/components/card";
 import { getCards } from "@/src/app/(private)/cartoes/services";
 import { useQuery } from "@tanstack/react-query";
