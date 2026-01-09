@@ -3,6 +3,7 @@
 import Card from "@/src/app/(private)/cartoes/components/card";
 import CardTransactionHistoryTable from "@/src/app/(private)/cartoes/components/card-transaction-history-table";
 import { CardType } from "@/src/app/(private)/cartoes/types/card-type";
+import Badge from "@/src/components/badge";
 import {
   Dialog,
   DialogContent,
@@ -34,27 +35,29 @@ const CardDetailsDialog = ({ trigger, card }: CardFormDialogProps) => {
       <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle />
-          <Flex className="flex-row justify-between items-center">
-            <div className="w-full max-w-60">
+          <DialogTitle>
+            <Badge text="Em desenvolvimento" />
+          </DialogTitle>
+          <Flex className="flex-col sm:flex-row gap-4 justify-between sm:items-center">
+            <div className="w-full sm:max-w-60">
               <Card card={card} showActionButtons={false} />
             </div>
             <dl className="flex flex-col gap-2">
               <Row className="gap-2">
-                <dt>Data de Vencimento:</dt>
+                <dt>Vencimento:</dt>
                 <dd className="font-semibold">
                   <DateFormatter>{dueDate}</DateFormatter>
                 </dd>
               </Row>
               <Show when={isCreditCard}>
                 <Row className="gap-2">
-                  <dt>Limite do cartão:</dt>
+                  <dt>Limite:</dt>
                   <dd className="font-semibold">
                     <CurrencyFormatter>{card?.creditLimit}</CurrencyFormatter>
                   </dd>
                 </Row>
                 <Row className="gap-2">
-                  <dt>Limite disponível:</dt>
+                  <dt>Disponível:</dt>
                   <dd className="font-semibold">
                     <CurrencyFormatter>{card?.creditLimit}</CurrencyFormatter>
                   </dd>
