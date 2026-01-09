@@ -1,9 +1,11 @@
 "use client";
 
 import Card from "@/src/app/(private)/cartoes/components/card";
-import CardTransactionHistoryTable from "@/src/app/(private)/cartoes/components/card-transaction-history-table";
 import { CardType } from "@/src/app/(private)/cartoes/types/card-type";
+import TransactionCard from "@/src/app/(private)/transacoes/components/transaction-card";
+import { TransactionType } from "@/src/app/(private)/transacoes/types/transaction-type";
 import Badge from "@/src/components/badge";
+import Column from "@/src/components/core/column";
 import {
   Dialog,
   DialogContent,
@@ -30,6 +32,88 @@ const CardDetailsDialog = ({ trigger, card }: CardFormDialogProps) => {
 
   const isCreditCard = card?.type === "credit";
 
+  const mockCardHistory: TransactionType[] = [
+    {
+      id: "1",
+      description: "Compra no Supermercado Extra",
+      value: "23450",
+      type: "expense",
+      created_at: "2024-01-05T14:32:00",
+      payment_method: "credit_card",
+    },
+    {
+      id: "2",
+      description: "Netflix - Assinatura Mensal",
+      value: "4490",
+      type: "expense",
+      created_at: "2024-01-04T09:15:00",
+      payment_method: "credit_card",
+    },
+    {
+      id: "3",
+      description: "Posto Shell - Combustível",
+      value: "18900",
+      type: "expense",
+      created_at: "2024-01-03T18:45:00",
+      payment_method: "credit_card",
+    },
+    {
+      id: "4",
+      description: "iFood - Restaurante Japonês",
+      value: "8730",
+      type: "expense",
+      created_at: "2024-01-02T20:10:00",
+      payment_method: "credit_card",
+    },
+    {
+      id: "5",
+      description: "Amazon - Livros",
+      value: "15680",
+      type: "expense",
+      created_at: "2024-01-01T11:25:00",
+      payment_method: "credit_card",
+    },
+    {
+      id: "6",
+      description: "Farmácia São Paulo",
+      value: "6745",
+      type: "expense",
+      created_at: "2023-12-30T16:50:00",
+      payment_method: "credit_card",
+    },
+    {
+      id: "7",
+      description: "Uber - Corrida",
+      value: "2390",
+      type: "expense",
+      created_at: "2023-12-29T22:30:00",
+      payment_method: "credit_card",
+    },
+    {
+      id: "8",
+      description: "Spotify - Assinatura Premium",
+      value: "2190",
+      type: "expense",
+      created_at: "2023-12-28T08:00:00",
+      payment_method: "credit_card",
+    },
+    {
+      id: "9",
+      description: "Zara - Roupas",
+      value: "34500",
+      type: "expense",
+      created_at: "2023-12-27T15:20:00",
+      payment_method: "credit_card",
+    },
+    {
+      id: "10",
+      description: "Padaria Dona Maria",
+      value: "4215",
+      type: "expense",
+      created_at: "2023-12-26T07:30:00",
+      payment_method: "credit_card",
+    },
+  ];
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen} modal>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
@@ -66,7 +150,15 @@ const CardDetailsDialog = ({ trigger, card }: CardFormDialogProps) => {
             </dl>
           </Flex>
         </DialogHeader>
-        <CardTransactionHistoryTable />
+        <Column className="h-100 overflow-y-auto gap-2">
+          {mockCardHistory.map((transaction, index) => (
+            <TransactionCard
+              key={index}
+              transaction={transaction}
+              showActionButtons={false}
+            />
+          ))}
+        </Column>
       </DialogContent>
     </Dialog>
   );

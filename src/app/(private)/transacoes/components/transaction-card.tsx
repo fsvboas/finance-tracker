@@ -18,9 +18,13 @@ import { toast } from "sonner";
 
 interface TransactionCardProps {
   transaction: TransactionType;
+  showActionButtons?: boolean;
 }
 
-export default function TransactionCard({ transaction }: TransactionCardProps) {
+export default function TransactionCard({
+  transaction,
+  showActionButtons = true,
+}: TransactionCardProps) {
   const transactionDate = new Date(transaction?.created_at).toISOString();
   const transactionMonth = new Date(transaction.created_at).getMonth() + 1;
 
@@ -52,9 +56,19 @@ export default function TransactionCard({ transaction }: TransactionCardProps) {
 
   return (
     <Row className="p-4 gap-4 h-28 rounded bg-neutral-100 dark:bg-[#202020] justify-between items-center">
-      <Flex className="w-full flex-col md:flex-row md:justify-between md:items-center">
+      <Flex
+        className={`w-full justify-between  gap-2 ${
+          showActionButtons ? "flex-col" : "flex-row items-center"
+        } md:flex-row md:justify-between md:items-center`}
+      >
         <Column>
-          <p className="font-semibold text-base sm:text-lg overflow-hidden whitespace-nowrap overflow-ellipsis max-[400px]:max-w-[160px] max-[500px]:max-w-[250px]">
+          <p
+            className={`w-full font-semibold text-sm sm:text-lg overflow-hidden overflow-ellipsis whitespace-pre-line ${
+              showActionButtons
+                ? "max-[425px]:max-w-[160px]"
+                : "max-[425px]:max-w-26"
+            }`}
+          >
             {transaction?.description}
           </p>
           <span className="text-xs sm:text-sm text-gray-500">
@@ -64,7 +78,7 @@ export default function TransactionCard({ transaction }: TransactionCardProps) {
         <Row className="gap-4">
           <Column>
             <p
-              className={`font-medium text-start sm:text-end text-lg sm:text-xl ${
+              className={`font-medium text-start sm:text-end text-base sm:text-xl ${
                 isIncomeValue
                   ? "text-green-600"
                   : isExpenseValue
@@ -85,30 +99,32 @@ export default function TransactionCard({ transaction }: TransactionCardProps) {
           </Column>
         </Row>
       </Flex>
-      <Row className="gap-1">
-        <TransactionFormDialog
-          trigger={
-            <Button onClick={() => null}>
-              <Pencil />
-            </Button>
-          }
-          mode="update"
-          selectedMonth={transactionMonth}
-          transaction={transaction}
-        />
-        <ConfirmDeleteDialog
-          title="Excluir Transação"
-          itemName={transaction?.description}
-          description="Você tem certeza de que deseja excluir esta transação? Esta ação não poderá ser desfeita."
-          onConfirm={() => handleDeleteTransaction(transaction)}
-          isPending={pendingDeleteTransaction}
-          trigger={
-            <Button variant="destructive">
-              <Trash2 className="text-white" />
-            </Button>
-          }
-        />
-      </Row>
+      <Show when={showActionButtons}>
+        <Row className="gap-1">
+          <TransactionFormDialog
+            trigger={
+              <Button onClick={() => null}>
+                <Pencil />
+              </Button>
+            }
+            mode="update"
+            selectedMonth={transactionMonth}
+            transaction={transaction}
+          />
+          <ConfirmDeleteDialog
+            title="Excluir Transação"
+            itemName={transaction?.description}
+            description="Você tem certeza de que deseja excluir esta transação? Esta ação não poderá ser desfeita."
+            onConfirm={() => handleDeleteTransaction(transaction)}
+            isPending={pendingDeleteTransaction}
+            trigger={
+              <Button variant="destructive">
+                <Trash2 className="text-white" />
+              </Button>
+            }
+          />
+        </Row>
+      </Show>
     </Row>
   );
 }
