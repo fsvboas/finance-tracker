@@ -42,18 +42,31 @@ interface TransactionFormDialogProps {
   transaction?: TransactionType;
 }
 
-const transactionFormSchema = z.object({
-  type: z.enum(["income", "expense", "investment"]),
-  description: z.string().min(1, { message: "Campo obrigatório." }),
-  value: z
-    .string()
-    .min(1, { message: "Campo obrigatório." })
-    .refine((value) => Number(value) > 0, { message: "Campo obrigatório." }),
-  created_at: z.date(),
-  payment_method: z.string().optional(),
-  card: z.string().optional(),
-  repeat_months: z.string().optional(),
-});
+const transactionFormSchema = z
+  .object({
+    type: z.enum(["income", "expense", "investment"]),
+    description: z.string().min(1, { message: "Campo obrigatório." }),
+    value: z
+      .string()
+      .min(1, { message: "Campo obrigatório." })
+      .refine((value) => Number(value) > 0, { message: "Campo obrigatório." }),
+    created_at: z.date(),
+    payment_method: z.string().optional(),
+    card_id: z.string().optional(),
+    repeat_months: z.string().optional(),
+  })
+  .refine(
+    (data) => {
+      if (data.payment_method === "card" && !data.card_id) {
+        return false;
+      }
+      return true;
+    },
+    {
+      message: "Selecione um cartão quando o método de pagamento for cartão",
+      path: ["card_id"],
+    }
+  );
 
 type TransactionFormSchemaType = z.infer<typeof transactionFormSchema>;
 
@@ -74,10 +87,6 @@ const TransactionFormDialog = ({
     existingTransaction?: TransactionType
   ) => {
     if (existingTransaction) {
-      const [paymentMethod, card] = (
-        existingTransaction.payment_method || ""
-      ).split("/");
-
       return {
         description: existingTransaction.description,
         value: String(
@@ -85,8 +94,8 @@ const TransactionFormDialog = ({
         ),
         type: existingTransaction.type,
         created_at: new Date(existingTransaction.created_at),
-        payment_method: paymentMethod || "",
-        card: card || "",
+        payment_method: existingTransaction.payment_method || "",
+        card_id: existingTransaction.card_id || "",
         repeat_months: "1",
       };
     }
@@ -100,7 +109,7 @@ const TransactionFormDialog = ({
       type: "income" as const,
       created_at: date,
       payment_method: "",
-      card: "",
+      card_id: "",
       repeat_months: "1",
     };
   };
@@ -154,7 +163,10 @@ const TransactionFormDialog = ({
       ...formData,
       created_at: formData.created_at.toISOString(),
       payment_method: formData.payment_method,
+      card_id: formData.card_id,
     };
+
+    console.log("@@payload", payload);
 
     if (isUpdateMode) {
       return update({ transaction: payload, userSecrets: credentials! });
@@ -187,7 +199,7 @@ const TransactionFormDialog = ({
 
   useEffect(() => {
     if (!paymentMethodIsCard) {
-      setValue("card", "", { shouldValidate: false });
+      setValue("card_id", "", { shouldValidate: false });
     }
   }, [paymentMethodIsCard, setValue]);
 
@@ -339,9 +351,11 @@ const TransactionFormDialog = ({
               </Column>
               <Show when={paymentMethodIsCard}>
                 <Column className="space-y-2 col-span-2 max-[560px]:col-span-6">
-                  <Label htmlFor="card">Cartão</Label>
+                  <Label htmlFor="card_id">
+                    Cartão<span className="text-red-500">*</span>
+                  </Label>
                   <Controller
-                    name="card"
+                    name="card_id"
                     control={control}
                     render={({
                       field: { onChange, value },

@@ -117,7 +117,6 @@ export default function FinancialDashboard() {
       />
       <TransactionSection
         transactions={filteredTransactions}
-        totalIncome={financialSummary.totalIncome}
         selectedMonth={month}
         filter={filter}
         setFilter={setFilter}

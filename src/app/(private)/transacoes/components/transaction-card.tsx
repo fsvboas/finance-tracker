@@ -1,5 +1,6 @@
 "use client";
 
+import { CARD_TYPE_LABELS } from "@/src/app/(private)/cartoes/constants/card-type-labels";
 import TransactionFormDialog from "@/src/app/(private)/transacoes/components/transaction-form-dialog";
 import { deleteTransaction } from "@/src/app/(private)/transacoes/services";
 import { TransactionType } from "@/src/app/(private)/transacoes/types/transaction-type";
@@ -31,9 +32,7 @@ export default function TransactionCard({
   const isIncomeValue = transaction?.type === "income";
   const isExpenseValue = transaction?.type === "expense";
 
-  const splitCardFromPaymentMethod = transaction?.payment_method?.split("/");
-  const paymentMethod = splitCardFromPaymentMethod?.[0];
-  const card = splitCardFromPaymentMethod?.[1];
+  const paymentMethodIsCard = transaction?.payment_method === "card";
 
   const { mutate: del, isPending: pendingDeleteTransaction } = useMutation({
     mutationFn: deleteTransaction,
@@ -78,7 +77,9 @@ export default function TransactionCard({
         <Row className="gap-4">
           <Column>
             <p
-              className={`font-medium text-start sm:text-end text-base sm:text-xl ${
+              className={`font-medium ${
+                showActionButtons ? "text-start md:text-end" : "text-end"
+              } text-end text-base sm:text-xl ${
                 isIncomeValue
                   ? "text-green-600"
                   : isExpenseValue
@@ -90,9 +91,31 @@ export default function TransactionCard({
             </p>
             <Show when={transaction?.payment_method}>
               <span className="text-xs sm:text-sm text-end text-gray-500">
-                {paymentMethod}{" "}
-                <Show when={card}>
-                  - <strong>{card}</strong>
+                <Show
+                  when={!paymentMethodIsCard}
+                  fallback={
+                    transaction?.cards && (
+                      <Flex
+                        className={`flex ${
+                          showActionButtons && "flex-row gap-1"
+                        } flex-col sm:flex-row sm:items-center sm:gap-1`}
+                      >
+                        <span>{transaction.cards.name}</span>
+                        <span
+                          className={`${
+                            showActionButtons ? "block" : "hidden"
+                          } sm:block`}
+                        >
+                          -
+                        </span>
+                        <span className="text-xs sm:text-sm font-bold">
+                          {CARD_TYPE_LABELS[transaction.cards.type]}
+                        </span>
+                      </Flex>
+                    )
+                  }
+                >
+                  {transaction?.payment_method}
                 </Show>
               </span>
             </Show>

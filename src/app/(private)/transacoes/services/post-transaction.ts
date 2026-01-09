@@ -35,6 +35,7 @@ export async function postTransaction({
         payment_method: transaction.payment_method
           ? encryptData(transaction.payment_method, keyHex)
           : undefined,
+        card_id: transaction.card_id,
       };
     }
   );

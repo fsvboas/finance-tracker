@@ -18,7 +18,6 @@ import TransactionTypeFilterSelectInput from "./transaction-type-filter-select-i
 interface TransactionSectionProps {
   transactions: TransactionType[];
   pending: boolean;
-  totalIncome: number;
   selectedMonth: number;
   filter: TransactionFiltersType;
   setFilter: Dispatch<SetStateAction<TransactionFiltersType>>;
@@ -27,7 +26,6 @@ interface TransactionSectionProps {
 const TransactionSection = ({
   transactions,
   pending,
-  totalIncome,
   selectedMonth,
   filter,
   setFilter,

@@ -3,7 +3,7 @@
 import Card from "@/src/app/(private)/cartoes/components/card";
 import { CardType } from "@/src/app/(private)/cartoes/types/card-type";
 import TransactionCard from "@/src/app/(private)/transacoes/components/transaction-card";
-import { TransactionType } from "@/src/app/(private)/transacoes/types/transaction-type";
+import { getTransactions } from "@/src/app/(private)/transacoes/services";
 import Badge from "@/src/components/badge";
 import Column from "@/src/components/core/column";
 import {
@@ -17,8 +17,10 @@ import Row from "@/src/components/core/row";
 import Show from "@/src/components/core/show";
 import CurrencyFormatter from "@/src/helpers/currency-formatter";
 import DateFormatter from "@/src/helpers/date-formatter";
+import { useUserSecrets } from "@/src/providers/user-secrets-provider";
 import { DialogTitle } from "@radix-ui/react-dialog";
-import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useMemo, useState } from "react";
 
 interface CardFormDialogProps {
   trigger: React.ReactNode;
@@ -26,94 +28,37 @@ interface CardFormDialogProps {
 }
 
 const CardDetailsDialog = ({ trigger, card }: CardFormDialogProps) => {
+  const { credentials } = useUserSecrets();
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const dueDate = card?.dueDate?.toString();
-
   const isCreditCard = card?.type === "credit";
 
-  const mockCardHistory: TransactionType[] = [
-    {
-      id: "1",
-      description: "Compra no Supermercado Extra",
-      value: "23450",
-      type: "expense",
-      created_at: "2024-01-05T14:32:00",
-      payment_method: "credit_card",
-    },
-    {
-      id: "2",
-      description: "Netflix - Assinatura Mensal",
-      value: "4490",
-      type: "expense",
-      created_at: "2024-01-04T09:15:00",
-      payment_method: "credit_card",
-    },
-    {
-      id: "3",
-      description: "Posto Shell - Combustível",
-      value: "18900",
-      type: "expense",
-      created_at: "2024-01-03T18:45:00",
-      payment_method: "credit_card",
-    },
-    {
-      id: "4",
-      description: "iFood - Restaurante Japonês",
-      value: "8730",
-      type: "expense",
-      created_at: "2024-01-02T20:10:00",
-      payment_method: "credit_card",
-    },
-    {
-      id: "5",
-      description: "Amazon - Livros",
-      value: "15680",
-      type: "expense",
-      created_at: "2024-01-01T11:25:00",
-      payment_method: "credit_card",
-    },
-    {
-      id: "6",
-      description: "Farmácia São Paulo",
-      value: "6745",
-      type: "expense",
-      created_at: "2023-12-30T16:50:00",
-      payment_method: "credit_card",
-    },
-    {
-      id: "7",
-      description: "Uber - Corrida",
-      value: "2390",
-      type: "expense",
-      created_at: "2023-12-29T22:30:00",
-      payment_method: "credit_card",
-    },
-    {
-      id: "8",
-      description: "Spotify - Assinatura Premium",
-      value: "2190",
-      type: "expense",
-      created_at: "2023-12-28T08:00:00",
-      payment_method: "credit_card",
-    },
-    {
-      id: "9",
-      description: "Zara - Roupas",
-      value: "34500",
-      type: "expense",
-      created_at: "2023-12-27T15:20:00",
-      payment_method: "credit_card",
-    },
-    {
-      id: "10",
-      description: "Padaria Dona Maria",
-      value: "4215",
-      type: "expense",
-      created_at: "2023-12-26T07:30:00",
-      payment_method: "credit_card",
-    },
-  ];
+  const { data, isPending } = useQuery({
+    queryFn: () =>
+      getTransactions({
+        userSecrets: credentials!,
+        cardId: card.id,
+      }),
+    queryKey: ["card-transactions", card.id, credentials],
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
+  });
+
+  const cardTransactions = useMemo(() => data || [], [data]);
+
+  const totalSpent = useMemo(() => {
+    return cardTransactions.reduce((sum, transaction) => {
+      return sum + Number(transaction.value);
+    }, 0);
+  }, [cardTransactions]);
+
+  const availableLimit = useMemo(() => {
+    if (!isCreditCard) return 0;
+    const limit = Number(card.creditLimit);
+    return limit - totalSpent;
+  }, [isCreditCard, card.creditLimit, totalSpent]);
+
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen} modal>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
@@ -141,9 +86,17 @@ const CardDetailsDialog = ({ trigger, card }: CardFormDialogProps) => {
                   </dd>
                 </Row>
                 <Row className="gap-2">
+                  <dt>Gasto:</dt>
+                  <dd className="font-semibold text-red-600">
+                    <CurrencyFormatter>{String(totalSpent)}</CurrencyFormatter>
+                  </dd>
+                </Row>
+                <Row className="gap-2">
                   <dt>Disponível:</dt>
-                  <dd className="font-semibold">
-                    <CurrencyFormatter>{card?.creditLimit}</CurrencyFormatter>
+                  <dd className="font-semibold text-green-600">
+                    <CurrencyFormatter>
+                      {String(availableLimit)}
+                    </CurrencyFormatter>
                   </dd>
                 </Row>
               </Show>
@@ -151,13 +104,29 @@ const CardDetailsDialog = ({ trigger, card }: CardFormDialogProps) => {
           </Flex>
         </DialogHeader>
         <Column className="h-100 overflow-y-auto gap-2">
-          {mockCardHistory.map((transaction, index) => (
-            <TransactionCard
-              key={index}
-              transaction={transaction}
-              showActionButtons={false}
-            />
-          ))}
+          <Show
+            when={!isPending && cardTransactions.length > 0}
+            fallback={
+              <div className="text-center text-gray-500 py-8">
+                {isPending ? (
+                  <div className="flex flex-col items-center gap-2">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 dark:border-white" />
+                    <p>Carregando transações...</p>
+                  </div>
+                ) : (
+                  <p>Nenhuma transação encontrada</p>
+                )}
+              </div>
+            }
+          >
+            {cardTransactions.map((transaction) => (
+              <TransactionCard
+                key={transaction.id}
+                transaction={transaction}
+                showActionButtons={false}
+              />
+            ))}
+          </Show>
         </Column>
       </DialogContent>
     </Dialog>

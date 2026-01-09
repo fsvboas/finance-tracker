@@ -22,6 +22,7 @@ const CardSelectInput = ({ value, onChange }: CardSelectInputProps) => {
 
   const cards = data || [];
 
+  console.log("@@cards", cards);
   return (
     <Select value={value} onValueChange={onChange}>
       <SelectTrigger className="w-full text-base">
@@ -30,7 +31,7 @@ const CardSelectInput = ({ value, onChange }: CardSelectInputProps) => {
       <SelectContent>
         <SelectGroup>
           {cards?.map((card) => (
-            <SelectItem key={card?.id} value={card?.name}>
+            <SelectItem key={card?.id} value={card?.id}>
               {card?.name}
             </SelectItem>
           ))}

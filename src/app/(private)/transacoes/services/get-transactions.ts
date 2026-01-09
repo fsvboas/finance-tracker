@@ -4,18 +4,36 @@ import { decryptData, deriveKey } from "@/src/utils/crypto";
 
 interface GetTransactionsProps {
   userSecrets: UserCredentials;
+  cardId?: string;
 }
 
-export async function getTransactions({ userSecrets }: GetTransactionsProps) {
+export async function getTransactions({
+  userSecrets,
+  cardId,
+}: GetTransactionsProps) {
   const supabase = createClient();
 
   const result = (async () => {
     const keyHex = deriveKey(userSecrets.pin, userSecrets.salt!);
 
-    const { data, error } = await supabase
-      .from("transactions")
-      .select("*")
-      .order("created_at", { ascending: false });
+    let query = supabase.from("transactions").select(`
+        *,
+        cards (
+          id,
+          name,
+          color,
+          type,
+          credit_limit
+        )
+      `);
+
+    if (cardId) {
+      query = query.eq("card_id", cardId);
+    }
+
+    const { data, error } = await query.order("created_at", {
+      ascending: false,
+    });
 
     if (error) throw error;
 
@@ -28,6 +46,7 @@ export async function getTransactions({ userSecrets }: GetTransactionsProps) {
       payment_method: transaction.payment_method
         ? decryptData(transaction.payment_method, keyHex)
         : undefined,
+      cards: transaction.cards,
     }));
   })();
 
