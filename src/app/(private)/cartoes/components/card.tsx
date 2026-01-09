@@ -1,5 +1,6 @@
 "use client";
 
+import CardDetailsDialog from "@/src/app/(private)/cartoes/components/card-details-dialog";
 import CardFormDialog from "@/src/app/(private)/cartoes/components/card-form-dialog";
 import { deleteCard } from "@/src/app/(private)/cartoes/services";
 import { CardType } from "@/src/app/(private)/cartoes/types/card-type";
@@ -7,16 +8,18 @@ import ConfirmDeleteDialog from "@/src/components/confirm-delete-dialog";
 import { Button } from "@/src/components/core/button";
 import Column from "@/src/components/core/column";
 import Row from "@/src/components/core/row";
+import Show from "@/src/components/core/show";
 import { queryClient } from "@/src/libs/tanstack-query/query-client";
 import { useMutation } from "@tanstack/react-query";
-import { Pencil, Trash2 } from "lucide-react";
+import { Eye, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 interface CardProps {
   card: CardType;
+  showActionButtons?: boolean;
 }
 
-const Card = ({ card }: CardProps) => {
+const Card = ({ card, showActionButtons = true }: CardProps) => {
   const { mutate: del, isPending: pendingDeleteCard } = useMutation({
     mutationFn: deleteCard,
     onSuccess: async (_, variables) => {
@@ -56,35 +59,42 @@ const Card = ({ card }: CardProps) => {
         </p>
         <p className="capitalize text-sm">{cardTypeLabel}</p>
       </Column>
-      <Row className="items-center gap-1 absolute -top-4 -right-2">
-        {/* <Button
-          className="z-10 bg-white hover:bg-zinc-200 rounded-full p-0! cursor-pointer w-8 h-8 border"
-          onClick={() => null}
-        >
-          <Eye className="text-zinc-800" />
-        </Button> */}
-        <CardFormDialog
-          trigger={
-            <Button className="z-10 bg-white hover:bg-zinc-200 rounded-full p-0! cursor-pointer w-8 h-8 border">
-              <Pencil className="text-zinc-800" />
-            </Button>
-          }
-          mode="update"
-          card={card}
-        />
-        <ConfirmDeleteDialog
-          title="Excluir Cartão"
-          itemName={card?.name}
-          description="Você tem certeza de que deseja excluir este cartão? Esta ação não poderá ser desfeita."
-          onConfirm={() => handleDeleteCard(card)}
-          isPending={pendingDeleteCard}
-          trigger={
-            <Button variant="destructive" className="rounded-full p-0! w-8 h-8">
-              <Trash2 className="text-white" />
-            </Button>
-          }
-        />
-      </Row>
+      <Show when={showActionButtons}>
+        <Row className="items-center gap-1 absolute -top-4 -right-2">
+          <CardDetailsDialog
+            trigger={
+              <Button className="z-10 bg-white hover:bg-zinc-200 rounded-full p-0! cursor-pointer w-8 h-8 border">
+                <Eye className="text-zinc-800" />
+              </Button>
+            }
+            card={card}
+          />
+          <CardFormDialog
+            trigger={
+              <Button className="z-10 bg-white hover:bg-zinc-200 rounded-full p-0! cursor-pointer w-8 h-8 border">
+                <Pencil className="text-zinc-800" />
+              </Button>
+            }
+            mode="update"
+            card={card}
+          />
+          <ConfirmDeleteDialog
+            title="Excluir Cartão"
+            itemName={card?.name}
+            description="Você tem certeza de que deseja excluir este cartão?"
+            onConfirm={() => handleDeleteCard(card)}
+            isPending={pendingDeleteCard}
+            trigger={
+              <Button
+                variant="destructive"
+                className="rounded-full p-0! w-8 h-8"
+              >
+                <Trash2 className="text-white" />
+              </Button>
+            }
+          />
+        </Row>
+      </Show>
     </Column>
   );
 };
