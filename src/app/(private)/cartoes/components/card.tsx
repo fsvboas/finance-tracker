@@ -81,7 +81,7 @@ const Card = ({ card, showActionButtons = true }: CardProps) => {
           <ConfirmDeleteDialog
             title="Excluir Cartão"
             itemName={card?.name}
-            description="Você tem certeza de que deseja excluir este cartão?"
+            description="Você tem certeza de que deseja excluir este cartão? Esta ação não poderá ser desfeita."
             onConfirm={() => handleDeleteCard(card)}
             isPending={pendingDeleteCard}
             trigger={
